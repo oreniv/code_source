@@ -1,0 +1,548 @@
+/**---- basic -----*/
+*
+{
+    font-family: Segoe UI, Arial, Helvetica, sans-serif;
+}
+
+body, html{
+  height: 100%;
+  margin: 0;
+  background-color: #F8FEFF;
+}
+
+h3{
+  color: #707070;
+  font-size: x-large;
+  font-weight: bold;
+}
+
+/**------ tab design-------*/
+
+.tab_container{
+  display: flex;
+  flex-direction: column;
+}
+
+/* Style the tab buttons */
+.tablink {
+  background-color: #FEFCE9;
+  color: #707070;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: x-large;
+  font-weight: bold;
+  width: 25%;
+  height: fit-content;
+  justify-content: center;
+}
+
+.head_button{
+  width: 100%;
+  background-color: #FEFCE9;
+  border: none;
+  border-bottom: solid;
+  border-top: solid;
+  border-color: #E68235;
+  height: fit-content;
+  display: flex;
+  justify-content:space-around ;
+}
+
+.tablink:focus{
+    outline: 0;
+    outline-style:none;
+    outline-width:0;
+}
+
+#top_ten_link{
+  color: #E68235;
+}
+
+/* Change background color of buttons on hover */
+.tablink:hover {
+  color: #E68235;
+}
+
+/* Set default styles for tab content */
+.tabcontent {
+  color: white;
+  display: none;
+  padding: 50px;
+  text-align: center;
+}
+
+.title_container{
+  display: flex;
+  flex-direction: column;
+}
+
+/**------ search barre -------*/
+
+.search_container{
+text-align: center;
+margin-bottom: 10px;
+}
+
+.search_button{
+  background: none;
+  outline: 0;
+  outline-style:none;
+  outline-width:0;
+  border: none;
+  position: relative;
+  right: 40%;
+  bottom: 5px;
+}
+
+.search_text{
+  border-radius: 15px;
+  border-color: #E68235;
+  border-width: 3px;
+  width: 40%;
+  height: 40px;
+  font-size: x-large;
+}
+
+.search_text:focus{
+  outline: 0;
+  outline-style:none;
+  outline-width:0;
+}
+
+.search_img{
+  width: 25px;
+}
+
+
+
+
+
+/* ------ card ------**/
+
+.tab{
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.top_ten_container{
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+}
+
+.title_top_ten{
+text-align: center;}
+
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    width: 180px;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-bottom: 3%;
+    text-align: center;
+    font-family: arial;
+    height: fit-content;
+    border-bottom: solid;
+    border-bottom-color: #E68235;
+    background-color: #FEFCE9;
+  }
+  
+  .price {
+    color: grey;
+    font-size: large;
+  }
+  
+  .card {
+    border: none;
+    outline: 0;
+    cursor: pointer;
+    background-color: #FEFCE9;
+    font-size: large;
+  }
+
+  .heart_button{
+    border: none;
+    outline: 0;
+    outline: none;
+    cursor: pointer;
+    width: 15px;
+    background-color: #FEFCE9;
+  }
+
+  .heart_button:focus{
+    border: none;
+    outline: none;
+    outline-width: 0;
+  }
+  
+  .card button:hover {
+    opacity: 0.7;
+  }
+
+.card_bottom
+{
+  display: flex;
+  justify-content: space-between;
+  margin: auto;
+}
+
+.card_product_description
+{
+  margin: auto;
+  width: 100%;
+  height: 50px;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  margin-bottom: 10px;
+  color: black;
+  
+}
+
+.product
+{
+  width:100%;
+  display: flex;
+}
+
+.project
+{
+  width:100%;
+  display: flex;
+}
+
+.sellers{
+  width:100%;
+  display: flex;
+
+}
+
+#top_ten{
+  display: flex;
+  justify-content:space-between ;
+}
+
+.row::after 
+{
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.img_card
+{
+  width: 90%;
+  height: 150px;
+  object-fit: cover;
+  border: solid;
+  border-width: 0.5px;
+  border-color:#E68235;
+  margin-top: 5px;
+}
+
+.icon_heart{
+  background-color: #FEFCE9;
+  outline: none;
+  border: none;
+}
+
+
+/**--------- ad place --------*/
+
+.container_advertisement_image{
+  width: 100%;
+  height: 40%;
+  margin-bottom: 10px;
+}
+
+.mask_advertisement_image{
+  mask-image: url(source/icones/tracee3.svg);
+  mask-size: cover;
+  -webkit-mask: url(source/icones/tracee3.svg);
+  -webkit-mask-size: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.advertisement_image{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-bottom: solid;
+  border-top: solid;
+  border-color: #E68235;
+}
+
+.dot_container{
+  display: flex;
+  justify-content: center;
+  position: relative;
+  bottom: 50px;
+}
+
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 1px;
+  background-color: #FEFCE9;
+  border: none;
+  border-width: 0.5px;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+  
+}
+
+.active, .dot:hover {
+  background-color: #3598E6;
+}
+
+.prev, .next {
+  cursor: pointer;
+  position: relative;
+  bottom: 50%;
+  width: auto;
+  padding: 16px;
+  color: #FEFCE9;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  user-select: none;
+}
+
+.next {
+  left: 93%;
+  border-radius:  0 3px 3px 0 ;
+}
+.prev {
+  left: 3%;
+  border-radius: 3px 0 0 3px;
+}
+
+.prev:hover, .next:hover {
+  background-color: #E68235;
+  color: #FEFCE9;
+}
+
+.my_fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 2s;
+  animation-name: fade;
+  animation-duration: 2s;
+}
+
+@-webkit-keyframes fade {
+  from {opacity: .2}
+  to {opacity: 1}
+}
+
+@keyframes fade {
+  from {opacity: .2}
+  to {opacity: 1}
+}
+
+/**------ footer ------------*/
+
+.img_footer{
+  height: 150px;
+  background-image: url(source/icones/trace1.svg);
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: space-around;
+  font-size: medium;
+  color: black;
+  font-weight: bold;
+}
+
+#about_us{
+  position: relative;
+  top: 90px;
+}
+
+#policy{
+  position: relative;
+  top: 45px;
+  display: flex;
+  flex-direction: column;
+}
+
+#our_policy{
+  margin-bottom: 40%;
+}
+
+#contact{
+  position: relative;
+  top: 20px;
+}
+
+.link_footer{
+  font-size: medium;
+  color: black;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.link_footer:hover{
+  color: #E68235;
+}
+
+/**-------- header--------*/
+
+.header_class{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.logo{
+  width: 80px;
+  margin-left: 35px;
+}
+
+.mask_circle{
+  mask-image: url(source/icones/circle.svg);
+  mask-size: cover;
+  -webkit-mask: url(source/icones/circle.svg);
+  -webkit-mask-size: cover;
+  width: 60px;
+  height: 60px;
+  margin-right: 10px;
+}
+
+
+.img_profile{
+  width: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.img_profile:hover{
+  opacity: 0.7;
+}
+
+#current_page{
+  color: #E68235;
+}
+
+.header_link{
+  width: 30%;
+  color: #707070;
+  display: flex;
+  font-size: x-large;
+  font-weight: bold;
+  justify-content: space-around;
+}
+
+.profile_container{
+  display: flex;
+  margin-right: 30px;
+}
+.cart_img{
+  width: 30px;
+  justify-content: center;
+}
+.number_item{
+  position: relative;
+  left: 45%;
+  bottom: 20%;
+  color: #E68235;
+  font-size: large;
+}
+
+.cart_link{
+  text-decoration: none;
+}
+
+.cart_container{
+  position: relative;
+  top: 25%;
+}
+
+.header_specific_link{
+  color: #707070;
+  text-decoration: none;
+}
+
+.header_specific_link:hover{
+  color: #E68235;
+  text-decoration: none;
+}
+
+
+/**----------- profile page ----------------*/
+.profile_container{
+  display: flex;
+  justify-content: center;
+}
+
+.profile_table{
+width: 40%;
+height: auto;
+display: flex;
+justify-content: center;
+border: solid;
+border-radius: 15px  0 0 15px;
+margin-right: 15px;
+border-color: #BDDFF7;
+}
+
+#table_data{
+  width: 100%;
+  height: 100%;
+  border-spacing: 100px;
+  border-radius: 15px  0 0 15px;
+}
+
+th{
+  border-right: solid;
+  border-color: #BDDFF7;
+  padding: 15px;
+  background-color: #E4F2FB;
+}
+
+#first_row{
+  border-radius: 15px  0 0 0;
+}
+#last_row{
+  border-radius: 0 0 0 15px;
+
+}
+
+td{
+  padding: 15px;
+}
+
+
+#profile_picture_principal{
+  width: 20%;
+  border-radius: 0 15px 15px 0;
+  border: solid;
+  border-color: #BDDFF7;
+}
+
+.my_button_edit{
+  background-color: #FEFCE9;
+  border: solid;
+  border-color: #E68235;
+  border-radius: 15px;
+  width: 10%;
+  color: #707070;
+  font-weight: bold;
+  margin: auto;
+  margin-top: 15px;
+}
+
+.my_button_edit:focus{
+  outline: none;
+  outline-width: 0px;
+}
+
+.profile_container_data{
+  display: flex;
+  flex-direction: column;
+}
