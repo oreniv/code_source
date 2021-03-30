@@ -49,11 +49,9 @@ include_once 'dbconnection.php';
             document.getElementById("creditCard").innerHTML = "none yet";
             else
             document.getElementById("creditCard").innerHTML = profileData["bankAccount"];
-            
+
             document.getElementById("payPalAccount").innerHTML = "none yet";
                 }
-
-
 
 
     </script>
@@ -119,7 +117,7 @@ include_once 'dbconnection.php';
                                 Birthday
                             </th>
                             <td id="birthday">
-                                21/01/1993
+                                
                             </td>
                         </tr>
                         <tr>

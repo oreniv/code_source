@@ -82,7 +82,7 @@ include_once 'dbconnection.php';
         /**----------------------------------------------------------------------------------*/
         
 
-        function appendAllMyJson(dataProduct, dataProject, dataTopTenProject, dataTopTenProduct){
+        function appendAllMyJson(dataProduct, dataProject, dataTopTenProject, dataTopTenProduct, dataTopTenSeller, dataSellers){
                     for(var i = 0; i< dataProject.length; i++){
                         createNewCardTopTenProduct("project_link_card_happened","source/produits/project4.jpg", dataProject[i].project_description, dataProject[i].project_budget, true, dataProject[i].project_name);
                     }
@@ -90,13 +90,18 @@ include_once 'dbconnection.php';
                         createNewCardTopTenProduct("product_link_card_happened","source/produits/onepieceluffy.jpg", dataProduct[i].product_description, dataProduct[i].product_price, true, dataProduct[i].product_name);
                     }
                     for(var i = 0; i< dataTopTenProject.length; i++){
-                        createNewCardTopTenProduct("top_ten_project_card_happened","source/produits/project4.jpg", dataProject[i].project_description, dataProject[i].project_budget, true, dataProject[i].project_name);
+                        createNewCardTopTenProduct("top_ten_project_card_happened","source/produits/project4.jpg", dataTopTenProject[i].project_description, dataTopTenProject[i].project_budget, true, dataTopTenProject[i].project_name);
                     }
                     for(var i = 0; i< dataTopTenProduct.length; i++){
-                        createNewCardTopTenProduct("top_ten_card_happened","source/produits/onepieceluffy.jpg", dataProduct[i].product_description, dataProduct[i].product_price, true, dataProduct[i].product_name);
+                        createNewCardTopTenProduct("top_ten_card_happened","source/produits/onepieceluffy.jpg", dataTopTenProduct[i].product_description, dataTopTenProduct[i].product_price, true, dataTopTenProduct[i].product_name);
                     }
-                    
-              
+                    for(var i = 0; i< dataTopTenSeller.length; i++){
+                        createNewCardTopTenProduct("top_ten_sellers_card_happened","source/produits/person3.jfif", dataTopTenSeller[i].address, dataTopTenSeller[i].seller_rating, true, dataTopTenSeller[i].name);
+                    }
+
+                    for(var i = 0; i< dataSellers.length; i++){
+                        createNewCardTopTenProduct("sellers_link_card_happened","source/produits/person3.jfif", dataSellers[i].address, dataSellers[i].seller_rating, true, dataSellers[i].name);
+                    }
         }
 
 
@@ -118,6 +123,9 @@ include_once 'dbconnection.php';
             newContainerBottomCard.classList.add("card_bottom");
             const newPrice = document.createElement("p");
             newPrice.classList.add("price");
+            if(tabName == "sellers_link_card_happened" || tabName == "top_ten_sellers_card_happened" )
+            newPrice.innerHTML = "Rating: " + price;
+            else
             newPrice.innerHTML = "$" + price;
             const newLikeParagraph = document.createElement("p");
             const newLikeButton = document.createElement("button");
@@ -274,6 +282,8 @@ include_once 'dbconnection.php';
             $sqlProject = "SELECT * FROM project;";
             $sqlTopTenProject = "SELECT * FROM project ORDER BY project.bid_count DESC LIMIT 10";
             $sqlTopTenProduct = "SELECT * FROM sales_item LIMIT 10;";
+            $sqlTopTenSeller ="SELECT * FROM users LIMIT 10;";
+            $sqlSeller ="SELECT * FROM users;";
 
 
             $resultProject = mysqli_query($conn, $sqlProject);
@@ -287,6 +297,12 @@ include_once 'dbconnection.php';
 
             $resultTopTenProduct = mysqli_query($conn, $sqlTopTenProduct);
             $resultCheckTopTenProduct = mysqli_num_rows($resultTopTenProduct);
+
+            $resultTopTenSeller = mysqli_query($conn, $sqlTopTenSeller);
+            $resultCheckTopTenSeller = mysqli_num_rows($resultTopTenSeller);
+
+            $resultSeller = mysqli_query($conn, $sqlSeller);
+            $resultCheckSeller = mysqli_num_rows($resultSeller);
 
             
 
@@ -353,8 +369,38 @@ include_once 'dbconnection.php';
                 $jsonTopTenProject = json_encode($mainDataTopTenProject);                
             }
 
+            if($resultCheckSeller > 0)
+            {
+                $mainDataSeller = array();
+                while($row = mysqli_fetch_assoc($resultSeller)){
+                    $dataSeller = array(
+                        "name" => $row['full_name'],
+                        "id" => $row['id'],
+                        "seller_rating" => $row['seller_rating'],
+                        "address" => $row['address']
+                    );   
+                    array_push($mainDataSeller, $dataSeller);
+                    unset($dataSeller);                
+                }
+                $jsonSeller = json_encode($mainDataSeller);                
+            }
 
-            
+
+            if($resultCheckTopTenSeller > 0)
+            {
+                $mainDataTopTenSeller = array();
+                while($row = mysqli_fetch_assoc($resultTopTenSeller)){
+                    $dataTopTenSeller = array(
+                        "name" => $row['full_name'],
+                        "id" => $row['id'],
+                        "seller_rating" => $row['seller_rating'],
+                        "address" => $row['address']
+                    );   
+                    array_push($mainDataTopTenSeller, $dataTopTenSeller);
+                    unset($dataTopTenSeller);                
+                }
+                $jsonTopTenSeller = json_encode($mainDataTopTenSeller);                
+            }
 
         ?>
 
@@ -371,9 +417,14 @@ include_once 'dbconnection.php';
             var jsonJsTopTenProduct = <?= $jsonTopTenProduct; ?>;
             console.log(jsonJsTopTenProduct);
 
-            
+            var jsonJsTopTenSeller = <?= $jsonTopTenSeller; ?>;
+            console.log(jsonJsTopTenSeller);
 
-            appendAllMyJson(jsonJsProduct, jsonJsProject, jsonJsTopTenProject, jsonJsTopTenProduct);
+            var jsonJsSeller = <?= $jsonSeller; ?>;
+            console.log(jsonJsSeller)
+
+            
+            appendAllMyJson(jsonJsProduct, jsonJsProject, jsonJsTopTenProject, jsonJsTopTenProduct,jsonJsTopTenSeller, jsonJsSeller);
         </script>
 
  

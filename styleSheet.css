@@ -138,13 +138,12 @@ text-align: center;}
 .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     max-width: 300px;
-    width: 180px;
+    width: 170px;
     margin-left: 2%;
     margin-right: 2%;
     margin-bottom: 3%;
     text-align: center;
     font-family: arial;
-    height: fit-content;
     border-bottom: solid;
     border-bottom-color: #E68235;
     background-color: #FEFCE9;
