@@ -545,3 +545,13 @@ td{
   display: flex;
   flex-direction: column;
 }
+
+
+/****** Product page **/
+
+.product_page_text{
+background-color: #BDDFF7;
+text-align: left;
+font-size: 20px;
+}
+
