@@ -280,9 +280,9 @@ include_once 'dbconnection.php';
     <?php
             $sqlProducts ="SELECT * FROM sales_item";
             $sqlProject = "SELECT * FROM project;";
-            $sqlTopTenProject = "SELECT * FROM project ORDER BY project.bid_count DESC LIMIT 10";
-            $sqlTopTenProduct = "SELECT * FROM sales_item LIMIT 10;";
-            $sqlTopTenSeller ="SELECT * FROM users LIMIT 10;";
+            $sqlTopTenProduct = "CALL get_top10_sales_item_posts();";
+            $sqlTopTenProject = "CALL get_top10_projects();";
+            $sqlTopTenSeller ="CALL get_top10_sellers();";
             $sqlSeller ="SELECT * FROM users;";
 
 
@@ -294,18 +294,23 @@ include_once 'dbconnection.php';
 
             $resultTopTenProject = mysqli_query($conn, $sqlTopTenProject);
             $resultCheckTopTenProject = mysqli_num_rows($resultTopTenProject);
-
+            // Must restart connection after a CALL.
+            mysqli_close($conn);
+            $conn = mysqli_connect($servername, $username, $password, $dbname);
+            //****************************/
             $resultTopTenProduct = mysqli_query($conn, $sqlTopTenProduct);
             $resultCheckTopTenProduct = mysqli_num_rows($resultTopTenProduct);
 
-            $resultTopTenSeller = mysqli_query($conn, $sqlTopTenSeller);
-            $resultCheckTopTenSeller = mysqli_num_rows($resultTopTenSeller);
+            mysqli_close($conn);
+            $conn = mysqli_connect($servername, $username, $password, $dbname);
 
             $resultSeller = mysqli_query($conn, $sqlSeller);
             $resultCheckSeller = mysqli_num_rows($resultSeller);
 
-            
+            $resultTopTenSeller = mysqli_query($conn, $sqlTopTenSeller);
+            $resultCheckTopTenSeller = mysqli_num_rows($resultTopTenSeller);
 
+            
             if($resultCheckProduct > 0){
                 $mainDataProduct = array();
                 while($row = mysqli_fetch_assoc($resultProduct)){
