@@ -84,14 +84,16 @@ include_once 'dbconnection.php';
         </header>
 
 
-
-        <div class="profile_container_data">
-            <div class="head_button">
+        <div class="head_button">
                 <button id="defaultOpen" class="tablink" onclick="openTab('principal_profile', this)">Your profile</button>
                 <button id="buyer_profile_link" class="tablink" onclick="openTab('buyer_profile', this)">Your buyer profile</button>
                 <button id="seller_profile_link" class="tablink" onclick="openTab('seller_profile', this)">Your seller profile</button>
             </div>
-            ----------------------------------------------------------------------------------------------------------------------------------
+
+
+        <div class="profile_container_data">
+            
+
             <div id="principal_profile" class="profile_container">
 
                 <div class="profile_table">
@@ -159,15 +161,18 @@ include_once 'dbconnection.php';
 
             <button class="my_button_edit" onclick="window.location.href='#';">Edit</button>
         
-            <div id="buyer_profile">
+        </div>
 
+        <div id="buyer_profile">
+
+        </div>
+
+        <div id="seller_profile">
+
+            <div>
+                <p>fuck you fucker</p>
             </div>
 
-            <div id="seller_profile">
-
-            </div>
-        
-        
         </div>
 
         <?php

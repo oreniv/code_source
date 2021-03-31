@@ -534,6 +534,7 @@ td{
   font-weight: bold;
   margin: auto;
   margin-top: 15px;
+  
 }
 
 .my_button_edit:focus{
@@ -544,4 +545,69 @@ td{
 .profile_container_data{
   display: flex;
   flex-direction: column;
+}
+
+/**-------chart------------*/
+.myChart{
+  width: 800px;
+  height: 800px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#myChartSvg{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes percent1 {
+  to {
+    stroke-dasharray: calc(2 * var(--pi) * 300 * var(--a1) / 100) calc(2 * var(--pi) * 300 * calc(1 - var(--a1) / 100));
+  }
+}
+
+@keyframes percent2 {
+  to {
+    stroke-dasharray: calc(2 * var(--pi) * 300 * var(--a2) / 100) calc(2 * var(--pi) * 300 * calc(1 - var(--a2) / 100));
+  }
+}
+
+@keyframes percent3 {
+  to {
+    stroke-dasharray: calc(2 * var(--pi) * 300 * var(--a3) / 100) calc(2 * var(--pi) * 300 * calc(1 - var(--a3) / 100));
+  }
+}
+
+@keyframes percent4 {
+  to {
+    stroke-dasharray: calc(2 * var(--pi) * 300 * var(--a4) / 100) calc(2 * var(--pi) * 300 * calc(1 - var(--a4) / 100));
+  }
+}
+
+.donut:nth-child(1) {
+  transform: rotateZ(-90deg);
+  animation: percent1 1s ease-in-out forwards;
+}
+
+.donut:nth-child(2) {
+  transform: rotateZ(calc(-90deg  + calc(var(--a1) * 360deg / 100)));
+  animation: percent2 1s ease-in-out forwards;
+}
+
+.donut:nth-child(3) {
+  transform: rotateZ(calc(-90deg  + calc(var(--a1) * 360deg / 100) + calc(var(--a2) * 360deg / 100)));
+  animation: percent3 1s ease-in-out forwards;
+}
+
+.donut:nth-child(4) {
+  transform: rotateZ(calc(-90deg  + calc(var(--a1) * 360deg / 100) + calc(var(--a2) * 360deg / 100) + calc(var(--a3) * 360deg / 100)));
+  animation: percent4 1s ease-in-out forwards;
+}
+
+.donut:hover {
+  stroke-width: 100;
 }
