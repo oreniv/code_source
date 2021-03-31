@@ -16,14 +16,14 @@ include_once 'dbconnection.php';
        // document.getElementById("amount_sold").innerHTML = profileData["sold"];
      
        if(!profileData.print_duration) // if no duration specified it's digital probably 
-         document.getElementById("print_duration").innerHTML = "User did not specify or this is a digital item";
+         document.getElementById("print_duration").innerHTML = "Delivery time: User did not specify or this is a digital item";
        else
          document.getElementById("print_duration").innerHTML = "Delivery time: "+profileData["print_duration"]+" days";
        
-         if(!profileData.delivery_price) // if no duration specified it's digital probably
-         document.getElementById("delivery_price").innerHTML = "Free";
+         if(!profileData.delivery_price) // if no delivery price specified it's digital probably
+         document.getElementById("delivery_price").innerHTML = "Delivery price: Free";
          else
-            document.getElementById("delivery_price").innerHTML = profileData["delivery_price"]+ " $";
+        document.getElementById("delivery_price").innerHTML = "Delivery price: "+profileData["delivery_price"]+ " $";
        
        
        
@@ -31,6 +31,13 @@ include_once 'dbconnection.php';
 
        document.getElementById("author").innerHTML ="Author: " + profileData["author"] +" || "+" Rating: "+profileData["author_rating"];
        document.getElementById("tags").innerHTML = profileData["tags"];
+
+
+        /** Set stars ***/
+        
+
+
+
     }
 
 
