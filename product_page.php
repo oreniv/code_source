@@ -7,15 +7,7 @@ include_once 'dbconnection.php';
 
 <script>
     
-    
-  function addDays(date, days) {
-
-  var result = new Date(date);
-  result.setDate(result.getDate() + days);
-  
-   return result;
-}
-
+ 
     function appendData(profileData){
        
        document.getElementById("product_title").innerHTML = profileData["name"]+ " || "+"Rating: "+ profileData["rating"] ;
