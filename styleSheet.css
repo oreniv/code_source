@@ -545,3 +545,36 @@ td{
   display: flex;
   flex-direction: column;
 }
+
+
+/****** Product page **/
+
+.product_page_text{
+background-color: #BDDFF7;
+text-align: left;
+font-size: 20px;
+margin:10px;
+}
+
+.delivery_price_text{
+
+  margin:10px;
+
+}
+
+.button {
+  background-color: #ddd;
+  border: none;
+  color: black;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.button:hover {
+  background-color: #f1f1f1;
+}
