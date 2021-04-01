@@ -33,7 +33,7 @@ include_once 'dbconnection.php';
        {
           document.getElementById("delivery_price").innerHTML = "Delivery price: "+delivery_price+ " $";
         
-          // price = Number(price)  + Number(delivery_price);
+          
           document.getElementById("price").innerHTML = "Price:" +price+"$ + " + "Delivery: " + delivery_price+"$ "
           +"\n Total price: " + (Number(price)  + Number(delivery_price) + "$");
        }
@@ -56,27 +56,65 @@ include_once 'dbconnection.php';
 
 
     function appendReview(reviewData){
-     /*   var review_count = 0;
+        var review_count = 0;
+        
+        if (!reviewData[review_count])  // if a post has no reviews let the user know.
+            {
+
+            const reviewPost = document.createElement("div");
+            reviewPost.classList.add("review_wrapper");
+            const reviewUser = document.createElement("div");
+            reviewUser.classList.add("col");
+            reviewUser.classList.add("comment");
+            reviewUser.classList.add("review_user");
+            reviewUser.innerHTML = "No reviews so far..." ; 
+
+            reviewPost.appendChild(reviewUser);
+            document.getElementById("review_section").appendChild(reviewPost); 
+            }
+
         while(reviewData[review_count]) // build the review list 
-        {
-            document.getElementById("review_user").innerHTML = reviewData[review_count]["review_user"] ;
-            document.getElementById("review_text").innerHTML = reviewData[review_count]["review"];
-            var score  = reviewData[review_count]["score"];
-           
-            document.getElementById("stars").innerHTML = score;
-            for (i=1;i<=score;i++)
-                document.getElementById("rstar"+i).className = "fa fa-star checked";
-            review_count++;            
-        }
-*/
+      {
+       var userName =  reviewData[review_count]["review_user"] ;
+       var rText = reviewData[review_count]["review"];
+       var score  = reviewData[review_count]["score"];
+       var timeStamp = reviewData[review_count]["timestamp"];
+       review_count++;            
+   
        const reviewPost = document.createElement("div");
        reviewPost.classList.add("review_wrapper");
        const reviewUser = document.createElement("div");
-       reviewUser.classList.add("col comment review_user");
+       reviewUser.classList.add("col");
+       reviewUser.classList.add("comment");
+       reviewUser.classList.add("review_user");
+       reviewUser.innerHTML = userName ; 
        const reviewRating = document.createElement("div");
-       reviewRating.classList.add("col review_stars");
-
-
+       reviewRating.classList.add("col");
+       reviewRating.classList.add("review_stars");
+       reviewRating.innerHTML = score ; 
+       const reviewText = document.createElement("div");
+       reviewText.classList.add("col");
+       reviewText.classList.add("review_text");
+       reviewText.innerHTML = rText ;
+      
+       reviewPost.appendChild(reviewUser);
+ 
+        for (i=0;i<score;i++) // build the stars according to the rating the user left
+        {
+            var star = document.createElement("span");
+            star.classList.add("fa");
+            star.classList.add("fa-star");
+            star.classList.add("checked");
+            reviewPost.appendChild(star);
+        }
+ 
+       reviewPost.appendChild(reviewText);
+       reviewPost.appendChild(document.createElement("br"));
+       reviewText.appendChild(document.createElement("br"));
+       reviewText.appendChild(document.createTextNode("Posted on: "+timeStamp));
+       document.getElementById("review_section").appendChild(reviewPost); 
+           
+    }
     }
 
 
@@ -183,17 +221,10 @@ include_once 'dbconnection.php';
 
 </div>
 
-<div class="container">
+<div class="container" id="review_section"> </div>
    
-    <div class="review_wrapper">
-    
-        <div class="col comment review_user"> </div>
-        <div class="col review_stars"> </div> 
-        <div class="col review_text"></div>
-    
-    </div> 
-   
- </div>
+
+
 
 
 
