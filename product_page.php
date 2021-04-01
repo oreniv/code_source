@@ -6,8 +6,67 @@ include_once 'dbconnection.php';
 <html>
 
 <script>
-    
+
+    function addToCart()
+    {
+        window.alert("this doesn't work yet");
+    }
  
+    function buyNow()
+    {
+        window.alert("this doesn't work yet");
+    }
+ 
+
+
+
+    function appendData(profileData){
+       
+        var price = profileData["price"];
+        var print_duration = profileData["print_duration"];
+        var delivery_price = profileData["delivery_price"];
+
+        /** Set product title,description,author and related tags **/
+       document.getElementById("product_title").innerHTML = profileData["name"];
+       document.getElementById("product_desc").innerHTML ="Description: " + profileData["description"];
+       document.getElementById("author").innerHTML ="Author: " + profileData["author"];
+       document.getElementById("tags").innerHTML = profileData["tags"];
+       /** set prices and print duration display */
+       if(!print_duration) // if no duration specified it's digital probably 
+         document.getElementById("print_duration").innerHTML = "Print time: User did not specify or this is a digital item";
+       else
+         document.getElementById("print_duration").innerHTML = "Print time: "+print_duration+" days";    
+       if(!delivery_price) // if no delivery price specified it's digital probably
+       {
+        document.getElementById("delivery_price").innerHTML = "Delivery price: Free";
+        document.getElementById("price").innerHTML = "Total:" +price+" $";
+       } 
+       else
+       {
+          document.getElementById("delivery_price").innerHTML = "Delivery price: "+delivery_price+ " $";
+        
+          
+          document.getElementById("price").innerHTML = "Price:" +price+"$ + " + "Delivery: " + delivery_price+"$ "
+          +"\n Total price: " + (Number(price)  + Number(delivery_price) + "$");
+       }
+    
+        /** Set stars ***/
+        var author_rating = profileData["author_rating"];
+        var product_rating =  profileData["rating"];
+        
+        for(i = 1 ; i<=  author_rating;i++) // set author stars
+            document.getElementById("sstar"+i).className = "fa fa-star checked";
+        for(i = 1 ; i<=  product_rating;i++) // set item stars
+            document.getElementById("pstar"+i).className = "fa fa-star checked";
+        /****************/
+        
+        
+
+
+
+    }
+
+     
     function appendData(profileData){
        
         var price = profileData["price"];
@@ -55,12 +114,13 @@ include_once 'dbconnection.php';
     }
 
 
+
     function appendReview(reviewData){
         var review_count = 0;
-        
+          
         if (!reviewData[review_count])  // if a post has no reviews let the user know.
             {
-
+               
             const reviewPost = document.createElement("div");
             reviewPost.classList.add("review_wrapper");
             const reviewUser = document.createElement("div");
@@ -212,7 +272,12 @@ include_once 'dbconnection.php';
             </div>
             <div class="row product_page_text">
                 <div class="col">
-                    <p id="price"></p>
+                       <p id="price"></p>
+               </div>
+                <div class="col">
+                <!-- TO DO : make the buttons fucking work -->
+                <button class="button" onclick="buyNow()">Buy Now</button>
+                <button class="button" onclick="addToCart()">Add to cart</button>
                 </div>
 
             </div>
@@ -226,12 +291,7 @@ include_once 'dbconnection.php';
 
 
 
-
-
-
-
-
-    
+ 
     
     
             
@@ -240,9 +300,14 @@ include_once 'dbconnection.php';
     
     
     <?php 
+
+ 
+
+        
             $sqlProductInfo ="CALL get_sales_item_page_info(64)";
             $sqlFetchTags = "CALL get_tags_for_post(64,'sales_item')";
             $sqlFetchReviews = "CALL get_post_reviews(64)";
+        
             $resultProduct = mysqli_query($conn, $sqlProductInfo); // 1st query
             $row = mysqli_fetch_assoc($resultProduct); // store 1st results
             
