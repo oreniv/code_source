@@ -10,35 +10,75 @@ include_once 'dbconnection.php';
  
     function appendData(profileData){
        
-       document.getElementById("product_title").innerHTML = profileData["name"]+ " || "+"Rating: "+ profileData["rating"] ;
+        var price = profileData["price"];
+        var print_duration = profileData["print_duration"];
+        var delivery_price = profileData["delivery_price"];
+
+        /** Set product title,description,author and related tags **/
+       document.getElementById("product_title").innerHTML = profileData["name"];
        document.getElementById("product_desc").innerHTML ="Description: " + profileData["description"];
-       document.getElementById("price").innerHTML = profileData["price"]+" $";
-       // document.getElementById("amount_sold").innerHTML = profileData["sold"];
-     
-       if(!profileData.print_duration) // if no duration specified it's digital probably 
-         document.getElementById("print_duration").innerHTML = "Delivery time: User did not specify or this is a digital item";
-       else
-         document.getElementById("print_duration").innerHTML = "Delivery time: "+profileData["print_duration"]+" days";
-       
-         if(!profileData.delivery_price) // if no delivery price specified it's digital probably
-         document.getElementById("delivery_price").innerHTML = "Delivery price: Free";
-         else
-        document.getElementById("delivery_price").innerHTML = "Delivery price: "+profileData["delivery_price"]+ " $";
-       
-       
-       
-       // document.getElementById("filament_type").innerHTML = profileData["filament_type"];
-
-       document.getElementById("author").innerHTML ="Author: " + profileData["author"] +" || "+" Rating: "+profileData["author_rating"];
+       document.getElementById("author").innerHTML ="Author: " + profileData["author"];
        document.getElementById("tags").innerHTML = profileData["tags"];
-
-
+       /** set prices and print duration display */
+       if(!print_duration) // if no duration specified it's digital probably 
+         document.getElementById("print_duration").innerHTML = "Print time: User did not specify or this is a digital item";
+       else
+         document.getElementById("print_duration").innerHTML = "Print time: "+print_duration+" days";    
+       if(!delivery_price) // if no delivery price specified it's digital probably
+       {
+        document.getElementById("delivery_price").innerHTML = "Delivery price: Free";
+        document.getElementById("price").innerHTML = "Total:" +price+" $";
+       } 
+       else
+       {
+          document.getElementById("delivery_price").innerHTML = "Delivery price: "+delivery_price+ " $";
+        
+          // price = Number(price)  + Number(delivery_price);
+          document.getElementById("price").innerHTML = "Price:" +price+"$ + " + "Delivery: " + delivery_price+"$ "
+          +"\n Total price: " + (Number(price)  + Number(delivery_price) + "$");
+       }
+    
         /** Set stars ***/
+        var author_rating = profileData["author_rating"];
+        var product_rating =  profileData["rating"];
+        
+        for(i = 1 ; i<=  author_rating;i++) // set author stars
+            document.getElementById("sstar"+i).className = "fa fa-star checked";
+        for(i = 1 ; i<=  product_rating;i++) // set item stars
+            document.getElementById("pstar"+i).className = "fa fa-star checked";
+        /****************/
+        
         
 
 
 
     }
+
+
+    function appendReview(reviewData){
+     /*   var review_count = 0;
+        while(reviewData[review_count]) // build the review list 
+        {
+            document.getElementById("review_user").innerHTML = reviewData[review_count]["review_user"] ;
+            document.getElementById("review_text").innerHTML = reviewData[review_count]["review"];
+            var score  = reviewData[review_count]["score"];
+           
+            document.getElementById("stars").innerHTML = score;
+            for (i=1;i<=score;i++)
+                document.getElementById("rstar"+i).className = "fa fa-star checked";
+            review_count++;            
+        }
+*/
+       const reviewPost = document.createElement("div");
+       reviewPost.classList.add("review_wrapper");
+       const reviewUser = document.createElement("div");
+       reviewUser.classList.add("col comment review_user");
+       const reviewRating = document.createElement("div");
+       reviewRating.classList.add("col review_stars");
+
+
+    }
+
 
 
     </script>
@@ -48,8 +88,14 @@ include_once 'dbconnection.php';
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <link rel="stylesheet" href="styleSheet.css" />
+    <!-- import stylesheet for star icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Oray</title>
-
+    <style>
+    .checked { /* set star color */
+    color: orange;
+    }
+</style>
 
 
 </head>
@@ -83,27 +129,52 @@ include_once 'dbconnection.php';
 <body>
 
 
-<div class="container">
-    <div class="row">
+<div class="container ">
+    <div class="row ">
         <div class="col-4">
         <img class="img-fluid" src="source/produits/project3.jpg">
         </div>
-        <div class="col-8"> 
-            <p class="product_page_text" id="product_title"></p>       
-            <p class="product_page_text" id="author"></p> 
-            <p class="product_page_text" id="product_desc"></p>  
-            <p class="product_page_text" id="tags"></p>    
-            <div class="row">
-                <div class="col-6">
-                <p class="product_page_text" id="delivery_price"></p>
+        <div class="col-8 "> 
+            <div class="row product_page_text ">
+                <div class="col-7 ">
+                    <p  id="product_title"></p>
                 </div>
-                <div class="col-6">
-                <p class="product_page_text" id="print_duration"></p>
+                <div class="col-5 ">
+                    <span id="pstar1"class="fa fa-star"></span>
+                    <span id="pstar2"class="fa fa-star"></span>
+                    <span id="pstar3"class="fa fa-star"></span>
+                    <span id="pstar4"class="fa fa-star"></span>
+                    <span id="pstar5"class="fa fa-star"></span>
+                </div>
+            </div>  
+            
+            <div class="row product_page_text">   
+                <div class="col-7">
+                    <p id="author"></p> 
+                </div>
+                <div class="col-5">
+                    
+                    <span id="sstar1"class="fa fa-star"></span>
+                    <span id="sstar2"class="fa fa-star"></span>
+                    <span id="sstar3"class="fa fa-star"></span>
+                    <span id="sstar4"class="fa fa-star"></span>
+                    <span id="sstar5"class="fa fa-star"></span>
+
+                </div>
+            </div>  
+            <p class="product_page_text"  id="product_desc"></p>  
+            <p class="product_page_text"  id="tags"></p>    
+            <div class="row ">
+                <div class="col delivery_price_text product_page_text">
+                    <p class="delivery_price_text" id="delivery_price"></p>
+                </div>
+                <div class="col product_page_text">
+                    <p class="delivery_price_text" id="print_duration"></p>
                 </div>
             </div>
-            <div class="row">
+            <div class="row product_page_text">
                 <div class="col">
-                    <p class="product_page_text" id="price"></p>
+                    <p id="price"></p>
                 </div>
 
             </div>
@@ -112,15 +183,23 @@ include_once 'dbconnection.php';
 
 </div>
 
+<div class="container">
+   
+    <div class="review_wrapper">
+    
+        <div class="col comment review_user"> </div>
+        <div class="col review_stars"> </div> 
+        <div class="col review_text"></div>
+    
+    </div> 
+   
+ </div>
 
 
 
-    
-    
-    
-    
-    
-    
+
+
+
     
     
     
@@ -208,6 +287,7 @@ include_once 'dbconnection.php';
     console.log(jsonJsProduct);
 
    appendData(jsonJsProduct);
+   appendReview(jsonReviews);
 </script>
 
 

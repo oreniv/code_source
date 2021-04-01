@@ -553,5 +553,12 @@ td{
 background-color: #BDDFF7;
 text-align: left;
 font-size: 20px;
+margin:10px;
+}
+
+.delivery_price_text{
+
+  margin:10px;
+
 }
 
