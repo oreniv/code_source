@@ -2,6 +2,7 @@
 *
 {
     font-family: Segoe UI, Arial, Helvetica, sans-serif;
+    color: #707070;
 }
 
 body, html{
@@ -68,7 +69,7 @@ h3{
 
 /* Set default styles for tab content */
 .tabcontent {
-  color: white;
+  color: #707070;
   display: none;
   padding: 50px;
   text-align: center;
@@ -516,6 +517,10 @@ td{
   padding: 15px;
 }
 
+.myContent{
+  color: #707070;
+}
+
 
 #profile_picture_principal{
   width: 20%;
@@ -547,67 +552,125 @@ td{
   flex-direction: column;
 }
 
+
 /**-------chart------------*/
-.myChart{
-  width: 800px;
-  height: 800px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#myChartSvg{
+#principalChartContainer {
+  height: 250px;
   width: 100%;
-  height: 100%;
+  border-radius: 10px 0 0 0;
+}
+#creditContainer{
+  height: 250px;
+  width: 100%;
+  border-radius: 0 10px 0 0;
+}
+
+.side_container{
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  width: 49%;
+  justify-content: space-between;
 }
 
-@keyframes percent1 {
-  to {
-    stroke-dasharray: calc(2 * var(--pi) * 300 * var(--a1) / 100) calc(2 * var(--pi) * 300 * calc(1 - var(--a1) / 100));
-  }
+.second_side_container{
+  background-color: #E4F2FB;
+  height: 120px;
+  padding-top: 10px;
+  padding-left: 10px;
+  
+}
+#myLegend{
+  text-align: left;
 }
 
-@keyframes percent2 {
-  to {
-    stroke-dasharray: calc(2 * var(--pi) * 300 * var(--a2) / 100) calc(2 * var(--pi) * 300 * calc(1 - var(--a2) / 100));
-  }
+.withdraw_container{
+  display: flex;
+  flex-direction: column;
+}
+.withdraw_number{
+  text-align: right;
+  margin: auto;
+}
+.withdraw_button{
+  margin: auto;
+  width: 80%;
+  border-radius: 15px;
+  border: solid;
+  border-color: #E68235;
+  border-width: 3px;
+  margin-top: 5px;
+  background-color: #FEFCE9;
 }
 
-@keyframes percent3 {
-  to {
-    stroke-dasharray: calc(2 * var(--pi) * 300 * var(--a3) / 100) calc(2 * var(--pi) * 300 * calc(1 - var(--a3) / 100));
-  }
+.withdraw_button:focus{
+  border: solid;
+  border-color: #E68235;
+  border-width: 3px;
+  outline: none;
+  outline-width: 0;
+}
+#seller_profile{
+  display: flex;
 }
 
-@keyframes percent4 {
-  to {
-    stroke-dasharray: calc(2 * var(--pi) * 300 * var(--a4) / 100) calc(2 * var(--pi) * 300 * calc(1 - var(--a4) / 100));
-  }
+.innerTab{
+  display: flex;
+  justify-content: space-around;
+  margin: auto;
 }
 
-.donut:nth-child(1) {
-  transform: rotateZ(-90deg);
-  animation: percent1 1s ease-in-out forwards;
+.innertablink{
+  background-color: #F8FEFF;
+  border: none;
+  outline-width: none;
+  font-size: larger;
+  font-weight: bold;
 }
 
-.donut:nth-child(2) {
-  transform: rotateZ(calc(-90deg  + calc(var(--a1) * 360deg / 100)));
-  animation: percent2 1s ease-in-out forwards;
+.innertablink:hover{
+  color: #E68235;
+}
+.innertablink:focus{
+  outline: none;
+  border: none;
+  color: #E68235;
 }
 
-.donut:nth-child(3) {
-  transform: rotateZ(calc(-90deg  + calc(var(--a1) * 360deg / 100) + calc(var(--a2) * 360deg / 100)));
-  animation: percent3 1s ease-in-out forwards;
+.myChartDiv{
+  display: flex;
+  width: 35% ;
+  justify-content: space-between;
+  
 }
 
-.donut:nth-child(4) {
-  transform: rotateZ(calc(-90deg  + calc(var(--a1) * 360deg / 100) + calc(var(--a2) * 360deg / 100) + calc(var(--a3) * 360deg / 100)));
-  animation: percent4 1s ease-in-out forwards;
+.highcharts-figure, .highcharts-data-table table {
+    width: 100%;
+    margin: 1em auto;
 }
 
-.donut:hover {
-  stroke-width: 100;
+.highcharts-data-table table {
+	font-family: Verdana, sans-serif;
+	border-collapse: collapse;
+	border: 1px solid #EBEBEB;
+	margin: 10px auto;
+	text-align: center;
+	width: 100%;
+}
+.highcharts-data-table caption {
+    padding: 1em 0;
+    font-size: 1.2em;
+    color: #555;
+}
+.highcharts-data-table th {
+	font-weight: 600;
+    padding: 0.5em;
+}
+.highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
+    padding: 0.5em;
+}
+.highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
+    background: #f8f8f8;
+}
+.highcharts-data-table tr:hover {
+    background: #f1f7ff;
 }
