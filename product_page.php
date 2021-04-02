@@ -1,5 +1,7 @@
 <?php 
 include_once 'dbconnection.php';
+session_start();
+echo($_SESSION['userID']);
 ?>
 
 <!DOCTYPE html>
