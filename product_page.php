@@ -301,9 +301,6 @@ include_once 'dbconnection.php';
     
     <?php 
 
- 
-
-        
             $sqlProductInfo ="CALL get_sales_item_page_info(64)";
             $sqlFetchTags = "CALL get_tags_for_post(64,'sales_item')";
             $sqlFetchReviews = "CALL get_post_reviews(64)";
