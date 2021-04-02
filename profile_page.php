@@ -18,34 +18,7 @@ include_once 'dbconnection.php';
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
     <script>
-        function openTab(tabName, elmnt, tab) {
-
-            // Hide all elements with class="tabcontent" by default */
-            var i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName(tab);
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-
-            // Remove the background color of all tablinks/buttons
-            tablinks = document.getElementsByClassName("tablink");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].style.color = "";
-            }
-
-            // Show the specific tab content
-            document.getElementById(tabName).style.display = "flex";
-            elmnt.style.color = '#E68235';
-            document.getElementById(tabName).style.color = '#707070';
-
-            if(tabName=="seller_profile")
-                document.getElementById("defaultProductOpen").click();
-
-        }
-
-        // Get the element with id="defaultOpen" and click on it
-        document.getElementById("defaultOpen").click();
-        document.getElementById("principal_profile").style.color = '#707070';
+        
         
 
         /**------------------------------------------------------------------------ */
@@ -127,11 +100,14 @@ include_once 'dbconnection.php';
         /**-------------------------------------------------------- */
         function appendMyJson(data){
             for(var i = 0; i< data.length; i++){
-                createMyCard("source/produits/onepieceluffy.jpg", data[i].product_description, data[i].product_price, true, data[i].product_name);
+                createMyCard("myProducts", "source/produits/onepieceluffy.jpg", data[i].product_description, data[i].product_price, true, data[i].product_name);
                     }
+            for(var i = 0; i< data.length; i++){
+                createMyCard("myProjects", "source/produits/onepieceluffy.jpg", data[i].product_description, data[i].product_price, true, data[i].product_name);
+            }
         }
 
-        function createMyCard(image, description, price, liked, productName){
+        function createMyCard(tabName, image, description, price, liked, productName){
             const newCard = document.createElement("div");
             newCard.classList.add("card");
             const newPicture = document.createElement("img");
@@ -168,7 +144,7 @@ include_once 'dbconnection.php';
             newLikeParagraph.appendChild(newLikeButton);
             newLikeButton.appendChild(newLikeIcone);
 
-            document.getElementById("myProducts").appendChild(newCard);
+            document.getElementById(tabName).appendChild(newCard);
         }
             
     </script>
@@ -317,14 +293,17 @@ include_once 'dbconnection.php';
                 </div>
 
                 <div id="myOwnProductDefault" class="innerTabContent">
+                    <button class="my_button_add_product" onclick="window.location.href='#';">Add product</button>
                     <div id="myProducts" class="personalProduct row">
                     </div>
                 </div>
 
                 <div id="projectParticipated" class="innerTabContent">
                     <div id="myProjects" class="product row">
-                        
-
+                        <button class="my_button_add_product" onclick="window.location.href='#';">In progress</button>
+                        <button class="my_button_add_product" onclick="window.location.href='#';">Price proposition</button>
+                        <div id="myProjects" class="personalProduct row">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -484,7 +463,35 @@ include_once 'dbconnection.php';
             createMyLegend(jsonEarningDataJs);
             
 
-            
+            function openTab(tabName, elmnt, tab) {
+
+                // Hide all elements with class="tabcontent" by default */
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName(tab);
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+
+                // Remove the background color of all tablinks/buttons
+                tablinks = document.getElementsByClassName("tablink");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].style.color = "";
+                }
+
+                // Show the specific tab content
+                document.getElementById(tabName).style.display = "flex";
+                elmnt.style.color = '#E68235';
+                document.getElementById(tabName).style.color = '#707070';
+
+                if(tabName=="seller_profile"){
+                    document.getElementById("defaultProductOpen").click();
+                    document.getElementById(tabName).style.color = '#707070';
+                }
+            }
+
+                // Get the element with id="defaultOpen" and click on it
+                document.getElementById("defaultOpen").click();
+                document.getElementById("principal_profile").style.color = '#707070';
         </script>
 
         <footer>

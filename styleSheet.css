@@ -75,12 +75,7 @@ h3{
   text-align: center;
 }
 
-.innerTabContent{
-  color: #707070;
-  display: none;
-  padding: 50px;
-  text-align: center;
-}
+
 
 .title_container{
   display: flex;
@@ -594,12 +589,11 @@ margin:10px;
 
 /**-------chart------------*/
 #principalChartContainer {
-  height: 250px;
+
   width: 100%;
   border-radius: 10px 0 0 0;
 }
 #creditContainer{
-  height: 250px;
   width: 100%;
   border-radius: 0 10px 0 0;
 }
@@ -629,6 +623,7 @@ margin:10px;
 .withdraw_number{
   text-align: right;
   margin: auto;
+  width: 90%;
 }
 .withdraw_button{
   margin: auto;
@@ -647,6 +642,7 @@ margin:10px;
   border-width: 3px;
   outline: none;
   outline-width: 0;
+  width: 90%;
 }
 #seller_profile{
   display: flex;
@@ -718,8 +714,7 @@ margin:10px;
 
 .product_project_container{
   width: 70%;
-  display: flex;
-  flex-direction: column;
+  margin: auto;
 }
 
 .personalProduct{
@@ -730,7 +725,31 @@ margin:10px;
 
 #myOwnProductDefault{
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+}
+
+.my_button_add_product{
+  background-color: #FEFCE9;
+  border: solid;
+  border-color: #E68235;
+  border-radius: 15px;
+  width: 40%;
+  color: #707070;
+  font-weight: bold;
+  margin: auto;
+  margin-bottom: 10px;
+}
+
+.my_button_add_product:focus{
+  outline: none;
+  outline-width: 0px;
+}
+
+.innerTabContent{
+  color: #707070;
+  display: none;
+  padding: 50px;
+  text-align: center;
 }
 
 
