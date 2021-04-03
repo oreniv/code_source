@@ -1,7 +1,7 @@
 <?php 
 include_once 'dbconnection.php';
 session_start();
-echo($_SESSION['userID']);
+echo "Current userID: ",$_SESSION['userID'],"||","Name: " , $_SESSION['full_name']; 
 ?>
 
 <!DOCTYPE html>
@@ -273,8 +273,8 @@ echo($_SESSION['userID']);
         </div>
 
         <?php
-            $sqlProfile ="SELECT * FROM users WHERE users.id =19;";
-           
+        
+            $sqlProfile = "SELECT * FROM users WHERE users.id =".$_SESSION['userID']  ;
             $resultProfile = mysqli_query($conn, $sqlProfile);
             $resultCheckProfile = mysqli_num_rows($resultProfile);
 

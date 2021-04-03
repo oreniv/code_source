@@ -1,7 +1,7 @@
 <?php 
 include_once 'dbconnection.php';
 session_start();
-echo($_SESSION['userID']);
+echo "Current userID: ",$_SESSION['userID'],"||","Name: " , $_SESSION['full_name']; 
 ?>
 
 <!DOCTYPE html>

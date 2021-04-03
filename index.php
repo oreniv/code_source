@@ -2,7 +2,7 @@
 include_once 'dbconnection.php';
 include_once 'user_params.php';
 session_start();
-echo($_SESSION['userID']); 
+echo "Current userID: ",$_SESSION['userID'],"||","Name: " , $_SESSION['full_name']; 
 ?>
 
 <!DOCTYPE html>
@@ -159,7 +159,7 @@ echo($_SESSION['userID']);
             var xhttp = new XMLHttpRequest(); // using AJAX 
             xhttp.open("POST","index.php",true);
             xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xhttp.send("uname="+userID); 
+            xhttp.send("userID="+userID); 
             location.reload();
 
         }
