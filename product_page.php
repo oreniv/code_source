@@ -1,5 +1,7 @@
 <?php 
 include_once 'dbconnection.php';
+session_start();
+echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name']; 
 ?>
 
 <!DOCTYPE html>
@@ -193,7 +195,8 @@ include_once 'dbconnection.php';
     .checked { /* set star color */
     color: orange;
     }
-</style>
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
 
 
 </head>
@@ -227,7 +230,7 @@ include_once 'dbconnection.php';
 <body>
 
 
-<div class="container ">
+<div class="container">
     <div class="row ">
         <div class="col-4">
         <img class="img-fluid" src="source/produits/project3.jpg">
@@ -301,10 +304,15 @@ include_once 'dbconnection.php';
     
     <?php 
 
-            $sqlProductInfo ="CALL get_sales_item_page_info(64)";
-            $sqlFetchTags = "CALL get_tags_for_post(64,'sales_item')";
-            $sqlFetchReviews = "CALL get_post_reviews(64)";
+
+ 
         
+            $productID = $_GET['productID'] ; // grab the product ID the user clicked on
+            $sqlProductInfo ="CALL get_sales_item_page_info(".$productID.")";
+            $sqlFetchTags = "CALL get_tags_for_post(".$productID.",'sales_item')";
+            $sqlFetchReviews = "CALL get_post_reviews(".$productID.")";
+
+       
             $resultProduct = mysqli_query($conn, $sqlProductInfo); // 1st query
             $row = mysqli_fetch_assoc($resultProduct); // store 1st results
             

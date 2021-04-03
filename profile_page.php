@@ -1,5 +1,7 @@
 <?php 
 include_once 'dbconnection.php';
+session_start();
+echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name']; 
 ?>
 
 <!DOCTYPE html>
@@ -16,6 +18,7 @@ include_once 'dbconnection.php';
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
 
     <script>
         
@@ -312,7 +315,11 @@ include_once 'dbconnection.php';
         </div>
 
         <?php
-            $sqlProfile ="SELECT * FROM users WHERE users.id =19;";
+
+        
+            $sqlProfile = "SELECT * FROM users WHERE users.id =".$_SESSION['userID']  ;
+
+         
             $sqlTopTenProduct = "SELECT * FROM sales_item WHERE sales_item.sales_item_posterID = 19;";
             $sqlEarning = "CALL get_seller_total_sold_items(19);";
 
@@ -321,6 +328,7 @@ include_once 'dbconnection.php';
 
             mysqli_close($conn);
             $conn = mysqli_connect($servername, $username, $password, $dbname);
+
 
             $resultProfile = mysqli_query($conn, $sqlProfile);
             $resultCheckProfile = mysqli_num_rows($resultProfile);

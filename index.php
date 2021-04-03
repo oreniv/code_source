@@ -1,5 +1,8 @@
 <?php 
 include_once 'dbconnection.php';
+include_once 'user_params.php';
+session_start();
+echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name']; 
 ?>
 
 <!DOCTYPE html>
@@ -11,7 +14,8 @@ include_once 'dbconnection.php';
         integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <link rel="stylesheet" href="styleSheet.css" />
     <title>Oray</title>
-
+    <!-- Jquery import -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
     
     <script>
         var slideIndex = 1;
@@ -84,30 +88,28 @@ include_once 'dbconnection.php';
 
         function appendAllMyJson(dataProduct, dataProject, dataTopTenProject, dataTopTenProduct, dataTopTenSeller, dataSellers){
                     for(var i = 0; i< dataProject.length; i++){
-                        createNewCardTopTenProduct("project_link_card_happened","source/produits/project4.jpg", dataProject[i].project_description, dataProject[i].project_budget, true, dataProject[i].project_name);
+                        createNewCardTopTenProduct("project_link_card_happened","source/produits/project4.jpg", dataProject[i].project_description, dataProject[i].project_budget, true, dataProject[i].project_name,dataProject[i].project_id,"project");
                     }
                     for(var i = 0; i< dataProduct.length; i++){
-                        createNewCardTopTenProduct("product_link_card_happened","source/produits/onepieceluffy.jpg", dataProduct[i].product_description, dataProduct[i].product_price, true, dataProduct[i].product_name);
+                        createNewCardTopTenProduct("product_link_card_happened","source/produits/onepieceluffy.jpg", dataProduct[i].product_description, dataProduct[i].product_price, true, dataProduct[i].product_name,dataProduct[i].product_id,"product");
                     }
                     for(var i = 0; i< dataTopTenProject.length; i++){
-                        createNewCardTopTenProduct("top_ten_project_card_happened","source/produits/project4.jpg", dataTopTenProject[i].project_description, dataTopTenProject[i].project_budget, true, dataTopTenProject[i].project_name);
+                        createNewCardTopTenProduct("top_ten_project_card_happened","source/produits/project4.jpg", dataTopTenProject[i].project_description, dataTopTenProject[i].project_budget, true, dataTopTenProject[i].project_name,dataTopTenProject[i].project_id,"project");
                     }
                     for(var i = 0; i< dataTopTenProduct.length; i++){
-                        createNewCardTopTenProduct("top_ten_card_happened","source/produits/onepieceluffy.jpg", dataTopTenProduct[i].product_description, dataTopTenProduct[i].product_price, true, dataTopTenProduct[i].product_name);
+                        createNewCardTopTenProduct("top_ten_card_happened","source/produits/onepieceluffy.jpg", dataTopTenProduct[i].product_description, dataTopTenProduct[i].product_price, true, dataTopTenProduct[i].product_name,dataTopTenProduct[i].product_id,"product");
                     }
                     for(var i = 0; i< dataTopTenSeller.length; i++){
-                        createNewCardTopTenProduct("top_ten_sellers_card_happened","source/produits/person3.jfif", dataTopTenSeller[i].address, dataTopTenSeller[i].seller_rating, true, dataTopTenSeller[i].name);
+                        createNewCardTopTenProduct("top_ten_sellers_card_happened","source/produits/person3.jfif", dataTopTenSeller[i].address, dataTopTenSeller[i].seller_rating, true, dataTopTenSeller[i].name,dataTopTenSeller[i].id,"user");
                     }
 
                     for(var i = 0; i< dataSellers.length; i++){
-                        createNewCardTopTenProduct("sellers_link_card_happened","source/produits/person3.jfif", dataSellers[i].address, dataSellers[i].seller_rating, true, dataSellers[i].name);
+                        createNewCardTopTenProduct("sellers_link_card_happened","source/produits/person3.jfif", dataSellers[i].address, dataSellers[i].seller_rating, true, dataSellers[i].name,dataSellers[i].id,"user");
                     }
         }
 
-
-
-        function createNewCardTopTenProduct(tabName, picture, description, price, liked, productName) {
-
+        function createNewCardTopTenProduct(tabName, picture, description, price, liked, productName,id,postType) {
+            
             const newCard = document.createElement("div");
             newCard.classList.add("card");
             const newPicture = document.createElement("img");
@@ -147,22 +149,59 @@ include_once 'dbconnection.php';
             newLikeParagraph.appendChild(newLikeButton);
             newLikeButton.appendChild(newLikeIcone);
 
+            // using jquery to give every picture a link
+           // $(newPicture).wrap("<a href=test.html></a>");
+          
+          //Only product items currently have a working page 
+          if (tabName == "top_ten_card_happened" || tabName == "product_link_card_happened") // this means the current item is a product
+            $(newPicture).wrap("<a href=product_page.php?productID="+id+"></a>");
+            
+
+
+
             document.getElementById(tabName).appendChild(newCard);
         }
+         
+        function login()
+        {
+            var userID = window.prompt("Enter userID:","19");    
+            var xhttp = new XMLHttpRequest(); // using AJAX 
+            xhttp.open("POST","index.php",true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("userID="+userID); 
+            location.reload();
 
+        }
+        function logout()
+        {
+            var xhttp = new XMLHttpRequest();  // using AJAX 
+            xhttp.open("POST","index.php",true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("kill_session="+true); 
+            location.reload();
+        }
+         
     </script>
 
 </head>
 
 <body>
+     <!-- login button stuff -->
+    <div class="container">
+    <button class="my_button_edit" onclick="login()">log in</button>
+    <button class="my_button_edit" onclick="logout()">log out</button>
+    </div>
+    <!-- ******************* -->
+    
     <header class="header_class">
 
         <div>
             <img class="logo" src="source/icones/logo.png">
         </div>
-
+        
         <div class="header_link">
-            <a id="current_page" class="header_specific_link" href="index.html">Home</a>
+        
+            <a id="current_page" class="header_specific_link" href="index.php">Home</a>
             <a class="header_specific_link" href="getdata.php">Shop</a>
             <a class="header_specific_link" href="#">Forum</a>
             <a class="header_specific_link" href="#">Partner</a>
