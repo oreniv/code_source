@@ -153,6 +153,25 @@ echo($_SESSION['userID']);
             document.getElementById(tabName).appendChild(newCard);
         }
 
+        function login()
+        {
+            var userID = window.prompt("Enter userID:","19");    
+            var xhttp = new XMLHttpRequest(); // using AJAX 
+            xhttp.open("POST","index.php",true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("uname="+userID); 
+            location.reload();
+
+        }
+        function logout()
+        {
+            var xhttp = new XMLHttpRequest(); 
+            xhttp.open("POST","index.php",true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("kill_session="+true); 
+            location.reload();
+        }
+
     </script>
 
 </head>
@@ -160,11 +179,18 @@ echo($_SESSION['userID']);
 <body>
     <header class="header_class">
 
+    <!-- login button stuff -->
+    <button onclick="login()">login</button>
+    <button onclick="logout()">logout</button>
+    <!-- ******************* -->
+
+
         <div>
             <img class="logo" src="source/icones/logo.png">
         </div>
-
+        
         <div class="header_link">
+        
             <a id="current_page" class="header_specific_link" href="index.html">Home</a>
             <a class="header_specific_link" href="getdata.php">Shop</a>
             <a class="header_specific_link" href="#">Forum</a>
