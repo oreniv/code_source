@@ -88,27 +88,27 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
         function appendAllMyJson(dataProduct, dataProject, dataTopTenProject, dataTopTenProduct, dataTopTenSeller, dataSellers){
                     for(var i = 0; i< dataProject.length; i++){
-                        createNewCardTopTenProduct("project_link_card_happened","source/produits/project4.jpg", dataProject[i].project_description, dataProject[i].project_budget, true, dataProject[i].project_name,dataProject[i].project_id);
+                        createNewCardTopTenProduct("project_link_card_happened","source/produits/project4.jpg", dataProject[i].project_description, dataProject[i].project_budget, true, dataProject[i].project_name,dataProject[i].project_id,"project");
                     }
                     for(var i = 0; i< dataProduct.length; i++){
-                        createNewCardTopTenProduct("product_link_card_happened","source/produits/onepieceluffy.jpg", dataProduct[i].product_description, dataProduct[i].product_price, true, dataProduct[i].product_name,dataProduct[i].product_id);
+                        createNewCardTopTenProduct("product_link_card_happened","source/produits/onepieceluffy.jpg", dataProduct[i].product_description, dataProduct[i].product_price, true, dataProduct[i].product_name,dataProduct[i].product_id,"product");
                     }
                     for(var i = 0; i< dataTopTenProject.length; i++){
-                        createNewCardTopTenProduct("top_ten_project_card_happened","source/produits/project4.jpg", dataTopTenProject[i].project_description, dataTopTenProject[i].project_budget, true, dataTopTenProject[i].project_name,dataTopTenProject[i].project_id);
+                        createNewCardTopTenProduct("top_ten_project_card_happened","source/produits/project4.jpg", dataTopTenProject[i].project_description, dataTopTenProject[i].project_budget, true, dataTopTenProject[i].project_name,dataTopTenProject[i].project_id,"project");
                     }
                     for(var i = 0; i< dataTopTenProduct.length; i++){
-                        createNewCardTopTenProduct("top_ten_card_happened","source/produits/onepieceluffy.jpg", dataTopTenProduct[i].product_description, dataTopTenProduct[i].product_price, true, dataTopTenProduct[i].product_name,dataTopTenProduct[i].product_id);
+                        createNewCardTopTenProduct("top_ten_card_happened","source/produits/onepieceluffy.jpg", dataTopTenProduct[i].product_description, dataTopTenProduct[i].product_price, true, dataTopTenProduct[i].product_name,dataTopTenProduct[i].product_id,"product");
                     }
                     for(var i = 0; i< dataTopTenSeller.length; i++){
-                        createNewCardTopTenProduct("top_ten_sellers_card_happened","source/produits/person3.jfif", dataTopTenSeller[i].address, dataTopTenSeller[i].seller_rating, true, dataTopTenSeller[i].name,dataTopTenSeller[i].id);
+                        createNewCardTopTenProduct("top_ten_sellers_card_happened","source/produits/person3.jfif", dataTopTenSeller[i].address, dataTopTenSeller[i].seller_rating, true, dataTopTenSeller[i].name,dataTopTenSeller[i].id,"user");
                     }
 
                     for(var i = 0; i< dataSellers.length; i++){
-                        createNewCardTopTenProduct("sellers_link_card_happened","source/produits/person3.jfif", dataSellers[i].address, dataSellers[i].seller_rating, true, dataSellers[i].name,dataSellers[i].id);
+                        createNewCardTopTenProduct("sellers_link_card_happened","source/produits/person3.jfif", dataSellers[i].address, dataSellers[i].seller_rating, true, dataSellers[i].name,dataSellers[i].id,"user");
                     }
         }
 
-        function createNewCardTopTenProduct(tabName, picture, description, price, liked, productName,id) {
+        function createNewCardTopTenProduct(tabName, picture, description, price, liked, productName,id,postType) {
             
             const newCard = document.createElement("div");
             newCard.classList.add("card");

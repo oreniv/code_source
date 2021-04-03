@@ -19,6 +19,11 @@ else if(!($_SESSION['full_name']) && isset($_SESSION['userID']))
     $temp = mysqli_fetch_assoc($uNameQuery);
     $_SESSION['full_name'] = $temp['full_name'];
 
+   
+
+    
+    
+
 }
 
 
