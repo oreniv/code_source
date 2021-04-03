@@ -14,7 +14,8 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <link rel="stylesheet" href="styleSheet.css" />
     <title>Oray</title>
-
+    <!-- Jquery import -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
     
     <script>
         var slideIndex = 1;
@@ -192,7 +193,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         
         <div class="header_link">
         
-            <a id="current_page" class="header_specific_link" href="index.html">Home</a>
+            <a id="current_page" class="header_specific_link" href="index.php">Home</a>
             <a class="header_specific_link" href="getdata.php">Shop</a>
             <a class="header_specific_link" href="#">Forum</a>
             <a class="header_specific_link" href="#">Partner</a>
