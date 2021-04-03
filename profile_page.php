@@ -7,9 +7,9 @@ include_once 'dbconnection.php';
 
 <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="styleSheet.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link rel="stylesheet" href="styleSheet.css" />
     <title>Oray</title>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/variable-pie.js"></script>
@@ -18,31 +18,8 @@ include_once 'dbconnection.php';
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
     <script>
-        function openTab(tabName, elmnt, tab) {
-
-            // Hide all elements with class="tabcontent" by default */
-            var i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName(tab);
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-
-            // Remove the background color of all tablinks/buttons
-            tablinks = document.getElementsByClassName("tablink");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].style.color = "";
-            }
-
-            // Show the specific tab content
-            document.getElementById(tabName).style.display = "flex";
-            elmnt.style.color = '#E68235';
-            document.getElementById(tabName).style.color = '#707070';
-
-        }
-
-        // Get the element with id="defaultOpen" and click on it
-        document.getElementById("defaultOpen").click();
-        document.getElementById("principal_profile").style.color = '#707070';
+        
+        
 
         /**------------------------------------------------------------------------ */
 
@@ -62,6 +39,7 @@ include_once 'dbconnection.php';
         /**------------------------------------------------------------------------------------ */
 
         function createMyCharts(myTitle, dataImported, specificContainer){
+            console.log(dataImported);
             Highcharts.chart(specificContainer, {
                 chart: {
                 backgroundColor: '#E4F2FB',
@@ -116,8 +94,57 @@ include_once 'dbconnection.php';
                 else
                 mySentence = mySentence + data[i].name + ":   "+data[i].y +"$</br>"
             }
-
             legend.innerHTML = mySentence
+        }
+
+        /**-------------------------------------------------------- */
+        function appendMyJson(data){
+            for(var i = 0; i< data.length; i++){
+                createMyCard("myProducts", "source/produits/onepieceluffy.jpg", data[i].product_description, data[i].product_price, true, data[i].product_name);
+                    }
+            for(var i = 0; i< data.length; i++){
+                createMyCard("myProjects", "source/produits/onepieceluffy.jpg", data[i].product_description, data[i].product_price, true, data[i].product_name);
+            }
+        }
+
+        function createMyCard(tabName, image, description, price, liked, productName){
+            const newCard = document.createElement("div");
+            newCard.classList.add("card");
+            const newPicture = document.createElement("img");
+            newPicture.classList.add("img_card");
+            newPicture.src = "source/produits/onepiece.jpeg";
+            const newNameProduct = document.createElement("h3");
+            newNameProduct.innerHTML = productName;
+            const newDescription = document.createElement("p");
+            newDescription.classList.add("card_product_description");
+            newDescription.innerHTML = description;
+            const newContainerBottomCard = document.createElement("div");
+            newContainerBottomCard.classList.add("container");
+            newContainerBottomCard.classList.add("card_bottom");
+            const newPrice = document.createElement("p");
+            newPrice.classList.add("price");
+            newPrice.innerHTML = "$" + price;
+            const newLikeParagraph = document.createElement("p");
+            const newLikeButton = document.createElement("button");
+            newLikeButton.classList.add("heart_button")
+            const newLikeIcone = document.createElement("img");
+            newLikeIcone.classList.add("icon_heart");
+            if (liked == true) {
+                newLikeIcone.src = "source/icones/groupe_22_filled.png"
+            } else {
+                newLikeIcone.src = "source/icones/groupe_22.png"
+            }
+
+            newCard.appendChild(newPicture);
+            newCard.appendChild(newNameProduct);
+            newCard.appendChild(newDescription);
+            newCard.appendChild(newContainerBottomCard);
+            newContainerBottomCard.appendChild(newPrice);
+            newContainerBottomCard.appendChild(newLikeParagraph);
+            newLikeParagraph.appendChild(newLikeButton);
+            newLikeButton.appendChild(newLikeIcone);
+
+            document.getElementById(tabName).appendChild(newCard);
         }
             
     </script>
@@ -229,7 +256,7 @@ include_once 'dbconnection.php';
         </div>
             
         <div id="buyer_profile" class="tabcontent">
-            
+            <p>fuck you</p>
         </div>
 
         <div id="seller_profile" class="tabcontent">
@@ -239,32 +266,46 @@ include_once 'dbconnection.php';
                 <div class="side_container">
                     <figure class="highcharts-figure">
                         <div id="principalChartContainer"></div>
-                    </figure>
-                    <div class="second_side_container">
-                        <p  id="myLegend">hello there</p>
+                        <div class="second_side_container">
+                        <p  id="myLegend"></p>
                     </div>
+                    </figure>    
                 </div>
 
                 <div class="side_container">
                     <figure class="highcharts-figure ">
                     <div id="creditContainer"></div>
-                    </figure>
-                    <div class="second_side_container">
-                        <p>Withdraw money:</p>
-                        <div class="withdraw_container">
-                            <input type="number" placeholder="$" class="withdraw_number">
-                            <button class="withdraw_button" type="submit">Send</button>
+                        <div class="second_side_container">
+                            <p>Withdraw money:</p>
+                            <div class="withdraw_container">
+                                <input type="number" placeholder="$" class="withdraw_number" min="0">
+                                <button class="withdraw_button" type="submit">Send</button>
+                            </div>
                         </div>
-                    </div>
+                    </figure>
                 </div>
             </div>
 
             <div class="product_project_container">
                 <div class="innerTab">
-                    <button id="defaultProductOpen" class="innertablink" onclick="openTab('myOwnProduct', this, 'innerTabContent')">Products</button>
+                    <button id="defaultProductOpen" class="innertablink" onclick="openTab('myOwnProductDefault', this, 'innerTabContent')">Products</button>
                     <button id="project_link" class="innertablink" onclick="openTab('projectParticipated', this, 'innerTabContent')">Projects</button>
                 </div>
 
+                <div id="myOwnProductDefault" class="innerTabContent">
+                    <button class="my_button_add_product" onclick="window.location.href='#';">Add product</button>
+                    <div id="myProducts" class="personalProduct row">
+                    </div>
+                </div>
+
+                <div id="projectParticipated" class="innerTabContent">
+                    <div id="myProjects" class="product row">
+                        <button class="my_button_add_product" onclick="window.location.href='#';">In progress</button>
+                        <button class="my_button_add_product" onclick="window.location.href='#';">Price proposition</button>
+                        <div id="myProjects" class="personalProduct row">
+                        </div>
+                    </div>
+                </div>
             </div>
             
 
@@ -272,9 +313,90 @@ include_once 'dbconnection.php';
 
         <?php
             $sqlProfile ="SELECT * FROM users WHERE users.id =19;";
-           
+            $sqlTopTenProduct = "SELECT * FROM sales_item WHERE sales_item.sales_item_posterID = 19;";
+            $sqlEarning = "CALL get_seller_total_sold_items(19);";
+
+            $resultEarning = mysqli_query($conn, $sqlEarning);
+            $resultCheckEarning = mysqli_num_rows($resultEarning);
+
+            mysqli_close($conn);
+            $conn = mysqli_connect($servername, $username, $password, $dbname);
+
             $resultProfile = mysqli_query($conn, $sqlProfile);
             $resultCheckProfile = mysqli_num_rows($resultProfile);
+
+            $resultTopTenProduct = mysqli_query($conn, $sqlTopTenProduct);
+            $resultCheckTopTenProduct = mysqli_num_rows($resultTopTenProduct);
+
+            mysqli_close($conn);
+            $conn = mysqli_connect($servername, $username, $password, $dbname);
+
+            if($resultCheckEarning > 0){
+                $twoDSketch = 0;
+                $twoDSketchCount = 0;
+                $treeDSchema = 0;
+                $treeDSchemaCount = 0;
+                $physical = 0;
+                $physicalCount = 0;
+                $mainDataEarning  = array();
+                while($row = mysqli_fetch_assoc($resultEarning)){
+                    $dataEarning  = array(
+                        "type" => $row['item_type'],
+                        "count" => $row['amount_sold'],
+                        "product_price" => $row['price'],
+                        "credit" => $row['credit']
+                    );   
+                    array_push($mainDataEarning , $dataEarning );
+                    
+                    if($row['item_type'] == "2D-Sketch"){
+                        $twoDSketch +=  ($row['amount_sold']*$row['price']) ;
+                        $twoDSketchCount+= $row['amount_sold'];
+                    }else if($row['item_type'] == "3D-Schema"){
+                        $treeDSchema +=  ($row['amount_sold']*$row['price']);
+                        $treeDSchemaCount+= $row['amount_sold'];
+                    } else if($row['item_type'] == "Physical-item"){
+                        $physical +=  ($row['amount_sold']*$row['price']);
+                        $physicalCount += $row['amount_sold'];
+                    }
+                    unset($dataEarning );
+                }
+                $jsonEarning  = json_encode($mainDataEarning ); 
+
+                
+                $earning2dSketch = array(
+                    "name"=> '2D-Sketch', 
+                    "y"=> $twoDSketch,
+                    "z"=>  $twoDSketchCount
+                );
+                $earning3dSchema = array (
+                    "name"=> '3D-Schema', 
+                    "y"=> $treeDSchema,
+                    "z"=>$treeDSchemaCount
+                );
+                $earningPhysical = array(
+                    "name" => 'Physical-item', 
+                    "y"=> $physical,
+                    "z"=> $physicalCount
+                );
+    
+                $myfuckingArray = array($earning2dSketch, $earning3dSchema, $earningPhysical);
+                $jsonEarningData = json_encode($myfuckingArray);
+            }
+
+            if($resultCheckTopTenProduct > 0){
+                $mainDataTopTenProduct  = array();
+                while($row = mysqli_fetch_assoc($resultTopTenProduct)){
+                    $dataTopTenProduct  = array(
+                        "product_name" => $row['item_name'],
+                        "product_id" => $row['id'],
+                        "product_price" => $row['price'],
+                        "product_description" => $row['item_description']
+                    );   
+                    array_push($mainDataTopTenProduct , $dataTopTenProduct );
+                    unset($dataTopTenProduct );                
+                }
+                $jsonTopTenProduct  = json_encode($mainDataTopTenProduct ); 
+            }
 
             if($resultCheckProfile > 0)
             {
@@ -290,47 +412,6 @@ include_once 'dbconnection.php';
                         "address" => $row['address']
                     );   
             }
-
-            $dataTentative1 = array(
-                "name" => "3D products",
-                "y" => 200,
-                "z" => 28
-            );
-            $dataTentative2 = array(
-                "name" => "3D schemes",
-                "y" => 450,
-                "z" => 35
-            );
-            $dataTentative3 = array(
-                "name" => "projects",
-                "y" => 1250,
-                "z" => 12
-            );
-
-            $dataTentative4 = array(
-                "name" => "3D products",
-                "y" => 59,
-                "z" => 13
-            );
-            $dataTentative5 = array(
-                "name" => "3D schemes",
-                "y" => 35,
-                "z" => 9
-            );
-            $dataTentative6 = array(
-                "name" => "projects",
-                "y" => 720,
-                "z" => 3
-            );
-            
-            
-
-            $earningData = array($dataTentative1, $dataTentative2, $dataTentative3);
-            $creditData = array($dataTentative4, $dataTentative5, $dataTentative6);
-
-            $jsonEarningData = json_encode($earningData); 
-            $jsonCreditData = json_encode($creditData); 
-
         ?>
 
         <script>
@@ -347,35 +428,70 @@ include_once 'dbconnection.php';
             console.log(jsonJsProfile);
             appendData(jsonJsProfile);
 
+            var jsonJsTopTenProduct = <?= $jsonTopTenProduct; ?>;
+            console.log(jsonJsTopTenProduct);
+
+            appendMyJson(jsonJsTopTenProduct);
+            jsonEarningDataJs = <?= $jsonEarningData?>;
+
+            jsonTentative = <?=$jsonEarning?>;
+            console.log(jsonEarningDataJs);
+
+            console.log(jsonTentative);
 
             var myTitle = 'Total:</br>';
             var myTotal = 0;
             var myTitleCredit = 'Total credit:</br>';
             var myTotalCredit = 0;
+            myTotalCredit = jsonTentative[0].credit;
 
-            jsonEarningData = <?= $jsonEarningData?>;
-            jsonCreditData = <?= $jsonCreditData?>;
             
-            for(var i = 0; i< jsonEarningData.length; i++){
-                myTotal = myTotal + jsonEarningData[i].y;
-            }
-            for(var i = 0; i< jsonCreditData.length; i++){
-                myTotalCredit = myTotalCredit + jsonCreditData[i].y;
+            for(var i = 0; i< jsonEarningDataJs.length; i++){
+                myTotal = myTotal + jsonEarningDataJs[i].y;
             }
 
+           
             var myTotalString = myTotal.toString();
             myTitle += myTotalString;
             myTitle += '$';
-            var myTotalCreditString = myTotalCredit.toString();
+            myTotalCreditString =  myTotalCredit.toString();
             myTitleCredit += myTotalCreditString;
             myTitleCredit += '$';
 
-            createMyCharts(myTitleCredit, jsonCreditData, 'creditContainer');
-            createMyCharts(myTitle, jsonEarningData, 'principalChartContainer');
-            createMyLegend(jsonEarningData);
+            createMyCharts(myTitleCredit, jsonEarningDataJs, 'creditContainer');
+            createMyCharts(myTitle, jsonEarningDataJs, 'principalChartContainer');
+            createMyLegend(jsonEarningDataJs);
             
 
-            
+            function openTab(tabName, elmnt, tab) {
+
+                // Hide all elements with class="tabcontent" by default */
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName(tab);
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+
+                // Remove the background color of all tablinks/buttons
+                tablinks = document.getElementsByClassName("tablink");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].style.color = "";
+                }
+
+                // Show the specific tab content
+                document.getElementById(tabName).style.display = "flex";
+                elmnt.style.color = '#E68235';
+                document.getElementById(tabName).style.color = '#707070';
+
+                if(tabName=="seller_profile"){
+                    document.getElementById("defaultProductOpen").click();
+                    document.getElementById(tabName).style.color = '#707070';
+                }
+            }
+
+                // Get the element with id="defaultOpen" and click on it
+                document.getElementById("defaultOpen").click();
+                document.getElementById("principal_profile").style.color = '#707070';
         </script>
 
         <footer>
