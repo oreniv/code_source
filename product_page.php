@@ -304,13 +304,15 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
     
     <?php 
 
+
  
         
             $productID = $_GET['productID'] ; // grab the product ID the user clicked on
             $sqlProductInfo ="CALL get_sales_item_page_info(".$productID.")";
             $sqlFetchTags = "CALL get_tags_for_post(".$productID.",'sales_item')";
             $sqlFetchReviews = "CALL get_post_reviews(".$productID.")";
-        
+
+       
             $resultProduct = mysqli_query($conn, $sqlProductInfo); // 1st query
             $row = mysqli_fetch_assoc($resultProduct); // store 1st results
             

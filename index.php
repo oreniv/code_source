@@ -346,9 +346,14 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             $resultSeller = mysqli_query($conn, $sqlSeller);
             $resultCheckSeller = mysqli_num_rows($resultSeller);
 
+            mysqli_close($conn);
+            $conn = mysqli_connect($servername, $username, $password, $dbname);
+
             $resultTopTenSeller = mysqli_query($conn, $sqlTopTenSeller);
             $resultCheckTopTenSeller = mysqli_num_rows($resultTopTenSeller);
 
+            mysqli_close($conn);
+            $conn = mysqli_connect($servername, $username, $password, $dbname);
             
             if($resultCheckProduct > 0){
                 $mainDataProduct = array();
