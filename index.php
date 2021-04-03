@@ -2,7 +2,7 @@
 include_once 'dbconnection.php';
 include_once 'user_params.php';
 session_start();
-echo "Current userID: ",$_SESSION['userID'],"||","Name: " , $_SESSION['full_name']; 
+echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name']; 
 ?>
 
 <!DOCTYPE html>
@@ -177,13 +177,14 @@ echo "Current userID: ",$_SESSION['userID'],"||","Name: " , $_SESSION['full_name
 </head>
 
 <body>
-    <header class="header_class">
-
-    <!-- login button stuff -->
-    <button onclick="login()">login</button>
-    <button onclick="logout()">logout</button>
+     <!-- login button stuff -->
+    <div class="container">
+    <button class="my_button_edit" onclick="login()">log in</button>
+    <button class="my_button_edit" onclick="logout()">log out</button>
+    </div>
     <!-- ******************* -->
-
+    
+    <header class="header_class">
 
         <div>
             <img class="logo" src="source/icones/logo.png">

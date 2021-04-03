@@ -1,7 +1,7 @@
 <?php 
 include_once 'dbconnection.php';
 session_start();
-echo "Current userID: ",$_SESSION['userID'],"||","Name: " , $_SESSION['full_name']; 
+echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name']; 
 ?>
 
 <!DOCTYPE html>
@@ -229,7 +229,7 @@ echo "Current userID: ",$_SESSION['userID'],"||","Name: " , $_SESSION['full_name
 <body>
 
 
-<div class="container ">
+<div class="container">
     <div class="row ">
         <div class="col-4">
         <img class="img-fluid" src="source/produits/project3.jpg">
