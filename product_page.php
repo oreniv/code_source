@@ -2,6 +2,7 @@
 include_once 'dbconnection.php';
 session_start();
 echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name']; 
+ 
 ?>
 
 <!DOCTYPE html>
@@ -11,18 +12,21 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
     function addToCart()
     {
-        window.alert("I'm adding item number "+ <?=$_GET['productID']?> +" to my cart");
+         window.alert("I'm adding item number "+ <?=$_GET['productID']?> +" to my cart");
         
      
         <?php 
         if (isset($_POST['add_this_item_to_cart'])) // if page is called with set variable set then execute 
         {
+       
         $sqlAddToCart = "CALL insert_into_cart(".$_SESSION['userID'].",".$_POST['add_this_item_to_cart'].",'sales_item')";
         $query = mysqli_query($conn,  $sqlAddToCart ); 
-        array_push($_SESSION['items_in_cart'],(int)$_GET['productID']); // update session variables to display cart count and content on the fly
-        $_SESSION['cart_item_count']++ ; // same as above
-        unset($_POST['add_this_item_to_cart']); // unset this variable so refreshing the page is possible without adding shit to cart
+         
+        array_push($_SESSION['items_in_cart'][0],(int)$_POST['add_this_item_to_cart']);  // push this item to cart so i don't need to ping db again
+        $_SESSION['cart_item_count']++ ;  // update item counter on the fly 
         
+        unset($_POST['add_this_item_to_cart']); // unset this variable so refreshing the page is possible without adding shit to cart
+
         mysqli_close($conn);
         $conn = mysqli_connect($servername, $username, $password, $dbname);
         }
@@ -34,6 +38,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
            xhttp.send("add_this_item_to_cart="+productID); 
            location.reload(); // remove this when cart updates dynamically 
+           
     }
  
     function buyNow()

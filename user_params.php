@@ -25,28 +25,38 @@ else if(!($_SESSION['full_name']) && isset($_SESSION['userID']))
     $_SESSION['cartID'] = $temp['id'];
     
     // get the item IDs of sales_items in cart
-    $sql_item_in_my_cart = "SELECT item_in_cart.sales_itemID FROM item_in_cart  WHERE item_in_cart.cartID =".$_SESSION['cartID']." AND item_in_cart.sales_itemID IS NOT NULL ;";
-    
+    $sql_item_in_my_cart = "SELECT item_in_cart.sales_itemID,item_in_cart.project_item_bidID FROM item_in_cart  WHERE item_in_cart.cartID =".$_SESSION['cartID'];
     $uCartContentQuery =  mysqli_query($conn,$sql_item_in_my_cart);     
+    
     $cartItem_array = array();
+    $sale_items = array();
+    $project_bids = array();
+    
+    
     while($temp = mysqli_fetch_assoc($uCartContentQuery))
     {
-       array_push($cartItem_array,(int)$temp['sales_itemID']);  // only count sales_item for now 
+        if ($temp['sales_itemID'] != NULL)// if i'm looking at a sales_item
+        { 
+            array_push($sale_items,(int)$temp['sales_itemID']);
+                
+        }
+        else 
+        {
+            array_push($project_bids,(int)$temp['project_item_bidID']);
+            
+        }
+
+
+
+         
     }
-    $_SESSION['items_in_cart'] = $cartItem_array; // list of actual sales_item IDs
-    $_SESSION['cart_item_count'] = count($cartItem_array); // stores the count of sales_items ONLY 
-    
-
-    
-
-
+    array_push($cartItem_array,$sale_items);
+    array_push($cartItem_array,$project_bids);
+     
+     $_SESSION['items_in_cart'] = $cartItem_array; // 2D array of all items in cart
+     $_SESSION['cart_item_count'] = count($sale_items) + count($project_bids);
 
 
-
-
-
-
-    
 } 
 
 
