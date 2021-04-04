@@ -11,7 +11,27 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
     function addToCart()
     {
-        window.alert("this doesn't work yet");
+        window.alert("I'm adding item number "+ <?=$_GET['productID']?> +" to my cart");
+        
+     
+        <?php 
+        if (isset($_POST['add_this_item_to_cart'])) // if page is called with set variable set then execute 
+        {
+        $sqlAddToCart = "CALL insert_into_cart(".$_SESSION['userID'].",".$_POST['add_this_item_to_cart'].",'sales_item')";
+        $query = mysqli_query($conn,  $sqlAddToCart ); 
+        unset($_POST['add_this_item_to_cart']); // unset this variable so refresh the page is possible without adding shit to cart
+        
+        mysqli_close($conn);
+        $conn = mysqli_connect($servername, $username, $password, $dbname);
+        }
+        ?>
+
+        var productID = <?=$_GET['productID']?> ;     
+        var xhttp = new XMLHttpRequest(); // using AJAX 
+           xhttp.open("POST","product_page.php",true); // call this page again with a POST variable that indicates which item to add to cart
+           xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+           xhttp.send("add_this_item_to_cart="+productID); 
+           location.reload(); // remove this when cart updates dynamically 
     }
  
     function buyNow()
@@ -183,6 +203,10 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
     </script>
 
+
+
+
+
 <head>
     <meta charset="utf-8" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -202,29 +226,24 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 </head>
 
 
+
+<!--  jQuery loading header and footer -->
+<script>
+ 
+ $(document).ready(function(){
+   $(".header_class").load("header.html");
+ });
+ 
+</script>
+<!-- -------------------------------------------- -->
+
+
+
+
+
 <header class="header_class">
-
-            <div>
-                <img class="logo" src="source/icones/logo.png">
-            </div>
-
-            <div class="header_link">
-                <a class="header_specific_link" href="index.php">Home</a>
-                <a class="header_specific_link" href="#">Shop</a>
-                <a class="header_specific_link" href="#">Forum</a>
-                <a class="header_specific_link" href="#">Partner</a>
-            </div>
-
-            <div class="profile_container">
-                <div class="mask_circle">
-                    <img class="img_profile" src="source/produits/profil_picture.jpg">
-                </div>
-                <div class="cart_container">
-                    <a class="cart_link" href="#"><span class="number_item">0</span><img class="cart_img"
-                            src="source/icones/cart.png"></a>
-                </div>
-            </div>  
-        </header>
+  <!-- Header is loaded with jQuery -->
+</header>
 
 
 <body>

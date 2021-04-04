@@ -154,29 +154,19 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
 </head>
 
+<script>
+$(document).ready(function(){
+   $(".header_class").load("header.html");
+ });
+</script>
+
+
+
+
 <body>
     <header>
         <header class="header_class">
-            <div>
-                <img class="logo" src="source/icones/logo.png">
-            </div>
-
-            <div class="header_link">
-                <a class="header_specific_link" href="index.php">Home</a>
-                <a class="header_specific_link" href="#">Shop</a>
-                <a class="header_specific_link" href="#">Forum</a>
-                <a class="header_specific_link" href="#">Partner</a>
-            </div>
-
-            <div class="profile_container">
-                <div class="mask_circle">
-                    <img class="img_profile" src="source/produits/profil_picture.jpg">
-                </div>
-                <div class="cart_container">
-                    <a class="cart_link" href="#"><span class="number_item">0</span><img class="cart_img"
-                            src="source/icones/cart.png"></a>
-                </div>
-            </div>
+            <!-- Header is loaded with jQuery -->
         </header>
 
 
@@ -184,7 +174,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
                 <button id="defaultOpen" class="tablink" onclick="openTab('principal_profile', this, 'tabcontent')">Your profile</button>
                 <button id="buyer_profile_link" class="tablink" onclick="openTab('buyer_profile', this, 'tabcontent')">Your buyer profile</button>
                 <button id="seller_profile_link" class="tablink" onclick="openTab('seller_profile', this, 'tabcontent')">Your seller profile</button>
-        </div>
+        </div>  
 
 
         <div id="principal_profile" class="profile_container_data tabcontent">
@@ -320,8 +310,8 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             $sqlProfile = "SELECT * FROM users WHERE users.id =".$_SESSION['userID']  ;
 
          
-            $sqlTopTenProduct = "SELECT * FROM sales_item WHERE sales_item.sales_item_posterID = 19;";
-            $sqlEarning = "CALL get_seller_total_sold_items(19);";
+            $sqlTopTenProduct = "SELECT * FROM sales_item WHERE sales_item.sales_item_posterID =".$_SESSION['userID'];
+            $sqlEarning = "CALL get_seller_total_sold_items(".$_SESSION['userID'].");";
 
             $resultEarning = mysqli_query($conn, $sqlEarning);
             $resultCheckEarning = mysqli_num_rows($resultEarning);

@@ -152,8 +152,8 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             // using jquery to give every picture a link
            // $(newPicture).wrap("<a href=test.html></a>");
           
-          //Only product items currently have a working page 
-          if (tabName == "top_ten_card_happened" || tabName == "product_link_card_happened") // this means the current item is a product
+         
+          if (postType == "product") // every type of post  gets their own page
             $(newPicture).wrap("<a href=product_page.php?productID="+id+"></a>");
             
 
@@ -180,48 +180,32 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             xhttp.send("kill_session="+true); 
             location.reload();
         }
+
          
     </script>
 
 </head>
 
-<body>
+
+ <script>
+$(document).ready(function(){
+   $(".header_class").load("header.html");
+ });
+</script>
+
      <!-- login button stuff -->
-    <div class="container">
+     <div class="container">
     <button class="my_button_edit" onclick="login()">log in</button>
     <button class="my_button_edit" onclick="logout()">log out</button>
     </div>
     <!-- ******************* -->
     
-    <header class="header_class">
+<header class="header_class"> 
+     <!-- Header is loaded with jQuery -->
+</header>
+<body>
 
-        <div>
-            <img class="logo" src="source/icones/logo.png">
-        </div>
-        
-        <div class="header_link">
-        
-            <a id="current_page" class="header_specific_link" href="index.php">Home</a>
-            <a class="header_specific_link" href="getdata.php">Shop</a>
-            <a class="header_specific_link" href="#">Forum</a>
-            <a class="header_specific_link" href="#">Partner</a>
-        </div>
-
-        <div class="profile_container">
-            <a href="profile_page.php">
-                <div class="mask_circle">
-                    <img class="img_profile" src="source/produits/profil_picture.jpg">
-                </div>
-            </a>
-            <div class="cart_container">
-                <a class="cart_link" href="#"><span class="number_item">0</span><img class="cart_img"
-                        src="source/icones/cart.png"></a>
-            </div>
-        </div>
-
-
-
-    </header>
+    
 
     <div class="container_advertisement_image">
         <div class="mask_advertisement_image">
@@ -323,7 +307,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             $sqlTopTenProject = "CALL get_top10_projects();";
             $sqlTopTenSeller ="CALL get_top10_sellers();";
             $sqlSeller ="SELECT * FROM users;";
-
+            
 
             $resultProject = mysqli_query($conn, $sqlProject);
             $resultCheckProject = mysqli_num_rows($resultProject);
@@ -336,13 +320,14 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             // Must restart connection after a CALL.
             mysqli_close($conn);
             $conn = mysqli_connect($servername, $username, $password, $dbname);
+            
             //****************************/
             $resultTopTenProduct = mysqli_query($conn, $sqlTopTenProduct);
             $resultCheckTopTenProduct = mysqli_num_rows($resultTopTenProduct);
 
             mysqli_close($conn);
             $conn = mysqli_connect($servername, $username, $password, $dbname);
-
+        
             $resultSeller = mysqli_query($conn, $sqlSeller);
             $resultCheckSeller = mysqli_num_rows($resultSeller);
 
@@ -351,7 +336,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
             $resultTopTenSeller = mysqli_query($conn, $sqlTopTenSeller);
             $resultCheckTopTenSeller = mysqli_num_rows($resultTopTenSeller);
-
+            
             mysqli_close($conn);
             $conn = mysqli_connect($servername, $username, $password, $dbname);
             
