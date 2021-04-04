@@ -189,7 +189,8 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
  <script>
 $(document).ready(function(){
-   $(".header_class").load("header.html");
+   $(".header_class").load("header.php");
+   $("footer").load("footer.html");
  });
 </script>
 
@@ -463,25 +464,8 @@ $(document).ready(function(){
 
  
            
-    <footer>
-
-        <div id="fuck" class="img_footer">
-            <div id="about_us">
-                <a class="link_footer" href="#">About us</a>
-            </div>
-            <div id="policy">
-                <a class="link_footer" id="our_policy" href="#">Our policy</a>
-                <a class="link_footer" href="#">Private policy</a>
-            </div>
-            <div id="contact">
-                <a class="link_footer" href="#">Oray</a>
-                <p>Contact number: <span id="phone"></span></p>
-                <p>Contact mail: <span id="mail"></span></p>
-                <p>Contact address: <span id="address"></span></p>
-            </div>
-        </div>
-
-
+    <footer> 
+        <!-- jQuery pulls this -->
     </footer>
 </body>
 

@@ -1,3 +1,16 @@
+<?php
+session_start();
+?>
+
+
+<script>
+ // this section deals with updating the cart item count
+  
+document.getElementsByClassName("number_item")[0].innerHTML = <?= $_SESSION['cart_item_count'] ?>;
+
+</script>
+
+
 <div>
     <img class="logo" src="source/icones/logo.png">
 </div>
@@ -21,3 +34,4 @@
                 src="source/icones/cart.png"></a>
     </div>
 </div>
+
