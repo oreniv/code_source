@@ -570,6 +570,11 @@ margin:10px;
 
 }
 
+.checked_star{
+
+  color: yellow;
+}
+
 .button {
   background-color: #ddd;
   border: none;

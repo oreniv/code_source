@@ -49,51 +49,6 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
 
 
-    function appendData(profileData){
-       
-        var price = profileData["price"];
-        var print_duration = profileData["print_duration"];
-        var delivery_price = profileData["delivery_price"];
-
-        /** Set product title,description,author and related tags **/
-       document.getElementById("product_title").innerHTML = profileData["name"];
-       document.getElementById("product_desc").innerHTML ="Description: " + profileData["description"];
-       document.getElementById("author").innerHTML ="Author: " + profileData["author"];
-       document.getElementById("tags").innerHTML = profileData["tags"];
-       /** set prices and print duration display */
-       if(!print_duration) // if no duration specified it's digital probably 
-         document.getElementById("print_duration").innerHTML = "Print time: User did not specify or this is a digital item";
-       else
-         document.getElementById("print_duration").innerHTML = "Print time: "+print_duration+" days";    
-       if(!delivery_price) // if no delivery price specified it's digital probably
-       {
-        document.getElementById("delivery_price").innerHTML = "Delivery price: Free";
-        document.getElementById("price").innerHTML = "Total:" +price+" $";
-       } 
-       else
-       {
-          document.getElementById("delivery_price").innerHTML = "Delivery price: "+delivery_price+ " $";
-        
-          
-          document.getElementById("price").innerHTML = "Price:" +price+"$ + " + "Delivery: " + delivery_price+"$ "
-          +"\n Total price: " + (Number(price)  + Number(delivery_price) + "$");
-       }
-    
-        /** Set stars ***/
-        var author_rating = profileData["author_rating"];
-        var product_rating =  profileData["rating"];
-        
-        for(i = 1 ; i<=  author_rating;i++) // set author stars
-            document.getElementById("sstar"+i).className = "fa fa-star checked";
-        for(i = 1 ; i<=  product_rating;i++) // set item stars
-            document.getElementById("pstar"+i).className = "fa fa-star checked";
-        /****************/
-        
-        
-
-
-
-    }
 
      
     function appendData(profileData){
@@ -103,9 +58,9 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         var delivery_price = profileData["delivery_price"];
 
         /** Set product title,description,author and related tags **/
-       document.getElementById("product_title").innerHTML = profileData["name"];
+       document.getElementById("product_title").innerHTML = profileData["name"] + " ";
        document.getElementById("product_desc").innerHTML ="Description: " + profileData["description"];
-       document.getElementById("author").innerHTML ="Author: " + profileData["author"];
+       document.getElementById("author").innerHTML ="Posted by: " + profileData["author"] +" ";
        document.getElementById("tags").innerHTML = profileData["tags"];
        /** set prices and print duration display */
        if(!print_duration) // if no duration specified it's digital probably 
@@ -125,19 +80,23 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
           document.getElementById("price").innerHTML = "Price:" +price+"$ + " + "Delivery: " + delivery_price+"$ "
           +"\n Total price: " + (Number(price)  + Number(delivery_price) + "$");
        }
-    
-        /** Set stars ***/
+      
+        
+      /** Set stars ***/
+       
         var author_rating = profileData["author_rating"];
         var product_rating =  profileData["rating"];
-        
+       
         for(i = 1 ; i<=  author_rating;i++) // set author stars
-            document.getElementById("sstar"+i).className = "fa fa-star checked";
+            document.getElementById("author").insertAdjacentHTML("beforeend","<i class='fas fa-star checked_star'></i>");
         for(i = 1 ; i<=  product_rating;i++) // set item stars
-            document.getElementById("pstar"+i).className = "fa fa-star checked";
+            document.getElementById("product_title").insertAdjacentHTML("beforeend","<i class='fas fa-star checked_star'></i>");
+       
+               
         /****************/
         
         
-
+       
 
 
     }
@@ -169,9 +128,19 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
        var score  = reviewData[review_count]["score"];
        var timeStamp = reviewData[review_count]["timestamp"];
        review_count++;            
+
+
+
+
+
+
+
+       
    
        const reviewPost = document.createElement("div");
        reviewPost.classList.add("review_wrapper");
+       reviewPost.classList.add("border");
+       reviewPost.classList.add("border-3");
        const reviewUser = document.createElement("div");
        reviewUser.classList.add("col");
        reviewUser.classList.add("comment");
@@ -193,7 +162,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             var star = document.createElement("span");
             star.classList.add("fa");
             star.classList.add("fa-star");
-            star.classList.add("checked");
+            star.classList.add("checked_star");
             reviewPost.appendChild(star);
         }
  
@@ -202,6 +171,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
        reviewText.appendChild(document.createElement("br"));
        reviewText.appendChild(document.createTextNode("Posted on: "+timeStamp));
        document.getElementById("review_section").appendChild(reviewPost); 
+       
            
     }
     }
@@ -220,15 +190,12 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <link rel="stylesheet" href="styleSheet.css" />
     <!-- import stylesheet for star icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Oray</title>
-    <style>
-    .checked { /* set star color */
-    color: orange;
-    }
-    </style>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
 
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
+    <!-- for icon support -->
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 
 </head>
 
@@ -258,65 +225,34 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
 
 <div class="container">
-    <div class="row ">
-        <div class="col-4">
-        <img class="img-fluid" src="source/produits/project3.jpg">
+    <div class="row">
+        <div class="col-4 "> <!-- Make this dynamic depending on loaded item -->
+             <img src="source/produits/project3.jpg" class="img-fluid img-thumbnail">
         </div>
-        <div class="col-8 "> 
-            <div class="row product_page_text ">
-                <div class="col-7 ">
-                    <p  id="product_title"></p>
+        <div class="col-8 ">
+            <ul class="list-group">
+                <li id="product_title" class="list-group-item fw-bold">Product title</li>
+                <li id="author" class="list-group-item fw-bold">Author</li>
+                <li id="product_desc" class="list-group-item">Description</li>
+                <li id="tags"  class="list-group-item">Tags</li>
+                <div class="row">
+                    <div class="col-6 "><li id="print_duration" class="list-group-item">Print duration </li></div>
+                    <div class="col-6 "><li id="delivery_price" class="list-group-item">Delivery price </li></div>
                 </div>
-                <div class="col-5 ">
-                    <span id="pstar1"class="fa fa-star"></span>
-                    <span id="pstar2"class="fa fa-star"></span>
-                    <span id="pstar3"class="fa fa-star"></span>
-                    <span id="pstar4"class="fa fa-star"></span>
-                    <span id="pstar5"class="fa fa-star"></span>
-                </div>
-            </div>  
-            
-            <div class="row product_page_text">   
-                <div class="col-7">
-                    <p id="author"></p> 
-                </div>
-                <div class="col-5">
-                    
-                    <span id="sstar1"class="fa fa-star"></span>
-                    <span id="sstar2"class="fa fa-star"></span>
-                    <span id="sstar3"class="fa fa-star"></span>
-                    <span id="sstar4"class="fa fa-star"></span>
-                    <span id="sstar5"class="fa fa-star"></span>
-
-                </div>
-            </div>  
-            <p class="product_page_text"  id="product_desc"></p>  
-            <p class="product_page_text"  id="tags"></p>    
-            <div class="row ">
-                <div class="col delivery_price_text product_page_text">
-                    <p class="delivery_price_text" id="delivery_price"></p>
-                </div>
-                <div class="col product_page_text">
-                    <p class="delivery_price_text" id="print_duration"></p>
-                </div>
-            </div>
-            <div class="row product_page_text">
-                <div class="col">
-                       <p id="price"></p>
-               </div>
-                <div class="col">
-                <!-- TO DO : make the buttons fucking work -->
-                <button class="button" onclick="buyNow()">Buy Now</button>
-                <button class="button" onclick="addToCart()">Add to cart</button>
-                </div>
-
-            </div>
-        </div>    
+                <li id="price"  class="list-group-item">Price</li>
+            </ul>
+        </div>
     </div>
-
 </div>
 
-<div class="container" id="review_section"> </div>
+<div class="container" id="review_section"></div>
+
+
+
+
+
+
+
    
 
 
