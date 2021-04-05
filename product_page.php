@@ -224,22 +224,11 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
     </div>
 </div>
 
+
 <div class="container" id="review_section"></div>
 
 
-
-
-
-
-
-   
-
-
-
- 
     
-    
-            
 </body>
     
     
