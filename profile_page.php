@@ -1,5 +1,7 @@
 <?php 
 include_once 'dbconnection.php';
+session_start();
+echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name']; 
 ?>
 
 <!DOCTYPE html>
@@ -16,6 +18,7 @@ include_once 'dbconnection.php';
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
 
     <script>
         
@@ -151,29 +154,20 @@ include_once 'dbconnection.php';
 
 </head>
 
+<script>
+$(document).ready(function(){
+   $(".header_class").load("header.php");
+   $("footer").load("footer.html");
+ });
+</script>
+
+
+
+
 <body>
     <header>
         <header class="header_class">
-            <div>
-                <img class="logo" src="source/icones/logo.png">
-            </div>
-
-            <div class="header_link">
-                <a class="header_specific_link" href="index.php">Home</a>
-                <a class="header_specific_link" href="#">Shop</a>
-                <a class="header_specific_link" href="#">Forum</a>
-                <a class="header_specific_link" href="#">Partner</a>
-            </div>
-
-            <div class="profile_container">
-                <div class="mask_circle">
-                    <img class="img_profile" src="source/produits/profil_picture.jpg">
-                </div>
-                <div class="cart_container">
-                    <a class="cart_link" href="#"><span class="number_item">0</span><img class="cart_img"
-                            src="source/icones/cart.png"></a>
-                </div>
-            </div>
+            <!-- Header is loaded with jQuery -->
         </header>
 
 
@@ -181,7 +175,7 @@ include_once 'dbconnection.php';
                 <button id="defaultOpen" class="tablink" onclick="openTab('principal_profile', this, 'tabcontent')">Your profile</button>
                 <button id="buyer_profile_link" class="tablink" onclick="openTab('buyer_profile', this, 'tabcontent')">Your buyer profile</button>
                 <button id="seller_profile_link" class="tablink" onclick="openTab('seller_profile', this, 'tabcontent')">Your seller profile</button>
-        </div>
+        </div>  
 
 
         <div id="principal_profile" class="profile_container_data tabcontent">
@@ -312,15 +306,20 @@ include_once 'dbconnection.php';
         </div>
 
         <?php
-            $sqlProfile ="SELECT * FROM users WHERE users.id =19;";
-            $sqlTopTenProduct = "SELECT * FROM sales_item WHERE sales_item.sales_item_posterID = 19;";
-            $sqlEarning = "CALL get_seller_total_sold_items(19);";
+
+        
+            $sqlProfile = "SELECT * FROM users WHERE users.id =".$_SESSION['userID']  ;
+
+         
+            $sqlTopTenProduct = "SELECT * FROM sales_item WHERE sales_item.sales_item_posterID =".$_SESSION['userID'];
+            $sqlEarning = "CALL get_seller_total_sold_items(".$_SESSION['userID'].");";
 
             $resultEarning = mysqli_query($conn, $sqlEarning);
             $resultCheckEarning = mysqli_num_rows($resultEarning);
 
             mysqli_close($conn);
             $conn = mysqli_connect($servername, $username, $password, $dbname);
+
 
             $resultProfile = mysqli_query($conn, $sqlProfile);
             $resultCheckProfile = mysqli_num_rows($resultProfile);
@@ -495,21 +494,7 @@ include_once 'dbconnection.php';
         </script>
 
         <footer>
-            <div class="img_footer">
-                <div id="about_us">
-                    <a class="link_footer" href="#">About us</a>
-                </div>
-                <div id="policy">
-                    <a class="link_footer" id="our_policy" href="#">Our policy</a>
-                    <a class="link_footer" href="#">Private policy</a>
-                </div>
-                <div id="contact">
-                    <a class="link_footer" href="#">Oray</a>
-                    <p>Contact number: <span id="phone"></span></p>
-                    <p>Contact mail: <span id="mail"></span></p>
-                    <p>Contact address: <span id="address"></span></p>
-                </div>
-            </div>
+
         </footer>
 
 </body>

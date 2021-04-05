@@ -1,5 +1,8 @@
 <?php 
 include_once 'dbconnection.php';
+include_once 'user_params.php';
+session_start();
+echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name']; 
 ?>
 
 <!DOCTYPE html>
@@ -11,7 +14,8 @@ include_once 'dbconnection.php';
         integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <link rel="stylesheet" href="styleSheet.css" />
     <title>Oray</title>
-
+    <!-- Jquery import -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
     
     <script>
         var slideIndex = 1;
@@ -84,30 +88,28 @@ include_once 'dbconnection.php';
 
         function appendAllMyJson(dataProduct, dataProject, dataTopTenProject, dataTopTenProduct, dataTopTenSeller, dataSellers){
                     for(var i = 0; i< dataProject.length; i++){
-                        createNewCardTopTenProduct("project_link_card_happened","source/produits/project4.jpg", dataProject[i].project_description, dataProject[i].project_budget, true, dataProject[i].project_name);
+                        createNewCardTopTenProduct("project_link_card_happened","source/produits/project4.jpg", dataProject[i].project_description, dataProject[i].project_budget, true, dataProject[i].project_name,dataProject[i].project_id,"project");
                     }
                     for(var i = 0; i< dataProduct.length; i++){
-                        createNewCardTopTenProduct("product_link_card_happened","source/produits/onepieceluffy.jpg", dataProduct[i].product_description, dataProduct[i].product_price, true, dataProduct[i].product_name);
+                        createNewCardTopTenProduct("product_link_card_happened","source/produits/onepieceluffy.jpg", dataProduct[i].product_description, dataProduct[i].product_price, true, dataProduct[i].product_name,dataProduct[i].product_id,"product");
                     }
                     for(var i = 0; i< dataTopTenProject.length; i++){
-                        createNewCardTopTenProduct("top_ten_project_card_happened","source/produits/project4.jpg", dataTopTenProject[i].project_description, dataTopTenProject[i].project_budget, true, dataTopTenProject[i].project_name);
+                        createNewCardTopTenProduct("top_ten_project_card_happened","source/produits/project4.jpg", dataTopTenProject[i].project_description, dataTopTenProject[i].project_budget, true, dataTopTenProject[i].project_name,dataTopTenProject[i].project_id,"project");
                     }
                     for(var i = 0; i< dataTopTenProduct.length; i++){
-                        createNewCardTopTenProduct("top_ten_card_happened","source/produits/onepieceluffy.jpg", dataTopTenProduct[i].product_description, dataTopTenProduct[i].product_price, true, dataTopTenProduct[i].product_name);
+                        createNewCardTopTenProduct("top_ten_card_happened","source/produits/onepieceluffy.jpg", dataTopTenProduct[i].product_description, dataTopTenProduct[i].product_price, true, dataTopTenProduct[i].product_name,dataTopTenProduct[i].product_id,"product");
                     }
                     for(var i = 0; i< dataTopTenSeller.length; i++){
-                        createNewCardTopTenProduct("top_ten_sellers_card_happened","source/produits/person3.jfif", dataTopTenSeller[i].address, dataTopTenSeller[i].seller_rating, true, dataTopTenSeller[i].name);
+                        createNewCardTopTenProduct("top_ten_sellers_card_happened","source/produits/person3.jfif", dataTopTenSeller[i].address, dataTopTenSeller[i].seller_rating, true, dataTopTenSeller[i].name,dataTopTenSeller[i].id,"user");
                     }
 
                     for(var i = 0; i< dataSellers.length; i++){
-                        createNewCardTopTenProduct("sellers_link_card_happened","source/produits/person3.jfif", dataSellers[i].address, dataSellers[i].seller_rating, true, dataSellers[i].name);
+                        createNewCardTopTenProduct("sellers_link_card_happened","source/produits/person3.jfif", dataSellers[i].address, dataSellers[i].seller_rating, true, dataSellers[i].name,dataSellers[i].id,"user");
                     }
         }
 
-
-
-        function createNewCardTopTenProduct(tabName, picture, description, price, liked, productName) {
-
+        function createNewCardTopTenProduct(tabName, picture, description, price, liked, productName,id,postType) {
+            
             const newCard = document.createElement("div");
             newCard.classList.add("card");
             const newPicture = document.createElement("img");
@@ -147,42 +149,64 @@ include_once 'dbconnection.php';
             newLikeParagraph.appendChild(newLikeButton);
             newLikeButton.appendChild(newLikeIcone);
 
+            // using jquery to give every picture a link
+           // $(newPicture).wrap("<a href=test.html></a>");
+          
+         
+          if (postType == "product") // every type of post  gets their own page
+            $(newPicture).wrap("<a href=product_page.php?productID="+id+"></a>");
+            
+
+
+
             document.getElementById(tabName).appendChild(newCard);
         }
+         
+        function login()
+        {
+            var userID = window.prompt("Enter userID:","19");    
+            var xhttp = new XMLHttpRequest(); // using AJAX 
+            xhttp.open("POST","index.php",true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("userID="+userID); 
+            location.reload();
 
+        }
+        function logout()
+        {
+            var xhttp = new XMLHttpRequest();  // using AJAX 
+            xhttp.open("POST","index.php",true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("kill_session="+true); 
+            location.reload();
+        }
+
+         
     </script>
 
 </head>
 
+
+ <script>
+$(document).ready(function(){
+   $(".header_class").load("header.php");
+   $("footer").load("footer.html");
+ });
+</script>
+
+     <!-- login button stuff -->
+     <div class="container">
+    <button class="my_button_edit" onclick="login()">log in</button>
+    <button class="my_button_edit" onclick="logout()">log out</button>
+    </div>
+    <!-- ******************* -->
+    
+<header class="header_class"> 
+     <!-- Header is loaded with jQuery -->
+</header>
 <body>
-    <header class="header_class">
 
-        <div>
-            <img class="logo" src="source/icones/logo.png">
-        </div>
-
-        <div class="header_link">
-            <a id="current_page" class="header_specific_link" href="index.html">Home</a>
-            <a class="header_specific_link" href="getdata.php">Shop</a>
-            <a class="header_specific_link" href="#">Forum</a>
-            <a class="header_specific_link" href="#">Partner</a>
-        </div>
-
-        <div class="profile_container">
-            <a href="profile_page.php">
-                <div class="mask_circle">
-                    <img class="img_profile" src="source/produits/profil_picture.jpg">
-                </div>
-            </a>
-            <div class="cart_container">
-                <a class="cart_link" href="#"><span class="number_item">0</span><img class="cart_img"
-                        src="source/icones/cart.png"></a>
-            </div>
-        </div>
-
-
-
-    </header>
+    
 
     <div class="container_advertisement_image">
         <div class="mask_advertisement_image">
@@ -284,7 +308,7 @@ include_once 'dbconnection.php';
             $sqlTopTenProject = "CALL get_top10_projects();";
             $sqlTopTenSeller ="CALL get_top10_sellers();";
             $sqlSeller ="SELECT * FROM users;";
-
+            
 
             $resultProject = mysqli_query($conn, $sqlProject);
             $resultCheckProject = mysqli_num_rows($resultProject);
@@ -297,13 +321,14 @@ include_once 'dbconnection.php';
             // Must restart connection after a CALL.
             mysqli_close($conn);
             $conn = mysqli_connect($servername, $username, $password, $dbname);
+            
             //****************************/
             $resultTopTenProduct = mysqli_query($conn, $sqlTopTenProduct);
             $resultCheckTopTenProduct = mysqli_num_rows($resultTopTenProduct);
 
             mysqli_close($conn);
             $conn = mysqli_connect($servername, $username, $password, $dbname);
-
+        
             $resultSeller = mysqli_query($conn, $sqlSeller);
             $resultCheckSeller = mysqli_num_rows($resultSeller);
 
@@ -312,7 +337,7 @@ include_once 'dbconnection.php';
 
             $resultTopTenSeller = mysqli_query($conn, $sqlTopTenSeller);
             $resultCheckTopTenSeller = mysqli_num_rows($resultTopTenSeller);
-
+            
             mysqli_close($conn);
             $conn = mysqli_connect($servername, $username, $password, $dbname);
             
@@ -439,25 +464,8 @@ include_once 'dbconnection.php';
 
  
            
-    <footer>
-
-        <div id="fuck" class="img_footer">
-            <div id="about_us">
-                <a class="link_footer" href="#">About us</a>
-            </div>
-            <div id="policy">
-                <a class="link_footer" id="our_policy" href="#">Our policy</a>
-                <a class="link_footer" href="#">Private policy</a>
-            </div>
-            <div id="contact">
-                <a class="link_footer" href="#">Oray</a>
-                <p>Contact number: <span id="phone"></span></p>
-                <p>Contact mail: <span id="mail"></span></p>
-                <p>Contact address: <span id="address"></span></p>
-            </div>
-        </div>
-
-
+    <footer> 
+        <!-- jQuery pulls this -->
     </footer>
 </body>
 
