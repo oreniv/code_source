@@ -121,7 +121,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             document.getElementById("review_section").appendChild(reviewPost); 
             }
 
-        while(reviewData[review_count]) // build the review list 
+        while(reviewData[review_count]) // build the review list with bootstrap cards
       {
        var userName =  reviewData[review_count]["review_user"] ;
        var rText = reviewData[review_count]["review"];
@@ -130,48 +130,30 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
        review_count++;            
 
 
-
-
-
-
-
-       
-   
        const reviewPost = document.createElement("div");
-       reviewPost.classList.add("review_wrapper");
-       reviewPost.classList.add("border");
-       reviewPost.classList.add("border-3");
-       const reviewUser = document.createElement("div");
-       reviewUser.classList.add("col");
-       reviewUser.classList.add("comment");
-       reviewUser.classList.add("review_user");
-       reviewUser.innerHTML = userName ; 
-       const reviewRating = document.createElement("div");
-       reviewRating.classList.add("col");
-       reviewRating.classList.add("review_stars");
-       reviewRating.innerHTML = score ; 
-       const reviewText = document.createElement("div");
-       reviewText.classList.add("col");
-       reviewText.classList.add("review_text");
+       reviewPost.classList.add("card");
+       reviewPost.style.width = '95%';
+       const reviewCard = document.createElement("div");
+       reviewCard.classList.add("card-body");
+       const reviewUser = document.createElement("h5");
+       reviewUser.classList.add("card-title");
+       reviewUser.classList.add("text-start");
+       reviewUser.innerHTML =  userName+" ";
+       const reviewText = document.createElement("p");
+       reviewText.classList.add("card-text");
+       reviewText.classList.add("text-start");
        reviewText.innerHTML = rText ;
-      
-       reviewPost.appendChild(reviewUser);
- 
-        for (i=0;i<score;i++) // build the stars according to the rating the user left
-        {
-            var star = document.createElement("span");
-            star.classList.add("fa");
-            star.classList.add("fa-star");
-            star.classList.add("checked_star");
-            reviewPost.appendChild(star);
-        }
- 
-       reviewPost.appendChild(reviewText);
-       reviewPost.appendChild(document.createElement("br"));
-       reviewText.appendChild(document.createElement("br"));
-       reviewText.appendChild(document.createTextNode("Posted on: "+timeStamp));
+       reviewText.insertAdjacentHTML("beforeend", " <br> posted on: "+timeStamp);
+        
+       for(i=0;i<score;i++) 
+            reviewUser.insertAdjacentHTML("beforeend","<i class='fas fa-star checked_star'></i>");
+
+       reviewCard.appendChild(reviewUser);
+       reviewCard.appendChild(reviewText);
+       reviewPost.appendChild(reviewCard);
        document.getElementById("review_section").appendChild(reviewPost); 
-       
+
+
            
     }
     }
@@ -189,10 +171,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <link rel="stylesheet" href="styleSheet.css" />
-    <!-- import stylesheet for star icons -->
     <title>Oray</title>
-
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
     <!-- for icon support -->
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
