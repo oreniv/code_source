@@ -16,7 +16,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         
      
         <?php 
-        if (isset($_POST['add_this_item_to_cart'])) // if page is called with set variable set then execute 
+        if (isset($_POST['add_this_item_to_cart']) && $_SESSION['userID'] != -1) // if page is called with set variable set then execute 
         {
        
         $sqlAddToCart = "CALL insert_into_cart(".$_SESSION['userID'].",".$_POST['add_this_item_to_cart'].",'sales_item')";
@@ -28,8 +28,10 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         unset($_POST['add_this_item_to_cart']); // unset this variable so refreshing the page is possible without adding shit to cart
 
         mysqli_close($conn);
-        $conn = mysqli_connect($servername, $username, $password, $dbname);
+        
         }
+
+        
         ?>
 
         var productID = <?=$_GET['productID']?> ;     
@@ -43,7 +45,9 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
  
     function buyNow()
     {
-        window.alert("this doesn't work yet");
+
+
+
     }
  
 
@@ -165,10 +169,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
 
 
-    </script>
-
-
-
+</script>
 
 
 <head>
@@ -182,6 +183,9 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 
 </head>
+
+
+
 
 
 
@@ -207,6 +211,9 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
 <body>
 
+ 
+
+
 
 <div class="container">
     <div class="row">
@@ -227,7 +234,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             
             <div class="row">
                 <div class="mx-auto">
-                    <button onclick="buyNow()" type="button" class="btn btn-warning">Buy now</button>
+                    <button onclick="buyNow()" type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#buy_now_modal">Buy now</button>
                     <button onclick="addToCart()" type="button" class="btn btn-success">Add to cart</button>
                 </div>            
             </div>
@@ -236,6 +243,22 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         </div>
     </div>
 </div>
+
+
+<!-- Modal window -->
+
+
+
+
+
+
+<!-------------------------> 
+
+
+
+
+
+
 
 
 <div class="container" id="review_section"></div>
@@ -341,7 +364,6 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 <footer>
       <!-- jQuery pulls this -->
 </footer>
-
 
 
 
