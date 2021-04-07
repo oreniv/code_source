@@ -5,7 +5,7 @@ session_start();
 
 var_dump($_POST);
 var_dump($_SESSION);
-// NOTICE THE FUCKING QUOTES AT THE EDGES OF THE STRINGS !!!!!  
+// NOTICE THE QUOTES AT THE EDGES OF THE STRINGS  
 $productID = (int)$_SESSION['productID'];
 $quantity = (int)$_POST['quantity'] ; 
 $credit_card = (int)$_POST['credit_card'];
