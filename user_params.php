@@ -1,15 +1,13 @@
 <?php
-
+ 
+ 
   session_start();
 
- if (!isset($_SESSION['userID'])) // check if the userID is already SET FOR THIS SESSION
+ if (isset($_POST["userID"])) // check if the userID is already SET FOR THIS SESSION
  { 
-    $_SESSION['userID'] = $_POST["userID"];  
-       
- }
-
-else if(!($_SESSION['full_name']) && isset($_SESSION['userID'])) 
-{ 
+    $_SESSION['userID'] = (int)$_POST["userID"];  
+   
+    
     // execute only if i don't know the user name AND I DO HAVE a userID
     // fetch the full_name of logged in user 
     
@@ -47,17 +45,22 @@ else if(!($_SESSION['full_name']) && isset($_SESSION['userID']))
         }
 
 
-
-         
+        
     }
+    
     array_push($cartItem_array,$sale_items);
     array_push($cartItem_array,$project_bids);
      
      $_SESSION['items_in_cart'] = $cartItem_array; // 2D array of all items in cart
      $_SESSION['cart_item_count'] = count($sale_items) + count($project_bids);
-
-
+    
 } 
+ else if (!isset($_SESSION['userID']))
+    {
+        $_SESSION['userID'] = -1 ;
+        $_SESSION['cart_item_count'] = 0;
+    }
+
 
 
 if ($_POST["kill_session"]) // if kill_session is returned true then kill the session
@@ -66,7 +69,6 @@ if ($_POST["kill_session"]) // if kill_session is returned true then kill the se
     session_unset();
     session_destroy();
     
-
 }
  
 // From now on when I want the userID call it with $_SESSION['userID'] 

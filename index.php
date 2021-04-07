@@ -3,6 +3,7 @@ include_once 'dbconnection.php';
 include_once 'user_params.php';
 session_start();
 echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name']; 
+
 ?>
 
 <!DOCTYPE html>
@@ -166,7 +167,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         {
             var userID = window.prompt("Enter userID:","19");    
             var xhttp = new XMLHttpRequest(); // using AJAX 
-            xhttp.open("POST","index.php",true);
+            xhttp.open("POST","index.php",false);
             xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhttp.send("userID="+userID); 
             location.reload();
@@ -175,7 +176,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         function logout()
         {
             var xhttp = new XMLHttpRequest();  // using AJAX 
-            xhttp.open("POST","index.php",true);
+            xhttp.open("POST","index.php",false);
             xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhttp.send("kill_session="+true); 
             location.reload();
@@ -339,7 +340,7 @@ $(document).ready(function(){
             $resultCheckTopTenSeller = mysqli_num_rows($resultTopTenSeller);
             
             mysqli_close($conn);
-            $conn = mysqli_connect($servername, $username, $password, $dbname);
+            
             
             if($resultCheckProduct > 0){
                 $mainDataProduct = array();
