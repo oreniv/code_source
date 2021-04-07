@@ -1,12 +1,30 @@
 <?php
 session_start();
+include_once 'user_params.php';
+
 ?>
 
 
 <script>
  // this section deals with updating the cart item count
-  
+ 
 document.getElementsByClassName("number_item")[0].innerHTML = <?= $_SESSION['cart_item_count'] ?>;
+
+if (<?= $_SESSION['userID']  ?> == -1 ){
+    
+    /*  Make the profile pic disappear then put a 'Register button instead' */
+
+   var loginButton = document.getElementById("profile_link");
+   loginButton.remove(); 
+   loginButton =  document.createElement("button");
+   loginButton.setAttribute("class","btn btn-info h-50 d-inline-block ");
+   loginButton.setAttribute("type","button");
+   loginButton.innerHTML = "Register";
+   document.getElementsByClassName("profile_container")[0].appendChild(loginButton);
+    
+
+    
+}
 
 </script>
 
@@ -24,7 +42,7 @@ document.getElementsByClassName("number_item")[0].innerHTML = <?= $_SESSION['car
 </div>
 
 <div class="profile_container">
-    <a href="profile_page.php">
+    <a id="profile_link" href="profile_page.php">
         <div class="mask_circle">
             <img class="img_profile" src="source/produits/profil_picture.jpg">
         </div>

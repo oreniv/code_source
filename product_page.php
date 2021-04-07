@@ -1,5 +1,6 @@
 <?php 
 include_once 'dbconnection.php';
+
 session_start();
 echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name']; 
  
@@ -9,14 +10,11 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 <html>
 
 <script>
-
+ 
     function addToCart()
     {
-         window.alert("I'm adding item number "+ <?=$_GET['productID']?> +" to my cart");
-        
-     
         <?php 
-        if (isset($_POST['add_this_item_to_cart'])) // if page is called with set variable set then execute 
+        if (isset($_POST['add_this_item_to_cart']) && $_SESSION['userID'] != -1) // if page is called with set variable set then execute 
         {
        
         $sqlAddToCart = "CALL insert_into_cart(".$_SESSION['userID'].",".$_POST['add_this_item_to_cart'].",'sales_item')";
@@ -28,8 +26,10 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         unset($_POST['add_this_item_to_cart']); // unset this variable so refreshing the page is possible without adding shit to cart
 
         mysqli_close($conn);
-        $conn = mysqli_connect($servername, $username, $password, $dbname);
+        
         }
+
+        
         ?>
 
         var productID = <?=$_GET['productID']?> ;     
@@ -43,14 +43,47 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
  
     function buyNow()
     {
-        window.alert("this doesn't work yet");
+      if (validate())
+      {
+        var str = $("#buy_now_form").serialize(); // use jQuery to turn the form into a big array
+        var xhttp = new XMLHttpRequest(); // using AJAX 
+           xhttp.open("POST","handle_purchase.php",true); // call this page again with a POST variable that indicates which item to add to cart
+           xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+           xhttp.send(str); // POST that big array
+        
+        window.alert("Thank you for your purchase!");
+      }
     }
+
+
+    function validate()
+    {
+        var form =  document.getElementById("buy_now_form");
+       if (form.full_name.value.length <= 6 )
+       {
+            window.alert("Full name needs to be at least 6 characters long");
+            return false;
+       }
+       if (form.buyer_email.value.length <= 5 || form.buyer_email.value.search("@") == -1  || form.buyer_email.value.search(".") == -1)
+       {
+        window.alert("Email is invalid, makes sure it includes @ and . " ) ;
+        return false;
+       } 
+       if (form.shipping_address.value.length <= 10)
+       {
+        window.alert("shipping address is too short. Make sure it's at least 10 characters long");
+        return false;
+       }
+        if (form.credit_card.value.length <= 16)
+        {
+        window.alert("credit card needs to be at least 16 digits long");
+        return false;
+        }
  
+        return true;
 
-
-
-
-     
+    }
+    
     function appendData(profileData){
        
         var price = profileData["price"];
@@ -165,10 +198,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
 
 
-    </script>
-
-
-
+</script>
 
 
 <head>
@@ -180,8 +210,13 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
     <!-- for icon support -->
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+
 
 </head>
+
+
+
 
 
 
@@ -207,6 +242,9 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
 <body>
 
+ 
+
+
 
 <div class="container">
     <div class="row">
@@ -227,7 +265,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             
             <div class="row">
                 <div class="mx-auto">
-                    <button onclick="buyNow()" type="button" class="btn btn-warning">Buy now</button>
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#buy_now_modal">Buy now</button>
                     <button onclick="addToCart()" type="button" class="btn btn-success">Add to cart</button>
                 </div>            
             </div>
@@ -236,6 +274,60 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         </div>
     </div>
 </div>
+
+
+<!-- Modal window -->
+
+<div id="buy_now_modal" class="modal " tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Purchase details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+     <form id="buy_now_form" >   
+        <div class="mb-3">
+            <label for="full_name" class="form-label">Full name:</label>
+            <input type="text" class="form-control" name="full_name"  id="full_name" required>
+        </div> 
+        <div class="mb-3">
+            <label for="buyer_email" class="form-label">Your email:</label>
+            <input type="email" class="form-control" name="buyer_email" id="buyer_email" required 
+             aria-describedby="seller_amount_reminder">
+             <div id="email_comment" class="form-text">
+                We'll never share your email with anyone else besides the seller.
+             </div>
+        </div>
+        <div class="mb-3">
+            <label for="quantity" class="form-label">Select amount:</label>
+            <input type="number" class="form-control" name="quantity" id="quantity" min="1" value="1" required
+            aria-describedby="seller_amount_reminder">
+            <div id="seller_amount_reminder" class="form-text"> 
+                Please keep in mind the seller might take a while to produce a large order
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="shipping_address" class="form-label">Your full address:</label>
+            <textarea class="form-control" name="shipping_address" id="shipping_address" style="height: 50px" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="credit_card" class="form-label">Credit card num:</label>
+            <input type="text" class="form-control" name="credit_card" id="credit_card" required>
+        </div>   
+  
+      </div>    
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" onclick="buyNow()" class="btn btn-warning">Confirm</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-------------------------> 
+
 
 
 <div class="container" id="review_section"></div>
@@ -249,12 +341,13 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
     <?php 
 
 
- 
-        
-            $productID = $_GET['productID'] ; // grab the product ID the user clicked on
-            $sqlProductInfo ="CALL get_sales_item_page_info(".$productID.")";
-            $sqlFetchTags = "CALL get_tags_for_post(".$productID.",'sales_item')";
-            $sqlFetchReviews = "CALL get_post_reviews(".$productID.")";
+            if(isset($_GET['productID']))
+                 $_SESSION['productID'] = $_GET['productID'] ; // grab the product ID the user clicked on
+           
+             
+            $sqlProductInfo ="CALL get_sales_item_page_info(".$_SESSION['productID'].")";
+            $sqlFetchTags = "CALL get_tags_for_post(".$_SESSION['productID'].",'sales_item')";
+            $sqlFetchReviews = "CALL get_post_reviews(".$_SESSION['productID'].")";
 
        
             $resultProduct = mysqli_query($conn, $sqlProductInfo); // 1st query
@@ -341,7 +434,6 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 <footer>
       <!-- jQuery pulls this -->
 </footer>
-
 
 
 
