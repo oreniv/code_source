@@ -2,9 +2,8 @@
 include_once 'dbconnection.php';
 session_start();
 
-
-var_dump($_POST);
-var_dump($_SESSION);
+if($_SESSION['userID'] == -1)
+{
 // NOTICE THE QUOTES AT THE EDGES OF THE STRINGS  
 $productID = (int)$_SESSION['productID'];
 $quantity = (int)$_POST['quantity'] ; 
@@ -18,3 +17,4 @@ if (!mysqli_query($conn,$sqlPurchaseData)) {
     echo("Error description: " . mysqli_error($conn));
   }
   mysqli_close($conn);
+}

@@ -43,8 +43,8 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
  
     function buyNow()
     {
-      validate();
-      
+      if (validate())
+      {
         var str = $("#buy_now_form").serialize(); // use jQuery to turn the form into a big array
         var xhttp = new XMLHttpRequest(); // using AJAX 
            xhttp.open("POST","handle_purchase.php",true); // call this page again with a POST variable that indicates which item to add to cart
@@ -52,7 +52,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
            xhttp.send(str); // POST that big array
         
         window.alert("Thank you for your purchase!");
-
+      }
     }
 
 
