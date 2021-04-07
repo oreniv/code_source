@@ -50,9 +50,10 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
            xhttp.open("POST","handle_purchase.php",true); // call this page again with a POST variable that indicates which item to add to cart
            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
            xhttp.send(str); // POST that big array
+           location.reload();
         
         window.alert("Thank you for your purchase!");
-      }
+     }
     }
 
 
@@ -195,8 +196,9 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
            
     }
     }
-
-
+        // checking if the data was written to db 
+     if (   <?php  echo json_encode($_SESSION['db_error'] ) ;  ?> == true )
+            window.alert("There was an error making the purchase,please try again"); 
 
 </script>
 
