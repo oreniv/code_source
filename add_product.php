@@ -20,15 +20,6 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
 <body>
 
-
-<div class="head_button">
-    <button id="defaultOpen" class="tablink" onclick="openTab('principal_profile', this, 'tabcontent')">3D item</button>
-    <button id="buyer_profile_link" class="tablink" onclick="openTab('buyer_profile', this, 'tabcontent')">3D schema</button>
-    <button id="seller_profile_link" class="tablink" onclick="openTab('seller_profile', this, 'tabcontent')">2D sketch</button>
-</div>  
-
-
-
 <div class="totalContainer">
     <ul class="progressbar">
         <li class="actual_step">Files</li>
@@ -52,6 +43,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
             <div class="dropZone" id="dropZoneFileType">
                 <p>drop 3D files here to upload <br/>  <img class="logoDropZone" src="source/icones/filelogo.png"></p>
+                <button id="button_file_upload" onclick="setFileTrue()">No file to upload? click here</button>
             </div>
             <div id="uploadsFilesType"></div>
 
@@ -59,19 +51,18 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
         <form id="secondStepAddProduct" class="content" method="POST" action="add_product_to_sql.php">
             <label for="title">Title:</label><br>
-            <input type="text" id="title" name="title"><br>
+            <input type="text" id="title" name="title" required><br>
             <label for="description">Description:</label><br>
-            <textarea name="description" rows="10" cols="30">
-            </textarea><br>
+            <textarea name="description" rows="10" cols="30" required></textarea><br>
             <label for="tags">Tag:</label><br>
-            <input type="text" class="tags" name="tags"><br>
+            <input type="text" class="tags" name="tags" required><br>
             <label for="price">price:</label><br>
-            <input type="number" id="price" name="price" min="0" step="10"><br>
+            <input type="number" id="price" name="price" min="0" required><br>
 
             <label for="duration">Print duration (days/hours/minutes):</label><br>
-            <input type="range" id="dayDuration" name="duration" min="0" value="0" max="99">
+            <input type="range" id="dayDuration" name="dayDuration" min="0" value="0" max="99">
             <span id="demo">0 days</span>
-            <input type="range" id="timeDuration" name="duration" min="0" value="0" max="23">
+            <input type="range" id="timeDuration" name="timeDuration" min="0" value="0" max="23">
             <span id="demo2">0 hours</span><br>
             <script>
                 var slider = document.getElementById("dayDuration");
@@ -87,9 +78,16 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
                     output2.innerHTML = this.value+ " hours";
                 }
             </script>
+            <label for="type">Choose product's type:</label><br> 
+            <select id="type" name="type" required>
+                <option value="physical">Physical item</option>
+                <option value="3d">3D schema</option>
+                <option value="2d">2D sketch</option>
+            </select><br>
 
             <label for="filament">Choose a filament:</label><br> 
             <select id="filament" name="filament">
+                <option value="">...</option>
                 <option value="PLA">PLA</option>
                 <option value="ABS">ABS</option>
                 <option value="PETG">PETG</option>
@@ -112,6 +110,19 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 <script>
     var myPicture = false;
     var myFiles = false;
+    var buttonDrop = true;
+    function setFileTrue(){
+        if(myFiles == false)
+        {myFiles = true;
+         document.getElementById('button_file_upload').innerHTML = "File to upload? Click here"
+         buttonDrop =false;
+        }
+        else
+        {myFiles = false;
+         document.getElementById('button_file_upload').innerHTML = "No file to upload? click here"
+         buttonDrop = true;
+        }
+    }
     (function(){
         var dropZonePicture = document.getElementById('dropZonePicture');
         var dropZoneFileType = document.getElementById('dropZoneFileType');
@@ -158,23 +169,25 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         }
 
         dropZonePicture.ondrop = function (e){
-            e.preventDefault();
-            this.className = 'dropZone';
-            console.log(e.dataTransfer.files);
-            var allName = null;
+           
+            
+                e.preventDefault();
+                this.className = 'dropZone';
+                console.log(e.dataTransfer.files);
+                var allName = null;
 
-            for(var x=0; x<e.dataTransfer.files.length; x++){
-                if(allName == null)
-                    allName = e.dataTransfer.files[x].name + "\n";
-                else
-                    allName = allName + e.dataTransfer.files[x].name  + "\n";
-                }
-
-                if(confirm("you are about to upload: \n" + allName + "\n" +"Do you confirm the upload ?"))
-                    {myPicture = true;
-                     upload(e.dataTransfer.files, 'uploadsPicture');
+                for(var x=0; x<e.dataTransfer.files.length; x++){
+                    if(allName == null)
+                        allName = e.dataTransfer.files[x].name + "\n";
+                    else
+                        allName = allName + e.dataTransfer.files[x].name  + "\n";
                     }
 
+                    if(confirm("you are about to upload: \n" + allName + "\n" +"Do you confirm the upload ?"))
+                        {
+                            myPicture = true;
+                            upload(e.dataTransfer.files, 'uploadsPicture');
+                        }
         };
 
         dropZonePicture.ondragover = function (){
@@ -189,21 +202,26 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
         dropZoneFileType.ondrop = function (e){
             e.preventDefault();
-            this.className = 'dropZone';
-            console.log(e.dataTransfer.files);
-            var allName = null;
+            if(buttonDrop == true)
+            {
+                this.className = 'dropZone';
+                console.log(e.dataTransfer.files);
+                var allName = null;
 
-            for(var x=0; x<e.dataTransfer.files.length; x++){
-                if(allName == null)
-                    allName = e.dataTransfer.files[x].name + "\n";
-                else
-                    allName = allName + e.dataTransfer.files[x].name  + "\n";
-                }
-
-                if(confirm("you are about to upload: \n" + allName + "\n" +"Do you confirm the upload ?"))
-                   { myFiles = true;
-                     upload(e.dataTransfer.files, 'uploadsFilesType');
+                for(var x=0; x<e.dataTransfer.files.length; x++){
+                    if(allName == null)
+                        allName = e.dataTransfer.files[x].name + "\n";
+                    else
+                        allName = allName + e.dataTransfer.files[x].name  + "\n";
                     }
+
+                    if(confirm("you are about to upload: \n" + allName + "\n" +"Do you confirm the upload ?"))
+                    { myFiles = true;
+                        upload(e.dataTransfer.files, 'uploadsFilesType');
+                        }
+
+                } else window.alert("You have disabled the file upload");
+
         };
 
         dropZoneFileType.ondragover = function (){
@@ -218,38 +236,6 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
         
     }());
-
-
-    function openTab(tabName, elmnt, tab) {
-
-        // Hide all elements with class="tabcontent" by default */
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName(tab);
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-
-        // Remove the background color of all tablinks/buttons
-        tablinks = document.getElementsByClassName("tablink");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].style.color = "";
-        }
-
-        // Show the specific tab content
-        document.getElementById(tabName).style.display = "flex";
-        elmnt.style.color = '#E68235';
-        document.getElementById(tabName).style.color = '#707070';
-
-        if(tabName=="seller_profile"){
-            document.getElementById("defaultProductOpen").click();
-            document.getElementById(tabName).style.color = '#707070';
-        }
-    }
-
-        // Get the element with id="defaultOpen" and click on it
-    document.getElementById("defaultOpen").click();
-    document.getElementById("principal_profile").style.color = '#707070';
-
 </script>
 
 </body>
