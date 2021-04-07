@@ -80,9 +80,9 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             </script>
             <label for="type">Choose product's type:</label><br> 
             <select id="type" name="type" required>
-                <option value="physical">Physical item</option>
-                <option value="3d">3D schema</option>
-                <option value="2d">2D sketch</option>
+                <option value="Physical-item">Physical-item</option>
+                <option value="3D-Schema">3D-Schema</option>
+                <option value="2D-Sketch">2D-Sketch</option>
             </select><br>
 
             <label for="filament">Choose a filament:</label><br> 
