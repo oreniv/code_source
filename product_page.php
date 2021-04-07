@@ -43,17 +43,47 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
  
     function buyNow()
     {
-      
+      validate();
+      /*
         var str = $("#buy_now_form").serialize(); // use jQuery to turn the form into a big array
         var xhttp = new XMLHttpRequest(); // using AJAX 
            xhttp.open("POST","handle_purchase.php",true); // call this page again with a POST variable that indicates which item to add to cart
            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
            xhttp.send(str); // POST that big array
-        
+        */
 
 
     }
+
+
+    function validate()
+    {
+        var form =  document.getElementById("buy_now_form");
+       if (form.full_name.value.length <= 6 )
+       {
+            window.alert("Full name needs to be at least 6 characters long");
+            return false;
+       }
+       if (form.buyer_email.value.length <= 5 || form.buyer_email.value.search("@") == -1  || form.buyer_email.value.search(".") == -1)
+       {
+        window.alert("Email is invalid, makes sure it includes @ and . " ) ;
+        return false;
+       } 
+       if (form.shipping_address.value.length <= 10)
+       {
+        window.alert("shipping address is too short. Make sure it's at least 10 characters long");
+        return false;
+       }
+        if (form.credit_card.value.length <= 16)
+        {
+        window.alert("credit card needs to be at least 16 digits long");
+        return false;
+        }
  
+        return true;
+
+    }
+    
     function appendData(profileData){
        
         var price = profileData["price"];
@@ -256,7 +286,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-     <form id="buy_now_form" >  <!-- MOTHERFUCKER  -->
+     <form id="buy_now_form" >   
         <div class="mb-3">
             <label for="full_name" class="form-label">Full name:</label>
             <input type="text" class="form-control" name="full_name"  id="full_name" required>
