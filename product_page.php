@@ -61,7 +61,12 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
        document.getElementById("product_title").innerHTML = profileData["name"] + " ";
        document.getElementById("product_desc").innerHTML ="Description: " + profileData["description"];
        document.getElementById("author").innerHTML ="Posted by: " + profileData["author"] +" ";
+
+       if (profileData["tags"].length == 0 )
+       document.getElementById("tags").innerHTML = "This post has no tags";
+       else
        document.getElementById("tags").innerHTML = profileData["tags"];
+
        /** set prices and print duration display */
        if(!print_duration) // if no duration specified it's digital probably 
          document.getElementById("print_duration").innerHTML = "Print time: User did not specify or this is a digital item";
@@ -209,17 +214,25 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
              <img src="source/produits/project3.jpg" class="img-fluid img-thumbnail">
         </div>
         <div class="col-8 ">
-            <ul class="list-group">
-                <li id="product_title" class="list-group-item fw-bold">Product title</li>
-                <li id="author" class="list-group-item fw-bold">Author</li>
-                <li id="product_desc" class="list-group-item">Description</li>
-                <li id="tags"  class="list-group-item">Tags</li>
+            <div class="d-grid gap-3">
+                <div id="product_title" class="p-2 bg-light border fw-bold">Product title</div>
+                <div id="author" class="p-2 bg-light border fw-bold">Author</div>
+                <div id="product_desc" class="p-2 bg-light border ">Description</div>
+                <div id="tags"  class="p-2 bg-light border">Tags</div>
                 <div class="row">
-                    <div class="col-6 "><li id="print_duration" class="list-group-item">Print duration </li></div>
-                    <div class="col-6 "><li id="delivery_price" class="list-group-item">Delivery price </li></div>
+                    <div class="col-6 "><div id="print_duration" class="p-2 bg-light border">Print duration </div> </div> 
+                    <div class="col-6 "><div id="delivery_price" class="p-2 bg-light border">Delivery price </div> </div> 
                 </div>
-                <li id="price"  class="list-group-item">Price</li>
-            </ul>
+                <div id="price"  class="p-2 bg-light border">Price</div>
+            
+            <div class="row">
+                <div class="mx-auto">
+                    <button onclick="buyNow()" type="button" class="btn btn-warning">Buy now</button>
+                    <button onclick="addToCart()" type="button" class="btn btn-success">Add to cart</button>
+                </div>            
+            </div>
+
+
         </div>
     </div>
 </div>
