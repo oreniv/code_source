@@ -287,7 +287,7 @@ $(document).ready(function(){
                 </div>
 
                 <div id="myOwnProductDefault" class="innerTabContent">
-                    <button class="my_button_add_product" onclick="window.location.href='#';">Add product</button>
+                    <button class="my_button_add_product" onclick="window.location.href='add_product.php';" >Add product</button>
                     <div id="myProducts" class="personalProduct row">
                     </div>
                 </div>
