@@ -101,16 +101,19 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         }
 
         /**-------------------------------------------------------- */
-        function appendMyJson(data){
+        function appendMyJson(data, dataRecommended){
             for(var i = 0; i< data.length; i++){
-                createMyCard("myProducts", "source/produits/onepieceluffy.jpg", data[i].product_description, data[i].product_price, true, data[i].product_name);
+                createMyCard("myProducts", "source/produits/onepieceluffy.jpg", data[i].product_description, data[i].product_price, true, data[i].product_name, data[i].product_id);
                     }
             for(var i = 0; i< data.length; i++){
-                createMyCard("myProjects", "source/produits/onepieceluffy.jpg", data[i].product_description, data[i].product_price, true, data[i].product_name);
+                createMyCard("myProjects", "source/produits/onepieceluffy.jpg", data[i].product_description, data[i].product_price, true, data[i].product_name, data[i].product_id);
+            }
+            for(var i = 0; i<data.length; i++){
+                createMyCard("recommendation", "source/produits/onepieceluffy.jpg", dataRecommended[i].product_description, dataRecommended[i].product_price, true, dataRecommended[i].product_name, dataRecommended[i].product_id);
             }
         }
 
-        function createMyCard(tabName, image, description, price, liked, productName){
+        function createMyCard(tabName, image, description, price, liked, productName, id){
             const newCard = document.createElement("div");
             newCard.classList.add("card");
             const newPicture = document.createElement("img");
@@ -148,6 +151,8 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             newLikeButton.appendChild(newLikeIcone);
 
             document.getElementById(tabName).appendChild(newCard);
+
+            $(newPicture).wrap("<a href=product_page.php?productID="+id+"></a>");
         }
             
     </script>
@@ -164,7 +169,7 @@ $(document).ready(function(){
 
 
 
-<body>
+<body onLoad="scrollDiv_init()">
     <header>
         <header class="header_class">
             <!-- Header is loaded with jQuery -->
@@ -250,7 +255,48 @@ $(document).ready(function(){
         </div>
             
         <div id="buyer_profile" class="tabcontent">
-            <p>fuck you</p>
+            <div class="containerBuyerProfile">
+                <div id="recommendation" class="recommendationContainer" onMouseOver="pauseDiv()" onMouseOut="resumeDiv()">
+
+                </div>
+                <div class="historicContainer">
+
+                    <div class="innerTab">
+                        <button id="defaultOpenProducts" class="tablink" onclick="openTab('historicalProduct', this, 'innerBuyerTabContent')">Products history</button>
+                        <button id="projects_profile_created" class="tablink" onclick="openTab('historicalProject', this, 'innerBuyerTabContent')">Projects</button>
+                        <button id="projects_profile_created" class="tablink" onclick="openTab('historicalLikedProduct', this, 'innerBuyerTabContent')">Products you liked</button>
+                    </div>
+
+                    <div class="historicalCard">
+                        <div class="firstBand">
+                            <p class="dateCommand"> Command done the: <br/> dd/mm/yyyy</p>
+                            <P class="totalCommand">Total:<br/>xx.xxx</P>
+                            <P class="addressCommand">Send to:<br/>25st jules david, les lilas FR</P>
+                            <div  class="bill">
+                                <P class="idCommand">N° command: xxxxxx</P>
+                                <button class="seeBill">See bill</button>
+                            </div>
+                        </div>
+                        <div class="secondBand">
+                            <img  class="pictureProduct" src="source/produits/pikachu_ninja.jpg">
+                            <div class="secondContainerSecondBand">
+                                <p class="dateCommandDelivery">Delivery done the: dd/mm/yyyy</p>
+                                <p class="descriptionCommand">sa gentille race m'a bien usée</p>
+                                <div class="secondContainerButton">
+                                    <button class="buyAgain">Buy again</button>
+                                    <button class="seeProductAgain">See product</button>
+                                </div>
+                            </div>
+                            <div class="lastContainerSecondBand">
+                                <button>Rank seller</button>
+                                <button>See seller</button>
+                                <button>Problem</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
 
         <div id="seller_profile" class="tabcontent">
@@ -308,10 +354,10 @@ $(document).ready(function(){
         <?php
 
         
-            $sqlProfile = "SELECT * FROM users WHERE users.id =".$_SESSION['userID']  ;
+            $sqlProfile = "SELECT * FROM users WHERE users.id =".$_SESSION['userID'];
+            $sqlTopTenProduct = "CALL get_top10_sales_item_posts();";
 
-         
-            $sqlTopTenProduct = "SELECT * FROM sales_item WHERE sales_item.sales_item_posterID =".$_SESSION['userID'];
+            $sqlMyProducts = "SELECT * FROM sales_item WHERE sales_item.sales_item_posterID =".$_SESSION['userID'];
             $sqlEarning = "CALL get_seller_total_sold_items(".$_SESSION['userID'].");";
 
             $resultEarning = mysqli_query($conn, $sqlEarning);
@@ -320,12 +366,18 @@ $(document).ready(function(){
             mysqli_close($conn);
             $conn = mysqli_connect($servername, $username, $password, $dbname);
 
+            $resultTopTenProduct = mysqli_query($conn, $sqlTopTenProduct);
+            $resultCheckTopTenProduct = mysqli_num_rows($resultTopTenProduct);
+
+            mysqli_close($conn);
+            $conn = mysqli_connect($servername, $username, $password, $dbname);
+
 
             $resultProfile = mysqli_query($conn, $sqlProfile);
             $resultCheckProfile = mysqli_num_rows($resultProfile);
 
-            $resultTopTenProduct = mysqli_query($conn, $sqlTopTenProduct);
-            $resultCheckTopTenProduct = mysqli_num_rows($resultTopTenProduct);
+            $resultSqlMyProduct = mysqli_query($conn, $sqlMyProducts);
+            $resultCheckSqlMyProduct = mysqli_num_rows($resultSqlMyProduct);
 
             mysqli_close($conn);
             $conn = mysqli_connect($servername, $username, $password, $dbname);
@@ -382,6 +434,21 @@ $(document).ready(function(){
                 $jsonEarningData = json_encode($myfuckingArray);
             }
 
+            if($resultCheckSqlMyProduct > 0){
+                $mainDataMyProduct  = array();
+                while($row = mysqli_fetch_assoc($resultSqlMyProduct)){
+                    $dataMyProduct  = array(
+                        "product_name" => $row['item_name'],
+                        "product_id" => $row['id'],
+                        "product_price" => $row['price'],
+                        "product_description" => $row['item_description']
+                    );   
+                    array_push($mainDataMyProduct , $dataMyProduct );
+                    unset($dataMyProduct );                
+                }
+                $jsonMyProduct  = json_encode($mainDataMyProduct ); 
+            }
+
             if($resultCheckTopTenProduct > 0){
                 $mainDataTopTenProduct  = array();
                 while($row = mysqli_fetch_assoc($resultTopTenProduct)){
@@ -427,10 +494,10 @@ $(document).ready(function(){
             console.log(jsonJsProfile);
             appendData(jsonJsProfile);
 
-            var jsonJsTopTenProduct = <?= $jsonTopTenProduct; ?>;
-            console.log(jsonJsTopTenProduct);
+            var jsonJsMyProduct = <?= $jsonMyProduct; ?>;
+            console.log(jsonJsMyProduct);
+            
 
-            appendMyJson(jsonJsTopTenProduct);
             jsonEarningDataJs = <?= $jsonEarningData?>;
 
             jsonTentative = <?=$jsonEarning?>;
@@ -460,6 +527,11 @@ $(document).ready(function(){
             createMyCharts(myTitleCredit, jsonEarningDataJs, 'creditContainer');
             createMyCharts(myTitle, jsonEarningDataJs, 'principalChartContainer');
             createMyLegend(jsonEarningDataJs);
+
+            var jsonJsTopTenProduct = <?= $jsonTopTenProduct; ?>;
+            console.log(jsonJsTopTenProduct);
+
+            appendMyJson(jsonJsMyProduct, jsonJsTopTenProduct);
             
 
             function openTab(tabName, elmnt, tab) {
@@ -491,6 +563,45 @@ $(document).ready(function(){
                 // Get the element with id="defaultOpen" and click on it
                 document.getElementById("defaultOpen").click();
                 document.getElementById("principal_profile").style.color = '#707070';
+
+                /**---------------------------------------------------------------------- */
+
+                ScrollRate = 35;
+
+                function scrollDiv_init() {
+                    DivElmnt = document.getElementById('recommendation');
+                    ReachedMaxScroll = false;
+                    
+                    DivElmnt.scrollTop = 0;
+                    PreviousScrollTop  = 0;
+                    
+                    ScrollInterval = setInterval('scrollDiv()', ScrollRate);
+                }
+
+                function scrollDiv() {
+                    
+                    if (!ReachedMaxScroll) {
+                        DivElmnt.scrollTop = PreviousScrollTop;
+                        PreviousScrollTop++;
+                        
+                        ReachedMaxScroll = DivElmnt.scrollTop >= (DivElmnt.scrollHeight - DivElmnt.offsetHeight);
+                    }
+                    else {
+                        ReachedMaxScroll = (DivElmnt.scrollTop == 0)?false:true;
+                        
+                        DivElmnt.scrollTop = PreviousScrollTop;
+                        PreviousScrollTop--;
+                    }
+                }
+
+                function pauseDiv() {
+                    clearInterval(ScrollInterval);
+                }
+
+                function resumeDiv() {
+                    PreviousScrollTop = DivElmnt.scrollTop;
+                    ScrollInterval    = setInterval('scrollDiv()', ScrollRate);
+                }
         </script>
 
         <footer>

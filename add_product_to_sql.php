@@ -32,3 +32,28 @@ mysqli_close($conn);
 
 
 ?>
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link rel="stylesheet" href="styleSheet.css" />
+    <title>Oray</title>
+    <!-- Jquery import -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
+</head>
+
+<body>
+  <br>
+  <button class="withdraw_button" onclick="closeWin()">Done</button>
+  <Script>
+    function closeWin(){
+      window.open("", "_self");
+      window.close();
+    }
+  </Script>
+</body>
+</html>
