@@ -360,6 +360,11 @@ $(document).ready(function(){
             $sqlMyProducts = "SELECT * FROM sales_item WHERE sales_item.sales_item_posterID =".$_SESSION['userID'];
             $sqlEarning = "CALL get_seller_total_sold_items(".$_SESSION['userID'].");";
 
+            $sqlMyHistory = "SELECT * FROM transaction_history WHERE buyerID =".$_SESSION['userID'];";"
+
+            $resultHistory = mysqli_query($conn, $sqlMyHistory);
+            $resultCheckHistory = mysqli_num_rows($resultHistory);
+
             $resultEarning = mysqli_query($conn, $sqlEarning);
             $resultCheckEarning = mysqli_num_rows($resultEarning);
 
@@ -432,6 +437,25 @@ $(document).ready(function(){
     
                 $myfuckingArray = array($earning2dSketch, $earning3dSchema, $earningPhysical);
                 $jsonEarningData = json_encode($myfuckingArray);
+            }
+
+            if($resultCheckHistory > 0){
+                $mainDataHistory  = array();
+                while($row = mysqli_fetch_assoc($resultHistory)){
+                    $dataHistory  = array(
+                        "history_id" => $row['id'],
+                        "item_id" => $row['sales_itemID'],
+                        "seller_id" => $row['sellerID'],
+                        "address" => $row['address'],
+                        "timestamp" => $row['transaction_timestamp'],
+                        "price_item" => $row['price'],
+                        "amount" => $row['amount'],
+                        "delivery_status" => $row['transaction_status']
+                    );   
+                    array_push($mainDataHistory , $dataHistory );
+                    unset($dataHistory );                
+                }
+                $jsonHistory  = json_encode($mainDataHistory ); 
             }
 
             if($resultCheckSqlMyProduct > 0){
