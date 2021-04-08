@@ -156,8 +156,8 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
          
           if (postType == "product") // every type of post  gets their own page
             $(newPicture).wrap("<a href=product_page.php?productID="+id+"></a>");
-            
-
+          else if (postType == "project")
+            $(newPicture).wrap("<a href=project_page.php?projectID="+id+"></a>");
 
 
             document.getElementById(tabName).appendChild(newCard);
