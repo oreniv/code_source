@@ -908,14 +908,17 @@ recommendationContainer:hover {
   display: flex;
   flex-direction: column;
   width: 100%;
+  margin-bottom: 10px;
 }
 
 .firstBand{
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   background-color: #FEFCE9;
   border: solid;
   border-color: #E68235;
+  border-radius: 10px 10px 0px 0px;
+  border-bottom: none;
 }
 
 .bill{
@@ -924,13 +927,16 @@ recommendationContainer:hover {
 }
 .secondBand{
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   border: solid;
   border-color: #E68235;
+  background-color: white;
 }
 
 .pictureProduct{
-  width: 100px;
+  width: 150px;
+  object-fit: cover;
+  height: 150px;
 }
 
 .secondContainerSecondBand{
@@ -945,4 +951,20 @@ recommendationContainer:hover {
 .lastContainerSecondBand{
   display: flex;
   flex-direction: column;
+}
+
+.button_history{
+  border: solid;
+  border-color: #E68235;
+  border-width: 3px;
+  background-color: #FEFCE9;
+  border-radius: 15px;
+  margin-bottom: 3px;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 5px;
+}
+
+.innerBuyerTabContent{
+  display: none;
 }
