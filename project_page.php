@@ -4,6 +4,7 @@ include_once 'dbconnection.php';
 session_start();
 echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name']; 
  
+ 
 ?>
 
 <!DOCTYPE html>
@@ -105,6 +106,9 @@ $postData = json_encode($postData); // basic data about the whole project
 </script>
 <!-- -------------------------------------------- -->
 <script>
+
+ 
+
 function appendProjectInfo()
 {
 
@@ -174,11 +178,11 @@ for (i = 0 ; i < projectItemsSize ; i++)
       bidButton.setAttribute("type","button");
       bidButton.setAttribute("class","btn btn-secondary btn-sm col-1 w-20");
       bidButton.setAttribute("style","width: 100px;");
+      bidButton.setAttribute("data-bs-toggle","modal");
+      bidButton.setAttribute("data-bs-target","#bid_submit");
       bidButton.innerHTML = "Place a bid on this part";
-
-
-
-
+      
+      setBidID(bidButton,projectItems[i]["itemID"]);
 
 
      if(projectItems[i]["part_picture"] == null)
@@ -198,14 +202,16 @@ for (i = 0 ; i < projectItemsSize ; i++)
   bidCollapseList.appendChild(bidCollapseArea);
   
     
-  appendBidInfo(projectItems[i]["itemID"],bidCollapseArea);
+  appendBidInfo(projectItems[i]["itemID"],bidCollapseArea); // adds a 'onclick' event to each bid button
+   
+
 
   document.getElementById("project_item_info_section").appendChild(projectItemCard);
 
 }
 
 /*
-To do:  add modal to 'place bid button' {project itemID,bidderID,price,note,pic_link}
+To do:  add PHP code to append new bid submissions to DB
 
 */
 }
@@ -242,11 +248,23 @@ function appendBidInfo(itemID,bidArea)
         bidList.appendChild(bidLine);
   }
   bidArea.appendChild(bidList);
-
-  
+   
+ 
 }
 
+function setBidID(bidButton,itemID) // appends item and session data(via GET) to form depending on the 'bid' button clicked 
+{
+  bidButton.onclick = function () {
+    
+    document.
+    getElementById("submit_bid_form").
+    setAttribute("action","project_page.php?projectID="+<?= $_GET['projectID'] ?>+
+    "&itemID="+itemID+"&bidderID="+ <?=$_SESSION['userID'] ?>);
+  };
 
+
+
+}
 
 
 </script>
@@ -273,6 +291,47 @@ function appendBidInfo(itemID,bidArea)
 </div>
 
 <div class="container gap-2" id="project_item_info_section">
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="bid_submit" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="bid_submitLabel">Bid submission</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <form id="submit_bid_form" name="submit_bid_form"  method="POST" >
+
+            <label for="asking_price" class="form-label"> Asking price: </label>
+            <input name="asking_price" type="number" class="form-control" id="asking_price">
+            <label for="notes" class="form-label"> Notes to project owner </label>
+            <textarea name="notes" class="form-control" id="notes" rows="3" ></textarea>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button submit" class="btn btn-primary">Submit</button>
+            </div>
+
+          </form>      
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- project itemID,bidderID,note,pic_link -->
+
+
+
+
+
+
+
+
+
+
 
 
 
