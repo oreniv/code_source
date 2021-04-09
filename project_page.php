@@ -39,10 +39,29 @@ $projectItem_array = array();
         array_push($projectItem_array,$temp);
         unset($temp);
     }
-   
-  
-   
 
+  
+  $sqlProjectBids = "SELECT * FROM project_item_bids   
+                     INNER JOIN project_item ON project_item.id = project_item_bids.project_itemID 
+                     WHERE project_item.projectID =".$_GET['projectID'];
+
+  $sqlResult = mysqli_query($conn, $sqlProjectBids);
+  $bid_array = array();
+  while($row = mysqli_fetch_assoc($sqlResult))
+  {
+    $temp = array(
+      "project_itemID" => $row['project_itemID'],
+      "bidderID" => $row['bidderID'],
+      "price" => $row['price'],
+      "note" => $row['note'],
+      "bid_id" => $row['id']
+    );
+    array_push($bid_array,$temp);
+    unset($temp);
+
+  }
+
+ 
 
 $sqlFetchTags = "CALL get_tags_for_post(".$_GET['projectID'].",'project')";
 
@@ -54,10 +73,12 @@ $tag_array = array();
             {
                array_push($tag_array,$row['tag']);  
             }
+
+$bid_array = json_encode($bid_array); // array of bids for all post items of this project
+$projectItem_array = json_encode($projectItem_array); // array of all items that make up the whole project
+$tag_array = json_encode($tag_array); // array of tags that were given to this project
+$postData = json_encode($postData); // basic data about the whole project 
  
-$projectItem_array = json_encode($projectItem_array);
-$tag_array = json_encode($tag_array);
-$postData = json_encode($postData);
 ?>
 
 
@@ -100,16 +121,17 @@ if (jsonTags.length == 0 )
     document.getElementById("tags").innerHTML = profileData["tags"]+",";
 
 createNewProjectItemCard ();
+
+
 }
 
 function createNewProjectItemCard ()
 {
 
-
 var projectItems = <?=  $projectItem_array   ?>;
-console.log(projectItems);
 
-//window.alert( projectItems[0]["item_type"]  );
+
+ 
 var projectItemsSize = projectItems.length;
 for (i = 0 ; i < projectItemsSize ; i++)
 {
@@ -120,13 +142,14 @@ for (i = 0 ; i < projectItemsSize ; i++)
     cardRow.classList.add("row");
     cardRow.classList.add("g-0");
   var imageDiv = document.createElement("div")
-    imageDiv.classList.add("col-md-4");
+    imageDiv.classList.add("col");
     imageDiv.classList.add("border");
   var image = document.createElement("img");
     image.setAttribute("src",projectItems[i]["part_picture"]);
     image.setAttribute("style","width: 50%; height:auto;")
   var cardTextColumn =  document.createElement("div");
-    cardTextColumn.classList.add("col-md-8");
+  cardTextColumn.classList.add("col-md-8");
+  cardTextColumn.classList.add("col");
   var cardTextBody = document.createElement("div");
     cardTextBody.classList.add("card-body");
   var cardText = document.createElement("p");
@@ -134,7 +157,30 @@ for (i = 0 ; i < projectItemsSize ; i++)
     cardText.classList.add("border");
     cardText.classList.add("text-center");
     cardText.innerHTML = projectItems[i]["item_description"];
-  
+  // bid list section and collapsable list
+  var bidCollapseList = document.createElement("button");
+      bidCollapseList.setAttribute("class","btn btn-primary");
+      bidCollapseList.setAttribute("data-bs-toggle","collapse");
+      bidCollapseList.setAttribute("type","button");
+      bidCollapseList.setAttribute("data-bs-target","#bid_section"+[i]);
+      bidCollapseList.setAttribute("aria-expanded","false");
+      bidCollapseList.setAttribute("aria-controls","bid_section"+[i]);
+      bidCollapseList.innerHTML = "View bids on this part";
+  var bidCollapseArea =  document.createElement("div");
+      bidCollapseArea.setAttribute("class","collapse");
+      bidCollapseArea.setAttribute("id","bid_section"+[i]);
+  // bid button 
+  var bidButton = document.createElement("button");
+      bidButton.setAttribute("type","button");
+      bidButton.setAttribute("class","btn btn-secondary btn-sm col-1 w-20");
+      bidButton.setAttribute("style","width: 100px;");
+      bidButton.innerHTML = "Place a bid on this part";
+
+
+
+
+
+
      if(projectItems[i]["part_picture"] == null)
       image.setAttribute("src","source/no_picture.jpg"); // Hardcoded image 
 
@@ -145,12 +191,63 @@ for (i = 0 ; i < projectItemsSize ; i++)
   cardRow.appendChild(imageDiv);
   imageDiv.appendChild(image);
   cardRow.appendChild(cardTextColumn);
+  cardRow.appendChild(bidButton);
   cardTextColumn.appendChild(cardTextBody); 
   cardTextBody.appendChild(cardText);
+  cardTextColumn.appendChild(bidCollapseList);
+  bidCollapseList.appendChild(bidCollapseArea);
+  
+    
+  appendBidInfo(projectItems[i]["itemID"],bidCollapseArea);
 
   document.getElementById("project_item_info_section").appendChild(projectItemCard);
+
 }
+
+/*
+To do:  add modal to 'place bid button' {project itemID,bidderID,price,note,pic_link}
+
+*/
 }
+
+
+function appendBidInfo(itemID,bidArea)
+{
+    var bids = <?= $bid_array ?> ; 
+    var len = bids.length;
+    var has_at_least_one_bid = false; 
+   console.log(bids);
+
+   var bidList = document.createElement("ul");
+   bidList.classList.add("list-group")
+
+  for (bidCounter = 1,j = 0 ; j < len ; j++) // go through all the bids for a particular item
+  {
+    if (bids[j]["project_itemID"] == itemID ) // if the current itemID has a bid, post it.
+      {    
+        has_at_least_one_bid = true;
+        var bidLine = document.createElement("li");
+        bidLine.classList.add("list-group-item");
+        bidLine.innerHTML ="Bid # "+bidCounter+" $"+bids[j]["price"];
+        bidList.appendChild(bidLine);
+        bidCounter++;
+      }   
+  }
+
+  if (!has_at_least_one_bid)
+  {
+    var bidLine = document.createElement("li");
+        bidLine.classList.add("list-group-item");
+        bidLine.innerHTML ="No bids for this part."
+        bidList.appendChild(bidLine);
+  }
+  bidArea.appendChild(bidList);
+
+  
+}
+
+
+
 
 </script>
 
