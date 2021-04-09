@@ -113,6 +113,115 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             }
         }
 
+        function appenedHistoryCard(data){
+            for(var i = 0; i< data.length; i++){
+                createMyHistoryCard("historicalContainerId", "source/produits/pikachu_ninja.jpg", data[i].history_id, data[i].item_id, 
+                                    data[i].seller_id, data[i].address, data[i].timestamp, data[i].price_item, data[i].amount, data[i].delivery_status);
+            }
+        }
+
+        function createMyHistoryCard(tabName, picture, commandNumber, itemId, sellerId, address, timestamp, price, amount, delivery){
+            const newCard = document.createElement("div");
+            newCard.classList.add("historicalCard");
+
+            const firstBand = document.createElement("div");
+            firstBand.classList.add("firstBand");
+
+            const dateCommand = document.createElement("p");
+            dateCommand.classList.add("dateCommand");
+            dateCommand.innerHTML = "Command done the: <br/>" + timestamp;
+
+            const totalCommand = document.createElement("p");
+            totalCommand.classList.add("totalCommand");
+            var total = price * amount;
+            totalCommand.innerHTML = "Total:<br/>" + total;
+
+            const addressCommand = document.createElement("p");
+            addressCommand.classList.add("addressCommand");
+            addressCommand.innerHTML = "Send to:<br/>" + address;
+
+            const bill = document.createElement("div");
+            bill.classList.add("bill");
+
+            const idCommand = document.createElement("p");
+            idCommand.classList.add("idCommand");
+            idCommand.innerHTML = "N° command: " + commandNumber;
+
+            const seeBill = document.createElement("button");
+            seeBill.classList.add("seeBill");
+            seeBill.innerHTML = "See bill";
+
+            const secondBand = document.createElement("div");
+            secondBand.classList.add("secondBand");
+
+            const pictureProduct = document.createElement("img");
+            pictureProduct.classList.add("pictureProduct");
+            pictureProduct.src = picture;
+
+            const secondContainerSecondBand = document.createElement("div");
+            secondContainerSecondBand.classList.add("secondContainerSecondBand");
+
+            const dateCommandDelivery = document.createElement("p");
+            dateCommandDelivery.classList.add("dateCommandDelivery");
+            dateCommandDelivery.innerHTML = "Status delivery: " + delivery;
+
+            const descriptionCommand = document.createElement("p");
+            descriptionCommand.classList.add("descriptionCommand");
+            descriptionCommand.innerHTML = "sa gentille race m'a bien usée";
+
+            const secondContainerButton = document.createElement("div");
+            secondContainerButton.classList.add("secondContainerButton");
+
+            const buyAgain = document.createElement("button");
+            buyAgain.classList.add("secondContainerButton");
+            buyAgain.innerHTML = "Buy again";
+
+            const seeProductAgain = document.createElement("button");
+            seeProductAgain.classList.add("seeProductAgain");
+            seeProductAgain.innerHTML = "See product";
+
+            const lastContainerSecondBand = document.createElement("div");
+            lastContainerSecondBand.classList.add("lastContainerSecondBand");
+
+
+            const buttonRankSeller = document.createElement("button");
+            buttonRankSeller.innerHTML = "Rank seller";
+
+            const buttonSeeSeller = document.createElement("button");
+            buttonSeeSeller.innerHTML = "See seller";
+
+            const buttonProblem = document.createElement("button");
+            buttonProblem.innerHTML = "Problem";
+
+            newCard.appendChild(firstBand);
+            newCard.appendChild(secondBand);
+            
+            firstBand.appendChild(dateCommand);
+            firstBand.appendChild(totalCommand);
+            firstBand.appendChild(addressCommand);
+            firstBand.appendChild(bill);
+            bill.appendChild(idCommand);
+            bill.appendChild(seeBill);
+
+            secondBand.appendChild(pictureProduct);
+            secondBand.appendChild(secondContainerSecondBand);
+            secondBand.appendChild(lastContainerSecondBand);
+
+            secondContainerSecondBand.appendChild(dateCommandDelivery);
+            secondContainerSecondBand.appendChild(descriptionCommand);
+            secondContainerSecondBand.appendChild(secondContainerButton);
+
+            secondContainerButton.appendChild(buyAgain);
+            secondContainerButton.appendChild(seeProductAgain);
+
+            lastContainerSecondBand.appendChild(buttonRankSeller);
+            lastContainerSecondBand.appendChild(buttonSeeSeller);
+            lastContainerSecondBand.appendChild(buttonProblem);
+
+            document.getElementById(tabName).appendChild(newCard);
+
+        }
+
         function createMyCard(tabName, image, description, price, liked, productName, id){
             const newCard = document.createElement("div");
             newCard.classList.add("card");
@@ -259,40 +368,12 @@ $(document).ready(function(){
                 <div id="recommendation" class="recommendationContainer" onMouseOver="pauseDiv()" onMouseOut="resumeDiv()">
 
                 </div>
-                <div class="historicContainer">
+                <div class="historicContainer" id="historicalContainerId">
 
                     <div class="innerTab">
                         <button id="defaultOpenProducts" class="tablink" onclick="openTab('historicalProduct', this, 'innerBuyerTabContent')">Products history</button>
                         <button id="projects_profile_created" class="tablink" onclick="openTab('historicalProject', this, 'innerBuyerTabContent')">Projects</button>
                         <button id="projects_profile_created" class="tablink" onclick="openTab('historicalLikedProduct', this, 'innerBuyerTabContent')">Products you liked</button>
-                    </div>
-
-                    <div class="historicalCard">
-                        <div class="firstBand">
-                            <p class="dateCommand"> Command done the: <br/> dd/mm/yyyy</p>
-                            <P class="totalCommand">Total:<br/>xx.xxx</P>
-                            <P class="addressCommand">Send to:<br/>25st jules david, les lilas FR</P>
-                            <div  class="bill">
-                                <P class="idCommand">N° command: xxxxxx</P>
-                                <button class="seeBill">See bill</button>
-                            </div>
-                        </div>
-                        <div class="secondBand">
-                            <img  class="pictureProduct" src="source/produits/pikachu_ninja.jpg">
-                            <div class="secondContainerSecondBand">
-                                <p class="dateCommandDelivery">Delivery done the: dd/mm/yyyy</p>
-                                <p class="descriptionCommand">sa gentille race m'a bien usée</p>
-                                <div class="secondContainerButton">
-                                    <button class="buyAgain">Buy again</button>
-                                    <button class="seeProductAgain">See product</button>
-                                </div>
-                            </div>
-                            <div class="lastContainerSecondBand">
-                                <button>Rank seller</button>
-                                <button>See seller</button>
-                                <button>Problem</button>
-                            </div>
-                        </div>
                     </div>
 
                 </div>
@@ -355,15 +436,20 @@ $(document).ready(function(){
 
         
             $sqlProfile = "SELECT * FROM users WHERE users.id =".$_SESSION['userID'];
+
             $sqlTopTenProduct = "CALL get_top10_sales_item_posts();";
 
             $sqlMyProducts = "SELECT * FROM sales_item WHERE sales_item.sales_item_posterID =".$_SESSION['userID'];
+
             $sqlEarning = "CALL get_seller_total_sold_items(".$_SESSION['userID'].");";
 
-            $sqlMyHistory = "SELECT * FROM transaction_history WHERE buyerID =".$_SESSION['userID'];";"
+            $sqlMyHistory = "SELECT * FROM transaction_history WHERE buyerID =".$_SESSION['userID'];
 
             $resultHistory = mysqli_query($conn, $sqlMyHistory);
             $resultCheckHistory = mysqli_num_rows($resultHistory);
+
+            mysqli_close($conn);
+            $conn = mysqli_connect($servername, $username, $password, $dbname);
 
             $resultEarning = mysqli_query($conn, $sqlEarning);
             $resultCheckEarning = mysqli_num_rows($resultEarning);
@@ -556,6 +642,11 @@ $(document).ready(function(){
             console.log(jsonJsTopTenProduct);
 
             appendMyJson(jsonJsMyProduct, jsonJsTopTenProduct);
+
+            var jsonJsHistory = <?= $jsonHistory; ?>;
+            console.log(jsonJsHistory);
+
+            appenedHistoryCard(jsonJsHistory);
             
 
             function openTab(tabName, elmnt, tab) {
