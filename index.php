@@ -1,6 +1,6 @@
 <?php 
 include_once 'dbconnection.php';
-include_once 'user_params.php';
+ 
 session_start();
 echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name']; 
 
@@ -163,24 +163,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             document.getElementById(tabName).appendChild(newCard);
         }
          
-        function login()
-        {
-            var userID = window.prompt("Enter userID:","19");    
-            var xhttp = new XMLHttpRequest(); // using AJAX 
-            xhttp.open("POST","index.php",false);
-            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xhttp.send("userID="+userID); 
-            location.reload();
 
-        }
-        function logout()
-        {
-            var xhttp = new XMLHttpRequest();  // using AJAX 
-            xhttp.open("POST","index.php",false);
-            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xhttp.send("kill_session="+true); 
-            location.reload();
-        }
 
          
     </script>
@@ -195,13 +178,6 @@ $(document).ready(function(){
  });
 </script>
 
-     <!-- login button stuff -->
-     <div class="container">
-    <button class="my_button_edit" onclick="login()">log in</button>
-    <button class="my_button_edit" onclick="logout()">log out</button>
-    </div>
-    <!-- ******************* -->
-    
 <header class="header_class"> 
      <!-- Header is loaded with jQuery -->
 </header>

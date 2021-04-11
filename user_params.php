@@ -1,9 +1,29 @@
 <?php
- 
- 
-  session_start();
+ include_once 'dbconnection.php';
+session_start();
 
- if (isset($_POST["userID"])) // check if the userID is already SET FOR THIS SESSION
+ 
+
+if ($_POST['login_req'] == true)
+{
+    
+    $sqlValidateUser = "SELECT users.id
+                        FROM users
+                        WHERE users.email = "."'".$_POST['email']."'"."AND users.passwd = "."'".$_POST['password']."'" ; 
+   
+    $result =  mysqli_query($conn,$sqlValidateUser);
+    $result = mysqli_fetch_assoc($result)['id'] ;
+
+    if ($result != NULL)
+        $_POST["userID"] = (int)$result;
+    else 
+        $_POST["userID"] = -1 ;
+     
+    header("Location:index.php");
+}
+
+
+if (isset($_POST["userID"]) && $_POST["userID"] != -1  )    // check if the userID is already SET FOR THIS SESSION
  { 
     $_SESSION['userID'] = (int)$_POST["userID"];  
    
@@ -68,6 +88,7 @@ if ($_POST["kill_session"]) // if kill_session is returned true then kill the se
    
     session_unset();
     session_destroy();
+    header("Location:index.php");
     
 }
  
