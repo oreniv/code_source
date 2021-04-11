@@ -80,6 +80,38 @@ $projectItem_array = json_encode($projectItem_array); // array of all items that
 $tag_array = json_encode($tag_array); // array of tags that were given to this project
 $postData = json_encode($postData); // basic data about the whole project 
  
+
+/*  This section handles bid submission  */
+if (isset($_GET['itemID']))
+{
+
+ 
+  
+
+  $conn = mysqli_connect($servername, $username, $password, $dbname);
+  $notes = "'".$_POST['notes']."'" ;
+  $sqlInsertBid = "CALL insert_project_item_bid (".$_GET['itemID'].",".$_SESSION['userID'].",".$_POST['asking_price'].",".$notes.")";  
+    
+
+  if (!mysqli_query($conn,  $sqlInsertBid)) {
+    echo("Error description: " . mysqli_error($conn));
+    $_SESSION['db_error'] = True;
+  }
+  else
+  $_SESSION['db_error'] = False;
+
+  
+
+ 
+  
+
+
+  mysqli_close($conn);
+}
+
+
+
+
 ?>
 
 
@@ -234,7 +266,7 @@ function appendBidInfo(itemID,bidArea)
         has_at_least_one_bid = true;
         var bidLine = document.createElement("li");
         bidLine.classList.add("list-group-item");
-        bidLine.innerHTML ="Bid # "+bidCounter+" $"+bids[j]["price"];
+        bidLine.innerHTML ="Bid # "+bidCounter+" $"+bids[j]["price"]+" note: "+bids[j]["note"];
         bidList.appendChild(bidLine);
         bidCounter++;
       }   
@@ -259,7 +291,7 @@ function setBidID(bidButton,itemID) // appends item and session data(via GET) to
     document.
     getElementById("submit_bid_form").
     setAttribute("action","project_page.php?projectID="+<?= $_GET['projectID'] ?>+
-    "&itemID="+itemID+"&bidderID="+ <?=$_SESSION['userID'] ?>);
+    "&itemID="+itemID);
   };
 
 
@@ -307,9 +339,9 @@ function setBidID(bidButton,itemID) // appends item and session data(via GET) to
           <form id="submit_bid_form" name="submit_bid_form"  method="POST" >
 
             <label for="asking_price" class="form-label"> Asking price: </label>
-            <input name="asking_price" type="number" class="form-control" id="asking_price">
-            <label for="notes" class="form-label"> Notes to project owner </label>
-            <textarea name="notes" class="form-control" id="notes" rows="3" ></textarea>
+            <input name="asking_price" min="1" type="number" class="form-control" id="asking_price">
+            <label for="notes" class="form-label" > Notes to project owner </label>
+            <textarea name="notes" class="form-control" id="notes" rows="3" maxlength="300" ></textarea>
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             <button type="button submit" class="btn btn-primary">Submit</button>
@@ -321,7 +353,7 @@ function setBidID(bidButton,itemID) // appends item and session data(via GET) to
   </div>
 </div>
 
-<!-- project itemID,bidderID,note,pic_link -->
+ 
 
 
 
