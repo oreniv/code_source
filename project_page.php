@@ -241,11 +241,7 @@ for (i = 0 ; i < projectItemsSize ; i++)
   document.getElementById("project_item_info_section").appendChild(projectItemCard);
 
 }
-
-/*
-To do:  add PHP code to append new bid submissions to DB
-
-*/
+ 
 }
 
 

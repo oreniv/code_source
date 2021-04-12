@@ -99,7 +99,7 @@ else
             xhttp.open("POST","user_params.php",false);
             xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xhttp.send("kill_session="+true); 
-            location.reload();
+            window.location.assign("index.php");
         }
     
 

@@ -10,7 +10,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 <html>
 
 <script>
- 
+
     function addToCart()
     {
         <?php 
@@ -32,13 +32,21 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         
         ?>
 
-        var productID = <?=$_GET['productID']?> ;     
-        var xhttp = new XMLHttpRequest(); // using AJAX 
-           xhttp.open("POST","product_page.php",true); // call this page again with a POST variable that indicates which item to add to cart
-           xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-           xhttp.send("add_this_item_to_cart="+productID); 
-           location.reload(); // remove this when cart updates dynamically 
-           
+        if (<?=$_SESSION['userID']?> == -1)
+        {
+            var myModal = new bootstrap.Modal(document.getElementById('login_request_modal'),{keyboard:true});
+            myModal.toggle();
+        }
+        else
+        {
+            var productID = <?=$_GET['productID']?> ;     
+            var xhttp = new XMLHttpRequest(); // using AJAX 
+            xhttp.open("POST","product_page.php",true); // call this page again with a POST variable that indicates which item to add to cart
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("add_this_item_to_cart="+productID); 
+            location.reload(); // remove this when cart updates dynamically 
+        }
+
     }
  
     function buyNow()
@@ -192,7 +200,6 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
        reviewPost.appendChild(reviewCard);
        document.getElementById("review_section").appendChild(reviewPost); 
 
-
            
     }
     }
@@ -329,6 +336,43 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 </div>
 
 <!-------------------------> 
+
+
+
+<div id="login_request_modal" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>You must be logged in to use the cart</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
