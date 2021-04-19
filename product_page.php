@@ -98,11 +98,14 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         var price = profileData["price"];
         var print_duration = profileData["print_duration"];
         var delivery_price = profileData["delivery_price"];
+        var mySource = profileData["item_pic_link"];
+        var firstImage = mySource.split(",");
 
         /** Set product title,description,author and related tags **/
        document.getElementById("product_title").innerHTML = profileData["name"] + " ";
        document.getElementById("product_desc").innerHTML ="Description: " + profileData["description"];
        document.getElementById("author").innerHTML ="Posted by: " + profileData["author"] +" ";
+       document.getElementById("product_image").src = firstImage[0];
 
        if (profileData["tags"].length == 0 )
        document.getElementById("tags").innerHTML = "This post has no tags";
@@ -258,7 +261,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 <div class="container">
     <div class="row">
         <div class="col-4 "> <!-- Make this dynamic depending on loaded item -->
-             <img src="source/produits/project3.jpg" class="img-fluid img-thumbnail">
+             <img id="product_image" class="img-fluid img-thumbnail">
         </div>
         <div class="col-8 ">
             <div class="d-grid gap-3">
@@ -421,7 +424,8 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
                 "filament_type" => $row['filament_type'],
                 "rating" => $row['item_rating'],
                 "author" => $row['full_name'],
-                "author_rating" => $row['seller_rating']
+                "author_rating" => $row['seller_rating'],
+                "item_pic_link" => $row['item_pic_link']
                 );   
             // Now handle only tags
             $tag_array = array();
@@ -462,7 +466,8 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             "rating" : <?php echo json_encode($productData["rating"], JSON_HEX_TAG); ?>,
             "author" : <?php echo json_encode($productData["author"], JSON_HEX_TAG); ?>,
             "author_rating" : <?php echo json_encode($productData["author_rating"], JSON_HEX_TAG); ?>,
-            "tags" : <?php echo json_encode($tag_array, JSON_HEX_TAG); ?>
+            "tags" : <?php echo json_encode($tag_array, JSON_HEX_TAG); ?>,
+            "item_pic_link" : <?php echo json_encode($productData["item_pic_link"], JSON_HEX_TAG); ?>
         };   
 
     var jsonReviews = <?= $jsonReviews; ?>;

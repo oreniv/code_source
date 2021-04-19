@@ -709,7 +709,8 @@ $(document).ready(function(){
                         "product_name" => $row['item_name'],
                         "product_id" => $row['id'],
                         "product_price" => $row['price'],
-                        "product_description" => $row['item_description']
+                        "product_description" => $row['item_description'],
+                        "item_pic_link" => $row['item_pic_link']
                     );   
                     array_push($mainDataMyFavorite , $dataMyFavorite );
                     unset($dataMyFavorite );                
@@ -740,7 +741,8 @@ $(document).ready(function(){
                         "product_name" => $row['item_name'],
                         "product_id" => $row['id'],
                         "product_price" => $row['price'],
-                        "product_description" => $row['item_description']
+                        "product_description" => $row['item_description'],
+                        "item_pic_link" => $row['item_pic_link']
                     );   
                     array_push($mainDataTopTenProduct , $dataTopTenProduct );
                     unset($dataTopTenProduct );                
