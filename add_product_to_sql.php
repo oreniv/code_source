@@ -20,7 +20,6 @@ $page_link = "'"." page link here"."'";
 $conn = mysqli_connect($servername, $username, $password, $dbname);
 
 $sql = "CALL insert_sales_item($userID,$title,$description,$type,$price,$pic_link,$page_link,$durationDay,$price,$filament);";
-var_dump($sql);
 
 if (mysqli_query($conn, $sql)) {
     echo "New record created successfully";

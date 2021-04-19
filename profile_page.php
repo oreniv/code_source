@@ -593,7 +593,7 @@ $(document).ready(function(){
                              INNER JOIN sales_item ON sales_item.id = transaction_history.sales_itemID 
                              WHERE buyerID =".$_SESSION['userID'];
 
-            $sqlMyFavorite ="SELECT * FROM oraydata.fav_posts
+            $sqlMyFavorite ="SELECT * FROM fav_posts
                              INNER JOIN sales_item ON sales_item.id = fav_posts.sales_itemID 
                              WHERE userID =".$_SESSION['userID'];
 

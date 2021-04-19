@@ -1,9 +1,59 @@
 <?php
- 
- 
-  session_start();
+ include_once 'dbconnection.php';
+session_start();
 
- if (isset($_POST["userID"])) // check if the userID is already SET FOR THIS SESSION
+ 
+
+if ($_POST['register'] == true)
+{
+    
+    
+ 
+    $sqlInsertUser = "CALL insert_user(".
+    "'".$_POST["full_name"]."'".",".
+    "'".$_POST["email"]."'".",".
+    "'".$_POST["birthday"]."'".",".
+    "'".$_POST["password"]."'".",".
+    "'".$_POST["profile_pic"]."'".",".
+    (int)$_POST["payment_details"].",".
+    "'".$_POST["address"]."'".")";
+   
+   if (mysqli_query($conn, $sqlInsertUser)) {
+        echo "New record created successfully";
+        $_POST['login_req'] = true ; 
+        
+        } else {
+          echo "Error: " . $sql . "<br>"  . mysqli_error($conn);
+        }
+
+        mysqli_close($conn);
+        $conn = mysqli_connect($servername, $username, $password, $dbname);
+
+       
+       header("Location:index.php");
+        
+}
+
+if ($_POST['login_req'] == true)
+{
+    
+    $sqlValidateUser = "SELECT users.id
+                        FROM users
+                        WHERE users.email = "."'".$_POST['email']."'"."AND users.passwd = "."'".$_POST['password']."'" ; 
+   
+    $result =  mysqli_query($conn,$sqlValidateUser);
+    $result = mysqli_fetch_assoc($result)['id'] ;
+
+    if ($result != NULL)
+        $_POST["userID"] = (int)$result;
+    else 
+        $_POST["userID"] = -1 ;
+     
+     header("Location:index.php");
+}
+
+
+if (isset($_POST["userID"]) && $_POST["userID"] != -1  )    // check if the userID is already SET FOR THIS SESSION
  { 
     $_SESSION['userID'] = (int)$_POST["userID"];  
    
@@ -53,12 +103,13 @@
      
      $_SESSION['items_in_cart'] = $cartItem_array; // 2D array of all items in cart
      $_SESSION['cart_item_count'] = count($sale_items) + count($project_bids);
-    
+die();
 } 
  else if (!isset($_SESSION['userID']))
     {
         $_SESSION['userID'] = -1 ;
         $_SESSION['cart_item_count'] = 0;
+        die();
     }
 
 
@@ -68,6 +119,7 @@ if ($_POST["kill_session"]) // if kill_session is returned true then kill the se
    
     session_unset();
     session_destroy();
+    header("Location:index.php");
     
 }
  
