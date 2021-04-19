@@ -34,9 +34,14 @@ if (<?= $_SESSION['userID']  ?> == -1 ){
     var registerButton =  document.createElement("button");
     registerButton.setAttribute("class","btn btn-info h-50 d-inline-block ");
     registerButton.setAttribute("type","button");
+    registerButton.setAttribute("data-bs-toggle","modal");
+    registerButton.setAttribute("data-bs-target","#registerModal");
     registerButton.innerHTML = "Register";
     document.getElementsByClassName("profile_container")[0].appendChild(registerButton);
     
+   
+
+
     var loginButton = document.createElement("button");
     loginButton.setAttribute("class","btn btn-success h-50 d-inline-block ");
     loginButton.setAttribute("type","button");
@@ -155,7 +160,43 @@ else
     </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button submit" class="btn btn-primary">Save changes</button>
+        <button type="button submit" class="btn btn-primary">Login</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal 2 -->
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="registerModalLabel">Register</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="POST" action="user_params.php" enctype="multipart/form-data" >
+      <div class="modal-body">        
+    <div class="mb-3">
+        <label for="name_input" class="form-label">Full name:</label>
+        <input name="full_name" type="text" class="form-control" id="full_name" >
+        <label for="email_input" class="form-label">Email:</label>
+        <input name="email" type="email" class="form-control" id="email_input" >
+        <label for="birthday_input" class="form-label">Birthday:</label>
+        <input name="birthday" type="date" class="form-control" id="birthday_input" >
+        <label for="password_input" class="form-label">Password:</label>
+        <input name="password" type="password" class="form-control" id="password_input" >        
+        <label for="profile_pic" class="form-label">Profile picture: (Optional)</label>
+        <input name="profile_pic" type="file" class="form-control" id="profile_pic" >  
+        <label for="payment_details" class="form-label">Credit card num:(Optional)</label>
+        <input name="payment_details" type="text" class="form-control" id="payment_details" > 
+        <label for="address" class="form-label">Full address: (Optional)</label>
+        <textarea name="address" type="text" class="form-control" rows="3" id="address" > </textarea>
+        <input name="register" class="form-control" type="hidden" value="true"> 
+    </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button submit" class="btn btn-primary">Submit</button>
       </div>
       </form>
     </div>
@@ -163,26 +204,8 @@ else
 </div>
 
 
+<!-- remove credit,seller_rating on procedure 'insert user' + drop user_page column and on procedure-->
 
 
 
 
-
-
-
-
-
-
-
-
-<!-- 
-    <a id="profile_link" href="profile_page.php">
-        <div class="mask_circle">
-            <img class="img_profile" src="source/produits/profil_picture.jpg">
-        </div>
-    </a>
-    <div class="cart_container">
-        <a class="cart_link" href="#"><span class="number_item">0</span><img class="cart_img"
-                src="source/icones/cart.png"></a>
-    </div>
--->

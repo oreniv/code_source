@@ -4,6 +4,36 @@ session_start();
 
  
 
+if ($_POST['register'] == true)
+{
+    
+    
+ 
+    $sqlInsertUser = "CALL insert_user(".
+    "'".$_POST["full_name"]."'".",".
+    "'".$_POST["email"]."'".",".
+    "'".$_POST["birthday"]."'".",".
+    "'".$_POST["password"]."'".",".
+    "'".$_POST["profile_pic"]."'".",".
+    (int)$_POST["payment_details"].",".
+    "'".$_POST["address"]."'".")";
+   
+   if (mysqli_query($conn, $sqlInsertUser)) {
+        echo "New record created successfully";
+        $_POST['login_req'] = true ; 
+        
+        } else {
+          echo "Error: " . $sql . "<br>"  . mysqli_error($conn);
+        }
+
+        mysqli_close($conn);
+        $conn = mysqli_connect($servername, $username, $password, $dbname);
+
+       
+       header("Location:index.php");
+        
+}
+
 if ($_POST['login_req'] == true)
 {
     
@@ -19,7 +49,7 @@ if ($_POST['login_req'] == true)
     else 
         $_POST["userID"] = -1 ;
      
-    header("Location:index.php");
+     header("Location:index.php");
 }
 
 
@@ -73,12 +103,13 @@ if (isset($_POST["userID"]) && $_POST["userID"] != -1  )    // check if the user
      
      $_SESSION['items_in_cart'] = $cartItem_array; // 2D array of all items in cart
      $_SESSION['cart_item_count'] = count($sale_items) + count($project_bids);
-    
+die();
 } 
  else if (!isset($_SESSION['userID']))
     {
         $_SESSION['userID'] = -1 ;
         $_SESSION['cart_item_count'] = 0;
+        die();
     }
 
 
