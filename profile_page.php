@@ -370,7 +370,7 @@ $(document).ready(function(){
                     <table id="table_data">
                         <tr>
                             <th id="first_row">
-                                name
+                                Name
                             </th>
                             <td id="fullName">
                             </td>
@@ -380,7 +380,6 @@ $(document).ready(function(){
                                 UserName
                             </th>
                             <td id="username">
-                                YohannBe
                             </td>
                         </tr>
                         <tr>
@@ -396,7 +395,6 @@ $(document).ready(function(){
                                 Mail
                             </th>
                             <td id="usermail">
-                                Belhassen.yohann@gmail.com
                             </td>
                         </tr>
                         <tr>
@@ -404,7 +402,6 @@ $(document).ready(function(){
                                 Address
                             </th>
                             <td id="userAddress">
-                                25 rue jules david les lilas 93260
                             </td>
                         </tr>
                         <tr>
@@ -412,11 +409,9 @@ $(document).ready(function(){
                                 Payment method
                             </th>
                             <td id="creditCard">
-                                Credit card: xxxxxxxx1993
                             </td>
                         <tr>
                             <td id="payPalAccount">
-                                Paypal: Belhassen.yohann@gmail.com
                             </td>
                         </tr>
 
@@ -428,7 +423,25 @@ $(document).ready(function(){
                 <img id="profile_picture_principal" src="source/produits/profil_picture.jpg">
             </div>
 
-            <button class="my_button_edit" onclick="window.location.href='#';">Edit</button>
+            <div class="form-popup" id="myForm">
+                <form action="" class="form-container">
+                    <label for="nameEdit"><b>Name:</b></label>
+                    <input type="text" placeholder="Enter name" name="nameEdit"><br/>
+
+                    <label for="email"><b>Email:</b></label>
+                    <input type="text" placeholder="Enter Email" name="email"><br/>
+
+                    <label for="start"><b>Birthday:</b></label>
+                    <input type="date" id="start" name="trip-start" min="1920-01-01"><br/>
+
+                    <label for="Address"><b>Address:</b></label>
+                    <input type="text" placeholder="Enter Address" name="Address"><br/>
+
+                    <button type="submit" class="my_button_edit saveclose">Save changes</button><br/>
+                    <button class="my_button_edit saveclose" id="closeformbutton" onclick="closeForm()">Close</button>
+                </form>
+            </div>
+            <button class="my_button_edit" id="edit_button" onclick="openForm()">Edit</button>
         
         </div>
             
@@ -888,6 +901,19 @@ $(document).ready(function(){
                     PreviousScrollTop = DivElmnt.scrollTop;
                     ScrollInterval    = setInterval('scrollDiv()', ScrollRate);
                 }
+
+                function openForm() {
+                    document.getElementById("myForm").style.display = "flex";
+                    document.getElementById("edit_button").style.display = "none"
+                }
+
+                function closeForm() {
+                    document.getElementById("myForm").style.display = "none";
+                    document.getElementById("edit_button").style.display = "block"
+                    document.getElementById('closeformbutton').preventDefault();
+                }
+
+                closeForm();
         </script>
 
         <footer>
