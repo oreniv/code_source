@@ -31,19 +31,33 @@ if(isset($_POST['delete_item'])) // if user wants to delete an item
     $_SESSION['cart_item_count'] -= 1 ; // remove the item from the cart count  
   }
 
+  else 
+  {
+    $sql_delete_project_bid_from_cart = "DELETE FROM item_in_cart WHERE
+    cartID =".$_SESSION['cartID']." AND project_item_bidID = ".$_POST['delete_item']." LIMIT 1 ; " ; 
+    mysqli_query($conn,$sql_delete_project_bid_from_cart);    
+    $temp = array_search($_POST['delete_item'] ,$_SESSION['items_in_cart'][1] ); // get the index of the deleted element
+    $_SESSION['items_in_cart'][1][$temp] = -1; // set id as -1 for deleted items 
+    $_SESSION['cart_item_count'] -= 1 ; // remove the item from the cart count  
+  }
+
 }
 
+  
   $sql_get_sales_item_info_for_cart = "SELECT item_name,price,delivery_price,item_pic_link FROM sales_item WHERE id =";  
-  $sql_get_project_item_bid_info_for_cart = "SELECT id,price ,note FROM project_item_bids WHERE id =";   
+  $sql_get_project_item_bid_info_for_cart ="SELECT project_item_bids.* ,project_item.part_pic,project_item.item_description,project.id AS 'parent_project_ID' FROM project_item_bids
+  INNER JOIN project_item ON project_item.id = project_item_bids.project_itemID
+  INNER JOIN project ON project.id = project_item.projectID
+  WHERE project_item_bids.id ="; 
 
-  var_dump($_SESSION['items_in_cart'][0]);  
 
+  
   $i = 0;
   while ($_SESSION['items_in_cart'][0][$i] == -1) // keep looping until itemID is not -1 
     $i = $i + 1;
 
   $result =  mysqli_query($conn,$sql_get_sales_item_info_for_cart.$_SESSION['items_in_cart'][0][$i]); 
- 
+
   $sale_items = array();
   while($result != FALSE  &&  $temp = mysqli_fetch_assoc($result))
   {
@@ -66,9 +80,17 @@ if(isset($_POST['delete_item'])) // if user wants to delete an item
     
   }
  
-  
+
+
 // now handle project bids
+
+
+
   $i = 0;
+
+  while ($_SESSION['items_in_cart'][1][$i] == -1) // keep looping until itemID is not -1 
+    $i = $i + 1;
+
   $result =  mysqli_query($conn,$sql_get_project_item_bid_info_for_cart.$_SESSION['items_in_cart'][1][$i]); 
   
   $project_items = array();
@@ -77,15 +99,20 @@ if(isset($_POST['delete_item'])) // if user wants to delete an item
       $tempArr = array (
           "item_id" => $temp['id'],
           "price" => $temp['price'],
-          "note" => $temp['note']
-
+          "note" => $temp['note'],
+          "parent_project_id" => $temp['parent_project_ID'],
+          "part_pic" => $temp['part_pic'],
+          "item_desc" => $temp['item_description']
       );
 
        array_push($project_items, $tempArr); 
        
        unset($tempArr);
+
+       $i = $i + 1 ;
+       while ($_SESSION['items_in_cart'][1][$i] == -1)
+          $i = $i + 1;
      
-      $i++ ;
       $result =  mysqli_query($conn,$sql_get_project_item_bid_info_for_cart.$_SESSION['items_in_cart'][1][$i]); 
       
   }
@@ -93,7 +120,7 @@ if(isset($_POST['delete_item'])) // if user wants to delete an item
 
   $jsonSales_items =  json_encode($sale_items);
   $jsonProject_bids =  json_encode($project_items);
-
+   
 
 ?>
 
@@ -104,11 +131,15 @@ if(isset($_POST['delete_item'])) // if user wants to delete an item
 var sales_items = <?= $jsonSales_items  ?>; 
 var project_bids = <?=  $jsonProject_bids  ?>; 
 var sales_size =  sales_items.length ; 
+var project_bid_size = project_bids.length;
+var rowNumber = 0;
 
 function build_sales_table()
 {
-  setAmount();
-  var rowNumber = 0;
+  if (sales_size > 0)
+    setAmount();
+ 
+  
   for (i = 0 ; i< sales_size; i++)
   {
     if ( sales_items[i]['item_id'] == -1 )
@@ -128,8 +159,12 @@ function build_sales_table()
   button.innerHTML = "Remove from cart";
   var amount = document.createElement("td");
   amount.innerHTML = sales_items[i]['amount'];
-  
-
+  var picture = document.createElement("img");
+  picture.setAttribute("class","img-thumbnail rounded");
+  picture.setAttribute("style","border:1px solid #ddd; border-radius:4px; padding:5px ; width: 150px;")
+  var firstImage = sales_items[i]['pic_link'].split(",")
+  picture.src = firstImage[0];
+  picColumn.appendChild(picture);
 
   removeFromCart(button,sales_items[i]['item_id'],"sales_item");
 
@@ -152,7 +187,74 @@ function build_sales_table()
   document.getElementById("cart_table").appendChild(tableRow);
   }
 
+
 }
+
+function build_project_table()
+{
+  for (i=0;i<project_bid_size;i++)
+  {
+    if ( project_bids[i]['item_id'] == -1 )
+        continue; 
+  
+  rowNumber ++;
+  var tableRow =  document.createElement("tr");
+  var tableRowHeader = document.createElement("th");
+  tableRowHeader.setAttribute("scope","row");
+  tableRowHeader.innerHTML = rowNumber ;
+  var picColumn = document.createElement("tr");
+  var itemName = document.createElement("td");
+  var price = document.createElement("td");
+  var link = document.createElement("td");
+  var button = document.createElement("button");
+  button.setAttribute("class","btn btn-outline-danger btn-sm");
+  button.setAttribute("type","button");
+  button.innerHTML = "Remove from cart";
+  var amount = document.createElement("td");
+  amount.innerHTML = 1;
+
+  var picture = document.createElement("img");
+  picture.setAttribute("class","img-thumbnail rounded");
+  picture.setAttribute("style","border:1px solid #ddd; border-radius:4px; padding:5px ; width: 150px;");
+  var firstImage =  project_bids[i]['part_pic'].split(",")
+  picture.src = firstImage[0];
+  picColumn.appendChild(picture);
+  removeFromCart(button,project_bids[i]['item_id'],"project_bid");
+  link.innerHTML = "<a href=project_page.php?projectID="+project_bids[i]['parent_project_id']+">Go to project page</a>" ; 
+  itemName.innerHTML = project_bids[i]['item_desc'];
+  price.innerHTML = project_bids[i]['price'] ;
+  
+
+  tableRow.appendChild(tableRowHeader);
+  tableRow.appendChild(picColumn);
+  tableRow.appendChild(itemName); 
+  tableRow.appendChild(price);
+  tableRow.appendChild(amount);
+  tableRow.appendChild(link);
+  tableRow.appendChild(button);
+
+  document.getElementById("cart_table").appendChild(tableRow);
+
+    
+
+
+  }
+  
+  if (rowNumber == 0) // write something if cart is empty 
+  {
+    
+     var text = document.createElement("p");
+    text.setAttribute("class","fs-1");
+    text.innerHTML ="Cart is empty ";   
+    document.getElementById("cart_table").innerHTML = text.innerHTML;
+    
+  }
+
+}
+
+
+
+
 
 function setAmount()
 {
@@ -210,7 +312,7 @@ $(document).ready(function(){
 <div class="container">
   <div class="row ">
 
-  <table class="table">
+  <table class="table table-bordered">
   <thead>
     <tr>
       <th scope="col">#</th>
@@ -225,10 +327,33 @@ $(document).ready(function(){
     <tr>
     </tr>
   </tbody>
+
 </table>
 
+
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+    </div>
+    <div class="col">
+    </div>
+    <div class="col-7">
+    <button type="button" class="btn btn-success w-45 ">Proceed to payment --></button>
+    </div>
   </div>
 </div>
+
+
+
+
+</div>
+  </div>
+</div>
+
+
+
+
 
 
 <!-- hidden form for db deletions -->
@@ -247,7 +372,7 @@ $(document).ready(function(){
 <script>
 
 build_sales_table();
-
+build_project_table();
 
 </script>
 
