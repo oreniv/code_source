@@ -262,6 +262,8 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
     <div class="row">
         <div class="col-4 "> <!-- Make this dynamic depending on loaded item -->
              <img id="product_image" class="img-fluid img-thumbnail">
+             <a class="prev prevPicProduct" onclick="plusSlides(-1)">&#10094;</a>
+             <a class="next nextPicProduct" onclick="plusSlides(1)">&#10095;</a>
         </div>
         <div class="col-8 ">
             <div class="d-grid gap-3">
@@ -476,6 +478,31 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
    appendData(jsonJsProduct);
    appendReview(jsonReviews);
+
+
+    var slideIndex = 0;
+    var mySources = jsonJsProduct["item_pic_link"];
+    var sourcesArray = mySources.split(",");
+
+    // Next/previous controls
+    function plusSlides(n) {
+      showSlides(slideIndex += n);
+    }
+
+    function showSlides(n) {
+      if (n >= sourcesArray.length) 
+      {
+        slideIndex = 0;
+      }
+      if (n < 0) 
+      {
+        slideIndex = sourcesArray.length-1;
+      }
+      document.getElementById("product_image").src = sourcesArray[slideIndex];
+    }
+
+
+
 </script>
 
 

@@ -318,9 +318,21 @@ text-align: center;}
   left: 93%;
   border-radius:  0 3px 3px 0 ;
 }
+
+.nextPicProduct{
+  left: 50%;
+  background-color: #E68235;
+  color: #FEFCE9;
+}
+
 .prev {
   left: 3%;
   border-radius: 3px 0 0 3px;
+}
+
+.prevPicProduct{
+  background-color: #E68235;
+  color: #FEFCE9;
 }
 
 .prev:hover, .next:hover {
