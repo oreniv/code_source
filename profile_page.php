@@ -105,7 +105,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         /**-------------------------------------------------------- */
         function appendMyJson(data, dataRecommended, dataFavorite){
             for(var i = 0; i< data.length; i++){
-                createMyCard("myProducts", "source/produits/onepieceluffy.jpg", data[i].product_description, 
+                createMyCard("myProducts", data[i].item_pic_link, data[i].product_description, 
                 data[i].product_price, true, data[i].product_name, 
                 data[i].product_id);
                     }
@@ -296,7 +296,8 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             newCard.classList.add("card");
             const newPicture = document.createElement("img");
             newPicture.classList.add("img_card");
-            newPicture.src = "source/produits/onepiece.jpeg";
+            var firstImage = image.split(",");
+            newPicture.src = firstImage[0];
             const newNameProduct = document.createElement("h3");
             newNameProduct.innerHTML = productName;
             const newDescription = document.createElement("p");
@@ -708,7 +709,8 @@ $(document).ready(function(){
                         "product_name" => $row['item_name'],
                         "product_id" => $row['id'],
                         "product_price" => $row['price'],
-                        "product_description" => $row['item_description']
+                        "product_description" => $row['item_description'],
+                        "item_pic_link" => $row['item_pic_link']
                     );   
                     array_push($mainDataMyFavorite , $dataMyFavorite );
                     unset($dataMyFavorite );                
@@ -723,7 +725,8 @@ $(document).ready(function(){
                         "product_name" => $row['item_name'],
                         "product_id" => $row['id'],
                         "product_price" => $row['price'],
-                        "product_description" => $row['item_description']
+                        "product_description" => $row['item_description'],
+                        "item_pic_link" => $row['item_pic_link']
                     );   
                     array_push($mainDataMyProduct , $dataMyProduct );
                     unset($dataMyProduct );                
@@ -738,7 +741,8 @@ $(document).ready(function(){
                         "product_name" => $row['item_name'],
                         "product_id" => $row['id'],
                         "product_price" => $row['price'],
-                        "product_description" => $row['item_description']
+                        "product_description" => $row['item_description'],
+                        "item_pic_link" => $row['item_pic_link']
                     );   
                     array_push($mainDataTopTenProduct , $dataTopTenProduct );
                     unset($dataTopTenProduct );                

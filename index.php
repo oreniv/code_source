@@ -92,13 +92,13 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
                         createNewCardTopTenProduct("project_link_card_happened","source/produits/project4.jpg", dataProject[i].project_description, dataProject[i].project_budget, true, dataProject[i].project_name,dataProject[i].project_id,"project");
                     }
                     for(var i = 0; i< dataProduct.length; i++){
-                        createNewCardTopTenProduct("product_link_card_happened","source/produits/onepieceluffy.jpg", dataProduct[i].product_description, dataProduct[i].product_price, true, dataProduct[i].product_name,dataProduct[i].product_id,"product");
+                        createNewCardTopTenProduct("product_link_card_happened",dataProduct[i].item_pic_link, dataProduct[i].product_description, dataProduct[i].product_price, true, dataProduct[i].product_name,dataProduct[i].product_id,"product");
                     }
                     for(var i = 0; i< dataTopTenProject.length; i++){
                         createNewCardTopTenProduct("top_ten_project_card_happened","source/produits/project4.jpg", dataTopTenProject[i].project_description, dataTopTenProject[i].project_budget, true, dataTopTenProject[i].project_name,dataTopTenProject[i].project_id,"project");
                     }
                     for(var i = 0; i< dataTopTenProduct.length; i++){
-                        createNewCardTopTenProduct("top_ten_card_happened","source/produits/onepieceluffy.jpg", dataTopTenProduct[i].product_description, dataTopTenProduct[i].product_price, true, dataTopTenProduct[i].product_name,dataTopTenProduct[i].product_id,"product");
+                        createNewCardTopTenProduct("top_ten_card_happened",dataTopTenProduct[i].item_pic_link, dataTopTenProduct[i].product_description, dataTopTenProduct[i].product_price, true, dataTopTenProduct[i].product_name,dataTopTenProduct[i].product_id,"product");
                     }
                     for(var i = 0; i< dataTopTenSeller.length; i++){
                         createNewCardTopTenProduct("top_ten_sellers_card_happened","source/produits/person3.jfif", dataTopTenSeller[i].address, dataTopTenSeller[i].seller_rating, true, dataTopTenSeller[i].name,dataTopTenSeller[i].id,"user");
@@ -115,7 +115,8 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             newCard.classList.add("card");
             const newPicture = document.createElement("img");
             newPicture.classList.add("img_card");
-            newPicture.src = picture;
+            var firstImage = picture.split(",");
+            newPicture.src = firstImage[0];
             const newNameProduct = document.createElement("h3");
             newNameProduct.innerHTML = productName;
             const newDescription = document.createElement("p");
@@ -325,7 +326,8 @@ $(document).ready(function(){
                         "product_name" => $row['item_name'],
                         "product_id" => $row['id'],
                         "product_price" => $row['price'],
-                        "product_description" => $row['item_description']
+                        "product_description" => $row['item_description'],
+                        "item_pic_link" => $row['item_pic_link']
                     );   
                     array_push($mainDataProduct, $dataProduct);
                     unset($dataProduct);                
@@ -340,7 +342,8 @@ $(document).ready(function(){
                         "product_name" => $row['item_name'],
                         "product_id" => $row['id'],
                         "product_price" => $row['price'],
-                        "product_description" => $row['item_description']
+                        "product_description" => $row['item_description'],
+                        "item_pic_link" => $row['item_pic_link']
                     );   
                     array_push($mainDataTopTenProduct , $dataTopTenProduct );
                     unset($dataTopTenProduct );                

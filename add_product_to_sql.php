@@ -14,8 +14,8 @@ $durationDay =$_POST['dayDuration'];
 $durationHour =$_POST['timeDuration'];
 $type ="'".$_POST['type']."'";
 $filament ="'".$_POST['filament']."'";  
-$pic_link = "'"."picture link here"."'"; 
-$page_link = "'"." page link here"."'";
+$pic_link = "'".$_POST['myPicUploads']."'"; 
+$page_link = "'".$_POST['myFilesUploads']."'";
 
 $conn = mysqli_connect($servername, $username, $password, $dbname);
 

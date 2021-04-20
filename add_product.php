@@ -93,6 +93,9 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
                 <option value="PETG">PETG</option>
                 <option value="Nylon">Nylon</option>
             </select><br>
+
+            <input type="hidden" value="" id="myPicUploads" name="myPicUploads">
+            <input type="hidden" value="" id="myFilesUploads" name="myFilesUploads">
             <input class="my_button_add_product" type="submit" value="Submit">
         </form>
 
@@ -126,6 +129,8 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
     (function(){
         var dropZonePicture = document.getElementById('dropZonePicture');
         var dropZoneFileType = document.getElementById('dropZoneFileType');
+        var linkPictures = null;
+        var linkFilesType = null;
 
         var upload = function(files, dropZoneName){
             
@@ -134,11 +139,30 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
                 list,
                 x;
                 list = document.createElement('ul');
+                linkFiles = null;
                 for(x=0; x<data.length; x++){
                     item = document.createElement('li')
                     item.innerText = data[x].name;
                     list.appendChild(item);
+                    if(linkFiles == null)
+                        linkFiles = "uploads/" + data[x].name;
+                    else
+                        linkFiles = linkFiles + "," + "uploads/" + data[x].name;
                 }
+                console.log(linkFiles);
+                document.getElementById('myPicUploads').value = linkFiles;
+
+                if(dropZoneName == 'dropZonePicture')
+                        {
+                        linkPictures = linkFiles;
+                        document.getElementById('myPicUploads').value = linkPictures;
+                        
+                        }
+                else
+                        {
+                        linkFilesType = linkFiles;
+                        document.getElementById('myFilesUploads').value = linkPictures;
+                        }
                 uploads.appendChild(list);
             }
             
