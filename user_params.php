@@ -72,7 +72,7 @@ if (isset($_POST["userID"]) && $_POST["userID"] != -1  )    // check if the user
     $temp = mysqli_fetch_assoc($uCartIDQuery);
     $_SESSION['cartID'] = $temp['id'];
     
-    // get the item IDs of sales_items in cart
+    // get the item IDs items in cart
     $sql_item_in_my_cart = "SELECT item_in_cart.sales_itemID,item_in_cart.project_item_bidID FROM item_in_cart  WHERE item_in_cart.cartID =".$_SESSION['cartID'];
     $uCartContentQuery =  mysqli_query($conn,$sql_item_in_my_cart);     
     
@@ -86,30 +86,27 @@ if (isset($_POST["userID"]) && $_POST["userID"] != -1  )    // check if the user
         if ($temp['sales_itemID'] != NULL)// if i'm looking at a sales_item
         { 
             array_push($sale_items,(int)$temp['sales_itemID']);
-                
         }
         else 
         {
             array_push($project_bids,(int)$temp['project_item_bidID']);
-            
         }
-
-
         
     }
     
     array_push($cartItem_array,$sale_items);
     array_push($cartItem_array,$project_bids);
-     
+
+
      $_SESSION['items_in_cart'] = $cartItem_array; // 2D array of all items in cart
      $_SESSION['cart_item_count'] = count($sale_items) + count($project_bids);
-die();
+
 } 
  else if (!isset($_SESSION['userID']))
     {
         $_SESSION['userID'] = -1 ;
         $_SESSION['cart_item_count'] = 0;
-        die();
+        
     }
 
 
@@ -125,10 +122,4 @@ if ($_POST["kill_session"]) // if kill_session is returned true then kill the se
  
 // From now on when I want the userID call it with $_SESSION['userID'] 
 /************************** */
-
-
-
-
-
-
-
+ 

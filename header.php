@@ -88,30 +88,28 @@ else
     cart_container.appendChild(cartLink);
     cartLink.appendChild(number_item);
     cartLink.appendChild(cart_img);
+    cartLink.setAttribute("href","checkout.php");
     
     document.getElementsByClassName("profile_container")[0].appendChild(pfp_link);
     document.getElementsByClassName("profile_container")[0].appendChild(cartLink);
 
-    document.getElementsByClassName("number_item")[0].innerHTML = <?= $_SESSION['cart_item_count'] ?>;
-  
-}
- 
- 
 
-        function logout()
-        {
-            var xhttp = new XMLHttpRequest();  // using AJAX 
-            xhttp.open("POST","user_params.php",false);
-            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xhttp.send("kill_session="+true); 
-            window.location.assign("index.php");
-        }
+   
     
 
 
-
-
-
+    document.getElementsByClassName("number_item")[0].innerHTML = <?= $_SESSION['cart_item_count'] ?>;
+  
+}
+  function logout()
+    {
+      var xhttp = new XMLHttpRequest();  // using AJAX 
+      xhttp.open("POST","user_params.php",false);
+      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhttp.send("kill_session="+true); 
+      window.location.assign("index.php");
+    }
+    
 </script>
 
 
@@ -127,6 +125,7 @@ else
     <a class="header_specific_link" href="getdata.php">Shop</a>
     <a class="header_specific_link" href="#">Forum</a>
     <a class="header_specific_link" href="#">Partner</a>
+
 </div>
 
 <div class="profile_container">
@@ -134,9 +133,9 @@ else
 </div>
 
 
+ 
 
-
-<!-- Modal -->
+<!-- Login Modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -167,7 +166,7 @@ else
   </div>
 </div>
 
-<!-- Modal 2 -->
+<!--Register Modal  -->
 <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -204,7 +203,9 @@ else
 </div>
 
 
-<!-- remove credit,seller_rating on procedure 'insert user' + drop user_page column and on procedure-->
+
+
+
 
 
 
