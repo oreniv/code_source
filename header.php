@@ -84,7 +84,6 @@ else
          
     pfp_link.appendChild(mask_circle);
     mask_circle.appendChild(img_profile);
-
     cart_container.appendChild(cartLink);
     cartLink.appendChild(number_item);
     cartLink.appendChild(cart_img);

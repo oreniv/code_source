@@ -62,16 +62,17 @@ if (isset($_POST["userID"]) && $_POST["userID"] != -1  )    // check if the user
     // fetch the full_name of logged in user 
     
     // get the user name 
-    $sqlLoggedInUser = "SELECT users.full_name FROM users WHERE users.id =".$_SESSION['userID']; 
+    $sqlLoggedInUser = "SELECT users.full_name,users.email,users.address FROM users WHERE users.id =".$_SESSION['userID']; 
     $uNameQuery = mysqli_query($conn,  $sqlLoggedInUser);
     $temp = mysqli_fetch_assoc($uNameQuery);
     $_SESSION['full_name'] = $temp['full_name']; 
+    $_SESSION['email'] = $temp['email'];
+    $_SESSION['address'] = $temp['address'];
     // get the user cart ID 
     $sqlMyCartID = "SELECT cart.id FROM cart WHERE cart.buyerID=".$_SESSION['userID'];
     $uCartIDQuery = mysqli_query($conn,$sqlMyCartID);
     $temp = mysqli_fetch_assoc($uCartIDQuery);
     $_SESSION['cartID'] = $temp['id'];
-    
     // get the item IDs items in cart
     $sql_item_in_my_cart = "SELECT item_in_cart.sales_itemID,item_in_cart.project_item_bidID FROM item_in_cart  WHERE item_in_cart.cartID =".$_SESSION['cartID'];
     $uCartContentQuery =  mysqli_query($conn,$sql_item_in_my_cart);     

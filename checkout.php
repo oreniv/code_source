@@ -1,3 +1,8 @@
+<?php
+include_once 'dbconnection.php';
+session_start();
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,8 +19,7 @@
 
 
 <?php
- include_once 'dbconnection.php';
- session_start();
+
 
 
 if(isset($_POST['delete_item'])) // if user wants to delete an item 
@@ -133,6 +137,7 @@ var project_bids = <?=  $jsonProject_bids  ?>;
 var sales_size =  sales_items.length ; 
 var project_bid_size = project_bids.length;
 var rowNumber = 0;
+var total = 0;
 
 function build_sales_table()
 {
@@ -173,9 +178,9 @@ function build_sales_table()
   link.innerHTML = "<a href=product_page.php?productID="+sales_items[i]['item_id']+">Go to item page</a>" ; 
 
   itemName.innerHTML = sales_items[i]['Item_name'];
-  price.innerHTML = (sales_items[i]['price'] * sales_items[i]['amount']) +" + Delivery fee: " + sales_items[i]['delivery_price'] ;
-  
- 
+  price.innerHTML = "$"+(sales_items[i]['price'] * sales_items[i]['amount']) +" + Delivery fee: $" + sales_items[i]['delivery_price'] ;
+  total += Number((sales_items[i]['price'] * sales_items[i]['amount'])) + Number((sales_items[i]['delivery_price']));
+
   tableRow.appendChild(tableRowHeader);
   tableRow.appendChild(picColumn);
   tableRow.appendChild(itemName);
@@ -191,7 +196,7 @@ function build_sales_table()
 }
 
 function build_project_table()
-{
+{  
   for (i=0;i<project_bid_size;i++)
   {
     if ( project_bids[i]['item_id'] == -1 )
@@ -222,8 +227,9 @@ function build_project_table()
   removeFromCart(button,project_bids[i]['item_id'],"project_bid");
   link.innerHTML = "<a href=project_page.php?projectID="+project_bids[i]['parent_project_id']+">Go to project page</a>" ; 
   itemName.innerHTML = project_bids[i]['item_desc'];
-  price.innerHTML = project_bids[i]['price'] ;
+  price.innerHTML = "$"+project_bids[i]['price'] ;
   
+  total += Number(project_bids[i]['price']);
 
   tableRow.appendChild(tableRowHeader);
   tableRow.appendChild(picColumn);
@@ -235,9 +241,7 @@ function build_project_table()
 
   document.getElementById("cart_table").appendChild(tableRow);
 
-    
-
-
+   
   }
   
   if (rowNumber == 0) // write something if cart is empty 
@@ -251,10 +255,6 @@ function build_project_table()
   }
 
 }
-
-
-
-
 
 function setAmount()
 {
@@ -291,9 +291,65 @@ function removeFromCart(button,id,type)
     document.getElementById("deletion_form").submit();
     document.getElementById("deletion_form").reset();
   };
+}
 
+function preFillForm()
+{
+
+  var full_name = <?=  json_encode($_SESSION['full_name'])  ?> ; 
+  var email = <?= json_encode($_SESSION['email'])  ?> ; 
+  var address = <?= json_encode($_SESSION['address']) ?> ; 
+
+  document.getElementById("full_name").setAttribute("value",full_name);
+  document.getElementById("buyer_email").setAttribute("value",email);
+  document.getElementById("shipping_address").innerHTML = address ;
 
 }
+
+function buyNow()
+{
+    if (validate())
+    {
+        var str = $("#buy_now_form").serialize(); // use jQuery to turn the form into a big array
+        var xhttp = new XMLHttpRequest(); // using AJAX 
+           xhttp.open("POST","handle_purchase.php",true); // call this page again with a POST variable that indicates which item to add to cart
+           xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+           xhttp.send(str); // POST that big array
+        
+        window.alert("Thank you for your purchase! \nGo to your profile page to view more details");
+        window.location.assign("index.php");
+    }
+}
+
+
+function validate()
+    {
+        var form =  document.getElementById("buy_now_form");
+       if (form.full_name.value.length <= 6 )
+       {
+        window.alert("Full name needs to be at least 6 characters long");
+        return false;
+       }
+       if (form.buyer_email.value.length <= 5 || form.buyer_email.value.search("@") == -1  || form.buyer_email.value.search(".") == -1)
+       {
+        window.alert("Email is invalid, makes sure it includes @ and . " ) ;
+        return false;
+       } 
+       if (form.shipping_address.value.length <= 10)
+       {
+        window.alert("shipping address is too short. Make sure it's at least 10 characters long");
+        return false;
+       }
+        if (form.credit_card.value.length <= 16)
+        {
+        window.alert("credit card needs to be at least 16 digits long");
+        return false;
+        }
+ 
+        return true;
+
+    }
+
 </script>
 
 
@@ -332,26 +388,6 @@ $(document).ready(function(){
 
 
 
-<div class="container">
-  <div class="row">
-    <div class="col">
-    </div>
-    <div class="col">
-    </div>
-    <div class="col-7">
-    <button type="button" class="btn btn-success w-45 ">Proceed to payment --></button>
-    </div>
-  </div>
-</div>
-
-
-
-
-</div>
-  </div>
-</div>
-
-
 
 
 
@@ -361,6 +397,84 @@ $(document).ready(function(){
 <input type="hidden" id="delete_item" name="delete_item" >
 <input type="hidden" id="item_type" name="item_type">
 </form>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+    </div>
+    <div class="col">
+    </div>
+    <div class="col-7">
+    <button type="button" data-bs-toggle="modal" data-bs-target="#buy_now_modal" class="btn btn-success w-45 ">Proceed to payment --></button>
+    </div>
+  </div>
+</div>
+</div>
+  </div>
+</div>
+
+
+
+
+
+
+<!-- Modal window -->
+
+<div id="buy_now_modal" class="modal fade" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Payment details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+     <form id="buy_now_form" >   
+        <div class="mb-3">
+            <label for="full_name" class="form-label">Full name:</label>
+            <input type="text" class="form-control" name="full_name"  id="full_name" required>
+        </div> 
+        <div class="mb-3">
+            <label for="buyer_email" class="form-label">Your email:</label>
+            <input type="email" class="form-control" name="buyer_email" id="buyer_email" required 
+             aria-describedby="seller_amount_reminder">
+             <div id="email_comment" class="form-text">
+                We'll never share your email with anyone else besides the seller.
+             </div>
+        </div>
+        <div class="mb-3">
+            <label for="shipping_address" class="form-label">Your full address:</label>
+            <textarea class="form-control" name="shipping_address" id="shipping_address" style="height: 50px" required></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="credit_card" class="form-label">Credit card num:</label>
+            <input type="text" class="form-control" name="credit_card" id="credit_card" required>
+        </div>   
+  
+      </div>    
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" onclick="buyNow()" class="btn btn-warning">Confirm</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-------------------------> 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
            
@@ -373,7 +487,7 @@ $(document).ready(function(){
 
 build_sales_table();
 build_project_table();
-
+preFillForm();
 </script>
 
 
