@@ -423,7 +423,7 @@ $(document).ready(function(){
 
                 </div>
 
-                <img id="profile_picture_principal" src="source/produits/profil_picture.jpg">
+                <img id="profile_picture_principal" src="source/icones/profileIcon.png">
             </div>
 
             <div class="form-popup" id="myForm">

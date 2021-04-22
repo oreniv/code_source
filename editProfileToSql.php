@@ -12,6 +12,7 @@ $Address =  "'".$_POST['Address']."'";
 
 $target_dir = "uploads/profile/";
 $target_file = $target_dir . basename($_FILES["filename"]["name"]);
+
 $uploadOk = 1;
 $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
@@ -53,6 +54,7 @@ if ($uploadOk == 0) {
 } else {
   if (move_uploaded_file($_FILES["filename"]["tmp_name"], $target_file)) {
     echo "The file ". htmlspecialchars( basename( $_FILES["filename"]["name"])). " has been uploaded.";
+    $myFile =  "'uploads/profile/" . htmlspecialchars( basename( $_FILES["filename"]["name"]))."'";
   } else {
     echo "Sorry, there was an error uploading your file.";
   }
@@ -87,6 +89,15 @@ if($Address != "''")
     mysqli_query($conn, $sqlEditAddress);
     mysqli_close($conn);
 }
+
+if($uploadOk == 1)
+{
+    $conn = mysqli_connect($servername, $username, $password, $dbname);
+    $sqlEditProfilePic = "UPDATE users SET profile_pic_link = $myFile WHERE id = $userID";
+    mysqli_query($conn, $sqlEditProfilePic);
+    mysqli_close($conn);
+}
+
 
 ?>
 
