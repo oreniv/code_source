@@ -40,7 +40,10 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             document.getElementById("creditCard").innerHTML = profileData["bankAccount"];
 
             document.getElementById("payPalAccount").innerHTML = "none yet";
-            document.getElementById("profile_picture_principal").src = profileData["profile_pic_link"];
+            if(profileData["profile_pic_link"] == "")
+            {   document.getElementById("profile_picture_principal").src = "source/icones/profileIcon.png";}
+            else
+            {document.getElementById("profile_picture_principal").src = profileData["profile_pic_link"];}
                 }
 
         /**------------------------------------------------------------------------------------ */
