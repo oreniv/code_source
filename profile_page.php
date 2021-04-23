@@ -927,7 +927,7 @@ $(document).ready(function(){
                     document.getElementById('closeformbutton').preventDefault();
                 }
 
-                closeForm();
+            //    closeForm();
         </script>
 
         <footer>
@@ -936,4 +936,4 @@ $(document).ready(function(){
 
 </body>
 
-</html>
+</html>reload
