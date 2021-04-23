@@ -121,15 +121,13 @@ else
 <div class="header_link">
 
     <a id="current_page" class="header_specific_link" href="index.php">Home</a>
-    <a class="header_specific_link" href="getdata.php">Shop</a>
+    <a class="header_specific_link" href="#">Shop</a>
     <a class="header_specific_link" href="#">Forum</a>
     <a class="header_specific_link" href="#">Partner</a>
 
 </div>
 
-<div class="profile_container">
-
-</div>
+<div class="profile_container gap-3"></div>
 
 
  
