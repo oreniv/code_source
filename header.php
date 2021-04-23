@@ -69,7 +69,27 @@ else
     mask_circle.setAttribute("class","mask_circle");
     var img_profile = document.createElement("img");
     img_profile.setAttribute("class","img_profile");
-    img_profile.setAttribute("src","source/produits/profil_picture.jpg"); // link dynamically in the future
+    <?php
+      $sqlProfile = "SELECT * FROM users WHERE users.id =".$_SESSION['userID'];
+      $resultProfile = mysqli_query($conn, $sqlProfile);
+      $resultCheckProfile = mysqli_num_rows($resultProfile);
+      if($resultCheckProfile > 0)
+            {
+                $row = mysqli_fetch_assoc($resultProfile);
+                    $dataProfile = array(
+                        "profile_pic_link" => $row['profile_pic_link']
+                    );   
+            }
+      else{
+        $dataProfile = "";
+      }
+    ?>
+    var linkToPicture = <?php echo json_encode($dataProfile["profile_pic_link"], JSON_HEX_TAG); ?>;
+    if(linkToPicture == "")
+    {img_profile.setAttribute("src","source/icones/profileIcon.png");}
+    else
+    {img_profile.setAttribute("src",linkToPicture);}
+
     var cart_container = document.createElement("div");
     cart_container.setAttribute("class","cart_container");
     var cartLink = document.createElement("a");

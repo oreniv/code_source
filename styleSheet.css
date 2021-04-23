@@ -540,6 +540,7 @@ td{
   border-radius: 0 15px 15px 0;
   border: solid;
   border-color: #BDDFF7;
+  object-fit: scale-down;
 }
 
 .my_button_edit{
@@ -1043,4 +1044,8 @@ recommendationContainer:hover {
 }
 .saveclose{
   width: 100%;
+}
+
+.saveclose:hover{
+  cursor:pointer
 }

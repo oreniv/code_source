@@ -40,7 +40,12 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             document.getElementById("creditCard").innerHTML = profileData["bankAccount"];
 
             document.getElementById("payPalAccount").innerHTML = "none yet";
+            if(profileData["profile_pic_link"] == "")
+            {   document.getElementById("profile_picture_principal").src = "source/icones/profileIcon.png";}
+            else
+            {document.getElementById("profile_picture_principal").src = profileData["profile_pic_link"];}
                 }
+
         /**------------------------------------------------------------------------------------ */
 
         function createMyCharts(myTitle, dataImported, specificContainer){
@@ -421,11 +426,11 @@ $(document).ready(function(){
 
                 </div>
 
-                <img id="profile_picture_principal" src="source/produits/profil_picture.jpg">
+                <img id="profile_picture_principal" src="source/icones/profileIcon.png">
             </div>
 
             <div class="form-popup" id="myForm">
-                <form action="" class="form-container">
+                <form method="post" action="editProfileToSql.php" class="form-container" enctype="multipart/form-data">
                     <label for="nameEdit"><b>Name:</b></label>
                     <input type="text" placeholder="Enter name" name="nameEdit"><br/>
 
@@ -433,13 +438,16 @@ $(document).ready(function(){
                     <input type="text" placeholder="Enter Email" name="email"><br/>
 
                     <label for="start"><b>Birthday:</b></label>
-                    <input type="date" id="start" name="trip-start" min="1920-01-01"><br/>
+                    <input type="date" id="start" name="start" min="1920-01-01"><br/>
 
                     <label for="Address"><b>Address:</b></label>
                     <input type="text" placeholder="Enter Address" name="Address"><br/>
 
+                    <label for="filename"><b>Change profile picture</b></label>
+                    <input type="file" id="filename" name="filename"><br/>
+
                     <button type="submit" class="my_button_edit saveclose">Save changes</button><br/>
-                    <button class="my_button_edit saveclose" id="closeformbutton" onclick="closeForm()">Close</button>
+                    <p class="my_button_edit saveclose" id="closeformbutton" onclick="closeForm()">Close</p>
                 </form>
             </div>
             <button class="my_button_edit" id="edit_button" onclick="openForm()">Edit</button>
@@ -761,7 +769,8 @@ $(document).ready(function(){
                         "credit" => $row['credit'],
                         "bankAccount" => $row['bank_account'],
                         "seller_rating" => $row['seller_rating'],
-                        "address" => $row['address']
+                        "address" => $row['address'],
+                        "profile_pic_link" => $row['profile_pic_link']
                     );   
             }
         ?>
@@ -775,7 +784,8 @@ $(document).ready(function(){
                         "credit" :  <?php echo json_encode($dataProfile["credit"], JSON_HEX_TAG); ?>,
                         "bankAccount" :  <?php echo json_encode($dataProfile["bank_account"], JSON_HEX_TAG); ?>,
                         "seller_rating" :  <?php echo json_encode($dataProfile["seller_rating"], JSON_HEX_TAG); ?>,
-                        "address" :  <?php echo json_encode($dataProfile["address"], JSON_HEX_TAG); ?>
+                        "address" :  <?php echo json_encode($dataProfile["address"], JSON_HEX_TAG); ?>,
+                        "profile_pic_link" :  <?php echo json_encode($dataProfile["profile_pic_link"], JSON_HEX_TAG); ?>
                     };   
             console.log(jsonJsProfile);
             appendData(jsonJsProfile);
