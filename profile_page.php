@@ -125,7 +125,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
                 dataRecommended[i].product_id);
             }
             for(var i = 0; i< dataFavorite.length; i++){
-                createMyCard("favoriteInnerTab", "source/produits/onepieceluffy.jpg", 
+                createMyCard("favoriteInnerTab", dataFavorite[i].item_pic_link, 
                 dataFavorite[i].product_description, dataFavorite[i].product_price, true, dataFavorite[i].product_name, 
                 dataFavorite[i].product_id);
                     }
@@ -136,6 +136,14 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
                 createMyHistoryCard("historyInnerTab", data[i].item_pic_link, data[i].history_id, data[i].item_id, 
                                     data[i].seller_id, data[i].address, data[i].timestamp, data[i].price_item, data[i].amount, 
                                     data[i].delivery_status, data[i].item_description);
+            }
+        }
+
+        function appendProjects(dataProjects){
+            for(var i = 0; i< dataProjects.length; i++){
+                createMyProjectCard("projectsInnerTab", dataProjects[i].id, dataProjects[i].project_name, dataProjects[i].project_description,
+                dataProjects[i].project_pic_link, dataProjects[i].project_status, dataProjects[i].deadline, dataProjects[i].budget, 
+                dataProjects[i].bid_count);
             }
         }
 
@@ -181,6 +189,106 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
     
             return true;
 
+        }
+
+        function createMyProjectCard(tabName, id, name, description, picture, status, deadline, budget, bidCount){
+            const newCard = document.createElement("div");
+            newCard.classList.add("historicalCard");
+
+            const firstBand = document.createElement("div");
+            firstBand.classList.add("firstBand");
+
+            const dateCommand = document.createElement("p");
+            dateCommand.classList.add("dateCommand");
+            dateCommand.innerHTML = "Project created the: <br/>";
+
+            const totalCommand = document.createElement("p");
+            totalCommand.classList.add("totalCommand");
+            totalCommand.innerHTML = "Budget:<br/>" + budget;
+
+            const addressCommand = document.createElement("p");
+            addressCommand.classList.add("addressCommand");
+            addressCommand.innerHTML = "Price propositions:<br/>" + bidCount;
+
+            const bill = document.createElement("div");
+            bill.classList.add("bill");
+
+            const idCommand = document.createElement("p");
+            idCommand.classList.add("idCommand");
+            idCommand.innerHTML = "N° project: " + id;
+
+            const seeBill = document.createElement("button");
+            seeBill.classList.add("seeBill");
+            seeBill.classList.add("button_history");
+            seeBill.innerHTML = "See bill";
+
+            const secondBand = document.createElement("div");
+            secondBand.classList.add("secondBand");
+
+            const pictureProduct = document.createElement("img");
+            pictureProduct.classList.add("pictureProduct");
+            pictureProduct.src = picture;
+
+            const secondContainerSecondBand = document.createElement("div");
+            secondContainerSecondBand.classList.add("secondContainerSecondBand");
+
+            const dateCommandDelivery = document.createElement("p");
+            dateCommandDelivery.classList.add("dateCommandDelivery");
+            dateCommandDelivery.innerHTML = "Deadline: " + deadline;
+
+            const descriptionCommand = document.createElement("p");
+            descriptionCommand.classList.add("descriptionCommand");
+            descriptionCommand.innerHTML = description;
+
+            const secondContainerButton = document.createElement("div");
+            secondContainerButton.classList.add("secondContainerButton");
+
+            const seeProductAgain = document.createElement("button");
+            seeProductAgain.classList.add("seeProductAgain");
+            seeProductAgain.classList.add("button_history");
+            seeProductAgain.innerHTML = "See project";
+
+            const lastContainerSecondBand = document.createElement("div");
+            lastContainerSecondBand.classList.add("lastContainerSecondBand");
+
+
+            const buttonRankSeller = document.createElement("button");
+            buttonRankSeller.classList.add("button_history");
+            buttonRankSeller.innerHTML = "Share project";
+
+            const buttonSeeSeller = document.createElement("button");
+            buttonSeeSeller.classList.add("button_history");
+            buttonSeeSeller.innerHTML = "See bider";
+
+            const buttonProblem = document.createElement("button");
+            buttonProblem.classList.add("button_history");
+            buttonProblem.innerHTML = "Problem";
+
+            newCard.appendChild(firstBand);
+            newCard.appendChild(secondBand);
+            
+            firstBand.appendChild(dateCommand);
+            firstBand.appendChild(totalCommand);
+            firstBand.appendChild(addressCommand);
+            firstBand.appendChild(bill);
+            bill.appendChild(idCommand);
+            bill.appendChild(seeBill);
+
+            secondBand.appendChild(pictureProduct);
+            secondBand.appendChild(secondContainerSecondBand);
+            secondBand.appendChild(lastContainerSecondBand);
+
+            secondContainerSecondBand.appendChild(dateCommandDelivery);
+            secondContainerSecondBand.appendChild(descriptionCommand);
+            secondContainerSecondBand.appendChild(secondContainerButton);
+
+            secondContainerButton.appendChild(seeProductAgain);
+
+            lastContainerSecondBand.appendChild(buttonRankSeller);
+            lastContainerSecondBand.appendChild(buttonSeeSeller);
+            lastContainerSecondBand.appendChild(buttonProblem);
+
+            document.getElementById(tabName).appendChild(newCard);
         }
 
         function createMyHistoryCard(tabName, picture, commandNumber, itemId, sellerId, address, timestamp, price, amount, delivery, description){
@@ -606,6 +714,11 @@ $(document).ready(function(){
                              INNER JOIN sales_item ON sales_item.id = fav_posts.sales_itemID 
                              WHERE userID =".$_SESSION['userID'];
 
+            $sqlMyProjects ="SELECT * FROM project WHERE posterID =" .$_SESSION['userID'];
+
+            $resultMyProjects = mysqli_query($conn, $sqlMyProjects);
+            $resultCheckMyProjects = mysqli_num_rows($resultMyProjects);
+
             $resultFavorite = mysqli_query($conn, $sqlMyFavorite);
             $resultCheckFavorite = mysqli_num_rows($resultFavorite);
 
@@ -687,6 +800,25 @@ $(document).ready(function(){
     
                 $myfuckingArray = array($earning2dSketch, $earning3dSchema, $earningPhysical);
                 $jsonEarningData = json_encode($myfuckingArray);
+            }
+
+            if($resultCheckMyProjects > 0){
+                $mainDataMyProjects  = array();
+                while($row = mysqli_fetch_assoc($resultMyProjects)){
+                    $dataMyProjects  = array(
+                        "id" => $row['id'],
+                        "project_name" => $row['project_name'],
+                        "project_description" => $row['project_description'],
+                        "project_pic_link" => $row['project_pic_link'],
+                        "project_status" => $row['project_status'],
+                        "deadline" => $row['deadline'],
+                        "budget" => $row['budget'],
+                        "bid_count" => $row['bid_count']
+                    );   
+                    array_push($mainDataMyProjects , $dataMyProjects );
+                    unset($dataMyProjects );                
+                }
+                $jsonMyProjects = json_encode($mainDataMyProjects ); 
             }
 
             if($resultCheckHistory > 0){
@@ -795,7 +927,9 @@ $(document).ready(function(){
 
             var jsonJsMyProduct = <?= $jsonMyProduct; ?>;
             console.log(jsonJsMyProduct);
-            
+
+            var jsonJsMyProjects = <?= $jsonMyProjects; ?>;
+            console.log(jsonJsMyProjects);
 
             jsonEarningDataJs = <?= $jsonEarningData?>;
 
@@ -836,6 +970,7 @@ $(document).ready(function(){
             console.log(jsonJsHistory);
 
             appenedHistoryCard(jsonJsHistory);
+            appendProjects(jsonJsMyProjects);
             
 
             function openTab(tabName, elmnt, tab) {
