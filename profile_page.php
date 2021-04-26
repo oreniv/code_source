@@ -108,17 +108,13 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         }
 
         /**-------------------------------------------------------- */
-        function appendMyJson(data, dataRecommended, dataFavorite){
+        function appendMyJson(data, dataRecommended, dataFavorite, dataBiding){
             for(var i = 0; i< data.length; i++){
                 createMyCard("myProducts", data[i].item_pic_link, data[i].product_description, 
                 data[i].product_price, true, data[i].product_name, 
                 data[i].product_id);
                     }
-            for(var i = 0; i< data.length; i++){
-                createMyCard("myProjects", "source/produits/onepieceluffy.jpg", data[i].product_description, 
-                data[i].product_price, true, data[i].product_name, 
-                data[i].product_id);
-            }
+            
             for(var i = 0; i<dataRecommended.length; i++){
                 createMyCard("recommendation", "source/produits/onepieceluffy.jpg", dataRecommended[i].product_description, 
                 dataRecommended[i].product_price, true, dataRecommended[i].product_name, 
@@ -128,7 +124,13 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
                 createMyCard("favoriteInnerTab", dataFavorite[i].item_pic_link, 
                 dataFavorite[i].product_description, dataFavorite[i].product_price, true, dataFavorite[i].product_name, 
                 dataFavorite[i].product_id);
-                    }
+            }
+
+            for(var i = 0; i< dataBiding.length; i++){
+                {createMyParticipationCard(dataBiding[i].part_pic, 
+                dataBiding[i].projectID, dataBiding[i].item_description, dataBiding[i].item_type, 
+                dataBiding[i].price, dataBiding[i].project_itemID, dataBiding[i].item_status);}
+            }
         }
 
         function appenedHistoryCard(data){
@@ -190,6 +192,52 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             return true;
 
         }
+
+        function createMyParticipationCard (picture, 
+                projectId, descriptionItem, itemType, price, itemId, status){
+
+                    const newRow = document.createElement("div");
+                    newRow.classList.add("itemProjectRow");
+                    newRow.classList.add(status);
+
+                    const imageItemProject = document.createElement("img");
+                    imageItemProject.classList.add("imgItemProject");
+
+                    const descriptionItemProject = document.createElement("p");
+                    descriptionItemProject.innerHTML = descriptionItem;
+
+                    const priceItemProject = document.createElement("p");
+
+                    if(status == 'pending')
+                    priceItemProject.innerHTML = "You proposed: " + price + "$";
+                    else
+                    priceItemProject.innerHTML = "Accepted: " + price + "$";
+
+                    const typeItemProject = document.createElement("p");
+                    typeItemProject.innerHTML = itemType;
+
+                    const columnProject = document.createElement("div");
+                    columnProject.classList.add("columnButtonProject");
+
+                    const seeItemProject = document.createElement("button");
+                    seeItemProject.classList.add("button_history");
+                    seeItemProject.innerHTML = "See item";
+
+                    const seeProject = document.createElement("button");
+                    seeProject.classList.add("button_history");
+                    seeProject.innerHTML = "See project";
+
+                    newRow.appendChild(imageItemProject);
+                    newRow.appendChild(descriptionItemProject);
+                    newRow.appendChild(typeItemProject);
+                    newRow.appendChild(priceItemProject);
+                    newRow.appendChild(columnProject);
+                    columnProject.appendChild(seeItemProject);
+                    columnProject.appendChild(seeProject);
+
+                    document.getElementById("myProjectsParticipation").appendChild(newRow);
+
+                }
 
         function createMyProjectCard(tabName, id, name, description, picture, status, deadline, budget, bidCount){
             const newCard = document.createElement("div");
@@ -686,8 +734,9 @@ $(document).ready(function(){
                     <div id="myProjects" class="product row">
                         <button class="my_button_add_product" onclick="window.location.href='#';">In progress</button>
                         <button class="my_button_add_product" onclick="window.location.href='#';">Price proposition</button>
-                        <div id="myProjects" class="personalProduct row">
+                        <div id="myProjectsParticipation" class="personalProduct row">
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -716,6 +765,10 @@ $(document).ready(function(){
 
             $sqlMyProjects ="SELECT * FROM project WHERE posterID =" .$_SESSION['userID'];
 
+            $sqlProjectsParticipation = "SELECT projectID, part_pic, item_description, item_type, item_status, price, note, project_itemID FROM project_item 
+                                         INNER JOIN project_item_bids ON project_item_bids.project_itemID = project_item.id
+                                         where bidderID =".$_SESSION['userID'];
+
             $resultMyProjects = mysqli_query($conn, $sqlMyProjects);
             $resultCheckMyProjects = mysqli_num_rows($resultMyProjects);
 
@@ -724,6 +777,9 @@ $(document).ready(function(){
 
             $resultHistory = mysqli_query($conn, $sqlMyHistory);
             $resultCheckHistory = mysqli_num_rows($resultHistory);
+
+            $resultProjectsParticipation = mysqli_query($conn, $sqlProjectsParticipation);
+            $resultCheckProjectsParticipation = mysqli_num_rows($resultProjectsParticipation);
 
             mysqli_close($conn);
             $conn = mysqli_connect($servername, $username, $password, $dbname);
@@ -819,6 +875,26 @@ $(document).ready(function(){
                     unset($dataMyProjects );                
                 }
                 $jsonMyProjects = json_encode($mainDataMyProjects ); 
+            }
+
+
+            if($resultCheckProjectsParticipation > 0){
+                $mainDataProjectsParticipation  = array();
+                while($row = mysqli_fetch_assoc($resultProjectsParticipation)){
+                    $dataProjectsParticipation  = array(
+                        "projectID" => $row['projectID'],
+                        "note" => $row['note'],
+                        "item_description" => $row['item_description'],
+                        "part_pic" => $row['part_pic'],
+                        "item_status" => $row['item_status'],
+                        "item_type" => $row['item_type'],
+                        "price" => $row['price'],
+                        "project_itemID" => $row['project_itemID']
+                    );   
+                    array_push($mainDataProjectsParticipation , $dataProjectsParticipation );
+                    unset($dataProjectsParticipation );                
+                }
+                $jsonProjectsParticipation = json_encode($mainDataProjectsParticipation ); 
             }
 
             if($resultCheckHistory > 0){
@@ -931,12 +1007,15 @@ $(document).ready(function(){
             var jsonJsMyProjects = <?= $jsonMyProjects; ?>;
             console.log(jsonJsMyProjects);
 
-            jsonEarningDataJs = <?= $jsonEarningData?>;
+            jsonEarningDataJs = <?= $jsonEarningData; ?>;
 
             jsonTentative = <?=$jsonEarning?>;
             console.log(jsonEarningDataJs);
 
             console.log(jsonTentative);
+
+            var jsonJSProjectsParticipation = <?= $jsonProjectsParticipation; ?>;
+            console.log(jsonJSProjectsParticipation);
 
             var myTitle = 'Total:</br>';
             var myTotal = 0;
@@ -964,7 +1043,7 @@ $(document).ready(function(){
             var jsonJsTopTenProduct = <?= $jsonTopTenProduct; ?>;
             console.log(jsonJsTopTenProduct);
 
-            appendMyJson(jsonJsMyProduct, jsonJsTopTenProduct, jsonJsMyFavorite);
+            appendMyJson(jsonJsMyProduct, jsonJsTopTenProduct, jsonJsMyFavorite, jsonJSProjectsParticipation);
 
             var jsonJsHistory = <?= $jsonHistory; ?>;
             console.log(jsonJsHistory);

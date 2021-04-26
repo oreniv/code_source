@@ -987,6 +987,18 @@ recommendationContainer:hover {
   flex-direction: column;
 }
 
+/**--------------------------------------------*/
+.itemProjectRow{
+  display: flex;
+  justify-content: space-between;
+  height: 50px;
+}
+
+.columnButtonProject{
+  display: flex;
+  flex-direction: column;
+}
+
 /**-------------- edit profile ----------------*/
 
 /* The popup form - hidden by default */
