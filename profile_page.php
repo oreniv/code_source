@@ -236,6 +236,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
                     columnProject.appendChild(seeProject);
 
                     document.getElementById("myProjectsParticipation").appendChild(newRow);
+                    $(seeProject).wrap("<a href=project_page.php?projectID="+projectId+"></a>");
 
                 }
 
@@ -337,6 +338,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             lastContainerSecondBand.appendChild(buttonProblem);
 
             document.getElementById(tabName).appendChild(newCard);
+            $(seeProductAgain).wrap("<a href=project_page.php?projectID="+id+"></a>");
         }
 
         function createMyHistoryCard(tabName, picture, commandNumber, itemId, sellerId, address, timestamp, price, amount, delivery, description){
@@ -493,6 +495,13 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             document.getElementById(tabName).appendChild(newCard);
 
             $(newPicture).wrap("<a href=product_page.php?productID="+id+"></a>");
+            newLikeIcone.onclick = function(){
+                if(newLikeIcone.src == "source/icones/groupe_22_filled.png"){
+                    newLikeIcone.src ="source/icones/groupe_22.png";
+                } else {
+                    newLikeIcone.src = "source/icones/groupe_22_filled.png";
+                }
+            }
         }
             
     </script>
@@ -509,7 +518,7 @@ $(document).ready(function(){
 
 
 
-<body onLoad="scrollDiv_init()">
+<body onLoad="scrollDiv_init()"  onunload="updateFavorite()">
     <header>
         <header class="header_class">
             <!-- Header is loaded with jQuery -->
@@ -732,8 +741,8 @@ $(document).ready(function(){
 
                 <div id="projectParticipated" class="innerTabContent">
                     <div id="myProjects" class="product row">
-                        <button class="my_button_add_product" onclick="window.location.href='#';">In progress</button>
-                        <button class="my_button_add_product" onclick="window.location.href='#';">Price proposition</button>
+                        <button class="my_button_add_product" onclick="showProjectParticipationAccepted()">In progress</button>
+                        <button class="my_button_add_product" onclick="showProjectParticipationInProcess()">Price proposition</button>
                         <div id="myProjectsParticipation" class="personalProduct row">
                         </div>
 
@@ -1085,6 +1094,10 @@ $(document).ready(function(){
                     document.getElementById("defaultOpenProductsHistory").click();
                     document.getElementById(tabName).style.color = '#707070';
                 }
+
+                if(tabName == "projectParticipated"){
+                    showAllProjectParticipation();
+                }
             }
 
                 // Get the element with id="defaultOpen" and click on it
@@ -1142,6 +1155,48 @@ $(document).ready(function(){
                 }
 
             //    closeForm();
+            /**------------------------------------------------------- */
+            function showProjectParticipationAccepted(){
+                var list = document.getElementsByClassName("pending");
+                for(var i = 0; i<list.length; i++){
+                    list[i].style.display = "none"
+                }
+                 var list2 = document.getElementsByClassName("approved");
+                 for(var i = 0; i<list2.length; i++){
+                     list2[i].style.display = "flex";
+                 }
+            }
+            function showProjectParticipationInProcess(){
+                var list = document.getElementsByClassName("pending");
+                for(var i = 0; i<list.length; i++){
+                    list[i].style.display = "flex"
+                }
+                 var list2 = document.getElementsByClassName("approved");
+                 for(var i = 0; i<list2.length; i++){
+                     list2[i].style.display = "none";
+                 }
+            }
+
+            function showAllProjectParticipation(){
+                var list = document.getElementsByClassName("itemProjectRow");
+                for(var i = 0; i<list.length; i++){
+                    list[i].style.display = "flex"
+                }
+            }
+
+
+            /**---------------------------------------------------- */
+
+            function updateFavorite(){
+
+            }
+
+
+
+
+
+
+            
         </script>
 
         <footer>

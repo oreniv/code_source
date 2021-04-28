@@ -991,7 +991,8 @@ recommendationContainer:hover {
 .itemProjectRow{
   display: flex;
   justify-content: space-between;
-  height: 50px;
+  height: 100px;
+  width: 100%;
 }
 
 .columnButtonProject{
@@ -1065,4 +1066,10 @@ recommendationContainer:hover {
 
 .saveclose:hover{
   cursor:pointer
+}
+
+/**------------------------ profile extern--------------------------------*/
+.containerExternalProfile{
+  display: flex;
+  justify-content: space-around;
 }

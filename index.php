@@ -159,7 +159,8 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             $(newPicture).wrap("<a href=product_page.php?productID="+id+"></a>");
           else if (postType == "project")
             $(newPicture).wrap("<a href=project_page.php?projectID="+id+"></a>");
-
+            else if (postType == "user")
+            $(newPicture).wrap("<a href=extern_profile_page.php?userID="+id+"></a>");
 
             document.getElementById(tabName).appendChild(newCard);
         }
