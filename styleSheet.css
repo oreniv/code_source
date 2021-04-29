@@ -1073,3 +1073,9 @@ recommendationContainer:hover {
   display: flex;
   justify-content: space-around;
 }
+
+/**----------------under work--------------*/
+#iconWork{
+  height: 150px;
+  margin: auto;
+}

@@ -297,14 +297,13 @@ function setBidID(bidButton,itemID) // appends item and session data(via GET) to
 
 </script>
 
-
+<body>
 
 <header class="header_class">
   <!-- Header is loaded with jQuery -->
 </header>
 
 
-<body>
 
 <div class="container">
     <div class="row">
@@ -379,13 +378,13 @@ function setBidID(bidButton,itemID) // appends item and session data(via GET) to
 appendProjectInfo();
 </script>
 
+<footer>
+      <!-- jQuery pulls this -->
+</footer>
 
 </body>
 
 
 
-<footer>
-      <!-- jQuery pulls this -->
-</footer>
 
 </html>

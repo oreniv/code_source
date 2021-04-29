@@ -141,9 +141,9 @@ else
 <div class="header_link">
 
     <a id="current_page" class="header_specific_link" href="index.php">Home</a>
-    <a class="header_specific_link" href="#">Shop</a>
-    <a class="header_specific_link" href="#">Forum</a>
-    <a class="header_specific_link" href="#">Partner</a>
+    <a class="header_specific_link" href="underwork_page.php">Shop</a>
+    <a class="header_specific_link" href="underwork_page.php">Forum</a>
+    <a class="header_specific_link" href="underwork_page.php">Partner</a>
 
 </div>
 
