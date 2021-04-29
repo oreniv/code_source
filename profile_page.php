@@ -108,28 +108,27 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         }
 
         /**-------------------------------------------------------- */
-        function appendMyJson(data, dataRecommended, dataFavorite, dataBiding){
-            for(var i = 0; i< data.length; i++){
-                createMyCard("myProducts", data[i].item_pic_link, data[i].product_description, 
-                data[i].product_price, true, data[i].product_name, 
-                data[i].product_id);
-                    }
-            
-            for(var i = 0; i<dataRecommended.length; i++){
-                createMyCard("recommendation", "source/produits/onepieceluffy.jpg", dataRecommended[i].product_description, 
-                dataRecommended[i].product_price, true, dataRecommended[i].product_name, 
-                dataRecommended[i].product_id);
+        function appendJsonMyProjectParticipation(dataBiding){
+            for(var i = 0; i< dataBiding.length; i++){
+                {createMyParticipationCard(dataBiding[i].part_pic, 
+                dataBiding[i].projectID, dataBiding[i].item_description, dataBiding[i].item_type, 
+                dataBiding[i].price, dataBiding[i].project_itemID, dataBiding[i].item_status);}
             }
+        }
+
+        function appendJsonMyFavorite(dataFavorite){
             for(var i = 0; i< dataFavorite.length; i++){
                 createMyCard("favoriteInnerTab", dataFavorite[i].item_pic_link, 
                 dataFavorite[i].product_description, dataFavorite[i].product_price, true, dataFavorite[i].product_name, 
                 dataFavorite[i].product_id);
             }
+        }
 
-            for(var i = 0; i< dataBiding.length; i++){
-                {createMyParticipationCard(dataBiding[i].part_pic, 
-                dataBiding[i].projectID, dataBiding[i].item_description, dataBiding[i].item_type, 
-                dataBiding[i].price, dataBiding[i].project_itemID, dataBiding[i].item_status);}
+        function appendJsonTopTenProduct(dataRecommended){
+            for(var i = 0; i<dataRecommended.length; i++){
+                createMyCard("recommendation", "source/produits/onepieceluffy.jpg", dataRecommended[i].product_description, 
+                dataRecommended[i].product_price, true, dataRecommended[i].product_name, 
+                dataRecommended[i].product_id);
             }
         }
 
@@ -139,6 +138,14 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
                                     data[i].seller_id, data[i].address, data[i].timestamp, data[i].price_item, data[i].amount, 
                                     data[i].delivery_status, data[i].item_description);
             }
+        }
+
+        function appendJsonMyProduct(data){
+            for(var i = 0; i< data.length; i++){
+                createMyCard("myProducts", data[i].item_pic_link, data[i].product_description, 
+                data[i].product_price, true, data[i].product_name, 
+                data[i].product_id);
+                    }
         }
 
         function appendProjects(dataProjects){
@@ -865,7 +872,8 @@ $(document).ready(function(){
     
                 $myfuckingArray = array($earning2dSketch, $earning3dSchema, $earningPhysical);
                 $jsonEarningData = json_encode($myfuckingArray);
-            }
+            }else {$jsonEarningData = 0;
+                    $jsonEarning = 0;}
 
             if($resultCheckMyProjects > 0){
                 $mainDataMyProjects  = array();
@@ -884,7 +892,7 @@ $(document).ready(function(){
                     unset($dataMyProjects );                
                 }
                 $jsonMyProjects = json_encode($mainDataMyProjects ); 
-            }
+            } else $jsonMyProjects = 0;
 
 
             if($resultCheckProjectsParticipation > 0){
@@ -904,7 +912,7 @@ $(document).ready(function(){
                     unset($dataProjectsParticipation );                
                 }
                 $jsonProjectsParticipation = json_encode($mainDataProjectsParticipation ); 
-            }
+            } else $jsonProjectsParticipation = 0;
 
             if($resultCheckHistory > 0){
                 $mainDataHistory  = array();
@@ -925,7 +933,7 @@ $(document).ready(function(){
                     unset($dataHistory );                
                 }
                 $jsonHistory  = json_encode($mainDataHistory ); 
-            }
+            }else $jsonHistory = 0;
 
             if($resultCheckFavorite > 0){
                 $mainDataMyFavorite = array();
@@ -941,7 +949,7 @@ $(document).ready(function(){
                     unset($dataMyFavorite );                
                 }
                 $jsonMyFavorite  = json_encode($mainDataMyFavorite ); 
-            }
+            }else $jsonMyFavorite = 0;
 
             if($resultCheckSqlMyProduct > 0){
                 $mainDataMyProduct  = array();
@@ -957,7 +965,7 @@ $(document).ready(function(){
                     unset($dataMyProduct );                
                 }
                 $jsonMyProduct  = json_encode($mainDataMyProduct ); 
-            }
+            }else $jsonMyProduct = 0;
 
             if($resultCheckTopTenProduct > 0){
                 $mainDataTopTenProduct  = array();
@@ -973,7 +981,7 @@ $(document).ready(function(){
                     unset($dataTopTenProduct );                
                 }
                 $jsonTopTenProduct  = json_encode($mainDataTopTenProduct ); 
-            }
+            }else $jsonTopTenProduct = 0;
 
             if($resultCheckProfile > 0)
             {
@@ -993,6 +1001,50 @@ $(document).ready(function(){
         ?>
 
         <script>
+
+            function openTab(tabName, elmnt, tab) {
+
+            // Hide all elements with class="tabcontent" by default */
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName(tab);
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Remove the background color of all tablinks/buttons
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].style.color = "";
+            }
+
+            // Show the specific tab content
+
+            document.getElementById(tabName).style.display = "flex";
+            if(tabName == "historyInnerTab")
+            document.getElementById(tabName).style.flexDirection = "column";
+
+            elmnt.style.color = '#E68235';
+            document.getElementById(tabName).style.color = '#707070';
+
+            if(tabName=="seller_profile"){
+                document.getElementById("defaultProductOpen").click();
+                document.getElementById(tabName).style.color = '#707070';
+            }
+
+            if(tabName=="buyer_profile"){
+                document.getElementById("defaultOpenProductsHistory").click();
+                document.getElementById(tabName).style.color = '#707070';
+            }
+
+            if(tabName == "projectParticipated"){
+                showAllProjectParticipation();
+            }
+            }
+
+            // Get the element with id="defaultOpen" and click on it
+            document.getElementById("defaultOpen").click();
+            document.getElementById("principal_profile").style.color = '#707070';
+
             jsonJsProfile = {
                         "name" : <?php echo json_encode($dataProfile["name"], JSON_HEX_TAG); ?>,
                         "id" : <?php echo json_encode($dataProfile["id"], JSON_HEX_TAG); ?>,
@@ -1007,103 +1059,134 @@ $(document).ready(function(){
             console.log(jsonJsProfile);
             appendData(jsonJsProfile);
 
-            var jsonJsMyFavorite = <?= $jsonMyFavorite; ?>;
-            console.log(jsonJsMyFavorite);
+            var jsonJsMyFavorite;
+            var jsonJsMyProduct;
+            var jsonJsMyProjects;
+            var jsonEarningDataJs;
+            var jsonTentative;
+            var jsonJsHistory;
+            var jsonJSProjectsParticipation
 
-            var jsonJsMyProduct = <?= $jsonMyProduct; ?>;
-            console.log(jsonJsMyProduct);
 
-            var jsonJsMyProjects = <?= $jsonMyProjects; ?>;
+            if(<?php echo json_encode($jsonMyFavorite); ?> != 0)
+            {jsonJsMyFavorite = <?= $jsonMyFavorite; ?>;
+            console.log(jsonJsMyFavorite);}
+
+
+
+
+
+
+            if(<?php echo json_encode($jsonMyProduct); ?> != 0)
+            {jsonJsMyProduct = <?= $jsonMyProduct; ?>;
+            console.log(jsonJsMyProduct);}
+
+
+
+
+
+
+
+            if(<?php echo json_encode($jsonMyProjects); ?> != 0)
+            {jsonJsMyProjects = <?= $jsonMyProjects; ?>;
             console.log(jsonJsMyProjects);
+            appendProjects(jsonJsMyProjects);}
 
-            jsonEarningDataJs = <?= $jsonEarningData; ?>;
 
-            jsonTentative = <?=$jsonEarning?>;
-            console.log(jsonEarningDataJs);
 
-            console.log(jsonTentative);
 
-            var jsonJSProjectsParticipation = <?= $jsonProjectsParticipation; ?>;
-            console.log(jsonJSProjectsParticipation);
 
-            var myTitle = 'Total:</br>';
-            var myTotal = 0;
-            var myTitleCredit = 'Total credit:</br>';
-            var myTotalCredit = 0;
-            myTotalCredit = jsonTentative[0].credit;
 
-            
-            for(var i = 0; i< jsonEarningDataJs.length; i++){
-                myTotal = myTotal + jsonEarningDataJs[i].y;
+
+
+            if(<?php echo json_encode($jsonEarningData); ?> != 0)
+            {jsonEarningDataJs = <?= $jsonEarningData; ?>;
+            console.log(jsonEarningDataJs);}
+
+
+
+
+
+
+
+
+
+
+
+
+            if(<?php echo json_encode($jsonEarning); ?> != 0)
+            {jsonTentative = <?= $jsonEarning; ?>;
+            console.log(jsonTentative);}
+
+
+
+
+
+
+
+
+
+
+
+            if(<?php echo json_encode($jsonProjectsParticipation); ?> != 0)
+            {
+                jsonJSProjectsParticipation = <?= $jsonProjectsParticipation; ?>;
+                console.log(jsonJSProjectsParticipation);
             }
 
-           
-            var myTotalString = myTotal.toString();
-            myTitle += myTotalString;
-            myTitle += '$';
-            myTotalCreditString =  myTotalCredit.toString();
-            myTitleCredit += myTotalCreditString;
-            myTitleCredit += '$';
+            if(<?php echo json_encode($jsonEarning); ?> != 0)
+            {
+                var myTitle = 'Total:</br>';
+                var myTotal = 0;
+                var myTitleCredit = 'Total credit:</br>';
+                var myTotalCredit = 0;
+                myTotalCredit = jsonTentative[0].credit;
 
-            createMyCharts(myTitleCredit, jsonEarningDataJs, 'creditContainer');
-            createMyCharts(myTitle, jsonEarningDataJs, 'principalChartContainer');
-            createMyLegend(jsonEarningDataJs);
+                
+                for(var i = 0; i< jsonEarningDataJs.length; i++){
+                    myTotal = myTotal + jsonEarningDataJs[i].y;
+                }
 
+            
+                var myTotalString = myTotal.toString();
+                myTitle += myTotalString;
+                myTitle += '$';
+                myTotalCreditString =  myTotalCredit.toString();
+                myTitleCredit += myTotalCreditString;
+                myTitleCredit += '$';
+
+                createMyCharts(myTitleCredit, jsonEarningDataJs, 'creditContainer');
+                createMyCharts(myTitle, jsonEarningDataJs, 'principalChartContainer');
+                createMyLegend(jsonEarningDataJs);
+                }
+            
             var jsonJsTopTenProduct = <?= $jsonTopTenProduct; ?>;
             console.log(jsonJsTopTenProduct);
 
-            appendMyJson(jsonJsMyProduct, jsonJsTopTenProduct, jsonJsMyFavorite, jsonJSProjectsParticipation);
+            if(typeof jsonJsMyProduct != 'undefined')
+            appendJsonMyProduct(jsonJsMyProduct);
 
-            var jsonJsHistory = <?= $jsonHistory; ?>;
+            if(typeof jsonJsTopTenProduct != 'undefined')
+            appendJsonTopTenProduct(jsonJsTopTenProduct);
+
+            if(typeof jsonJsMyFavorite != 'undefined')
+            appendJsonMyFavorite(jsonJsMyFavorite);
+
+            if(typeof jsonJSProjectsParticipation != 'undefined')
+            appendJsonMyProjectParticipation(jsonJSProjectsParticipation);
+
+            if(<?php echo json_encode($jsonHistory); ?> != 0)
+            {jsonJsHistory = <?= $jsonHistory; ?>;
             console.log(jsonJsHistory);
+            appenedHistoryCard(jsonJsHistory);}
 
-            appenedHistoryCard(jsonJsHistory);
-            appendProjects(jsonJsMyProjects);
+
+
+           
+            
             
 
-            function openTab(tabName, elmnt, tab) {
-
-                // Hide all elements with class="tabcontent" by default */
-                var i, tabcontent, tablinks;
-                tabcontent = document.getElementsByClassName(tab);
-                for (i = 0; i < tabcontent.length; i++) {
-                    tabcontent[i].style.display = "none";
-                }
-
-                // Remove the background color of all tablinks/buttons
-                tablinks = document.getElementsByClassName("tablink");
-                for (i = 0; i < tablinks.length; i++) {
-                    tablinks[i].style.color = "";
-                }
-
-                // Show the specific tab content
-                
-                document.getElementById(tabName).style.display = "flex";
-                if(tabName == "historyInnerTab")
-                document.getElementById(tabName).style.flexDirection = "column";
-
-                elmnt.style.color = '#E68235';
-                document.getElementById(tabName).style.color = '#707070';
-
-                if(tabName=="seller_profile"){
-                    document.getElementById("defaultProductOpen").click();
-                    document.getElementById(tabName).style.color = '#707070';
-                }
-
-                if(tabName=="buyer_profile"){
-                    document.getElementById("defaultOpenProductsHistory").click();
-                    document.getElementById(tabName).style.color = '#707070';
-                }
-
-                if(tabName == "projectParticipated"){
-                    showAllProjectParticipation();
-                }
-            }
-
-                // Get the element with id="defaultOpen" and click on it
-                document.getElementById("defaultOpen").click();
-                document.getElementById("principal_profile").style.color = '#707070';
-
+            
                 /**---------------------------------------------------------------------- */
 
                 ScrollRate = 35;
