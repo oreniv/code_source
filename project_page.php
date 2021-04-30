@@ -341,14 +341,13 @@ function setAddToCartForm(button,bidID)
 
 </script>
 
-
+<body>
 
 <header class="header_class">
   <!-- Header is loaded with jQuery -->
 </header>
 
 
-<body>
 
 <div class="container">
     <div class="row">
@@ -433,13 +432,13 @@ function setAddToCartForm(button,bidID)
 appendProjectInfo();
 </script>
 
+<footer>
+      <!-- jQuery pulls this -->
+</footer>
 
 </body>
 
 
 
-<footer>
-      <!-- jQuery pulls this -->
-</footer>
 
 </html>

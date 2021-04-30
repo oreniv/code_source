@@ -987,6 +987,19 @@ recommendationContainer:hover {
   flex-direction: column;
 }
 
+/**--------------------------------------------*/
+.itemProjectRow{
+  display: flex;
+  justify-content: space-between;
+  height: 100px;
+  width: 100%;
+}
+
+.columnButtonProject{
+  display: flex;
+  flex-direction: column;
+}
+
 /**-------------- edit profile ----------------*/
 
 /* The popup form - hidden by default */
@@ -1053,4 +1066,16 @@ recommendationContainer:hover {
 
 .saveclose:hover{
   cursor:pointer
+}
+
+/**------------------------ profile extern--------------------------------*/
+.containerExternalProfile{
+  display: flex;
+  justify-content: space-around;
+}
+
+/**----------------under work--------------*/
+#iconWork{
+  height: 150px;
+  margin: auto;
 }
