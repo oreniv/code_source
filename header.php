@@ -70,6 +70,7 @@ else
     var img_profile = document.createElement("img");
     img_profile.setAttribute("class","img_profile");
     <?php
+      if ($_SESSION['userID'] != -1 ){
       $sqlProfile = "SELECT * FROM users WHERE users.id =".$_SESSION['userID'];
       $resultProfile = mysqli_query($conn, $sqlProfile);
       $resultCheckProfile = mysqli_num_rows($resultProfile);
@@ -83,6 +84,7 @@ else
       else{
         $dataProfile = "";
       }
+    }
     ?>
     var linkToPicture = <?php echo json_encode($dataProfile["profile_pic_link"], JSON_HEX_TAG); ?>;
     if(linkToPicture == "")

@@ -80,11 +80,12 @@ for ($i = 0;$i<$arrSize -1 ;$i++)
 
 $amount = 1;
 if ($sale_items[$arrSize - 1] != -1 ) // check if the last item is unique 
+{
     $sqlPurchaseData = "CALL insert_transaction_history(".$_SESSION['userID'].",".$sale_items[$arrSize - 1].",$amount,'sales_item')" ; 
-mysqli_query($conn,$sqlPurchaseData); 
-mysqli_close($conn);
-$conn = mysqli_connect($servername, $username, $password, $dbname);
-
+    mysqli_query($conn,$sqlPurchaseData); 
+    mysqli_close($conn);
+    $conn = mysqli_connect($servername, $username, $password, $dbname);
+}
 
 $arrSize = count($project_bids);
 for ($i=0;$i<$arrSize;$i++)

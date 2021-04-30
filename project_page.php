@@ -1,5 +1,6 @@
 <?php 
 include_once 'dbconnection.php';
+include_once 'user_params.php';
 
 session_start();
 echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name']; 
@@ -12,6 +13,19 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
 <?php 
 
+
+// adding bids to cart 
+
+if (isset($_POST['add_this_to_cart']))
+ {
+  $sqlInsertToCart = "CALL insert_into_cart(".$_SESSION['userID'].",".$_POST['add_this_to_cart'].",'bid')";
+  mysqli_query($conn, $sqlInsertToCart);
+  checkCart();
+  mysqli_close($conn);
+  $conn = mysqli_connect($servername, $username, $password, $dbname);
+  die();
+ }
+
 $sqlProjectInfo = " SELECT project.*,users.id,users.full_name FROM project 
                     INNER JOIN users ON users.id = project.posterID 
                     WHERE project.id =".$_GET['projectID'] ; 
@@ -22,6 +36,7 @@ $postData = array(
                     "project_name" => $row['project_name'],
                     "project_description" => $row['project_description'],
                     "poster_name" => $row['full_name'],
+                    "poster_ID" => $row['posterID']
 );
 
 $sqlProjectItems = "SELECT * FROM project_item WHERE projectID =".$_GET['projectID'];
@@ -42,20 +57,20 @@ $projectItem_array = array();
     }
 
   
-  $sqlProjectBids = "SELECT * FROM project_item_bids   
-                     INNER JOIN project_item ON project_item.id = project_item_bids.project_itemID 
-                     WHERE project_item.projectID =".$_GET['projectID'];
+  $sqlProjectBids = " SELECT project_item_bids.id,project_item_bids.project_itemID,project_item_bids.bidderID,project_item_bids.price,project_item_bids.note  FROM project_item_bids   
+                      INNER JOIN project_item ON project_item.id = project_item_bids.project_itemID 
+                      WHERE project_item.projectID =".$_GET['projectID'];
 
   $sqlResult = mysqli_query($conn, $sqlProjectBids);
   $bid_array = array();
   while($row = mysqli_fetch_assoc($sqlResult))
   {
     $temp = array(
+      "bid_id" => $row['id'],
       "project_itemID" => $row['project_itemID'],
       "bidderID" => $row['bidderID'],
       "price" => $row['price'],
-      "note" => $row['note'],
-      "bid_id" => $row['id']
+      "note" => $row['note']
     );
     array_push($bid_array,$temp);
     unset($temp);
@@ -85,9 +100,6 @@ $postData = json_encode($postData); // basic data about the whole project
 if (isset($_GET['itemID']))
 {
 
- 
-  
-
   $conn = mysqli_connect($servername, $username, $password, $dbname);
   $notes = "'".$_POST['notes']."'" ;
   $sqlInsertBid = "CALL insert_project_item_bid (".$_GET['itemID'].",".$_SESSION['userID'].",".$_POST['asking_price'].",".$notes.")";  
@@ -100,14 +112,16 @@ if (isset($_GET['itemID']))
   else
   $_SESSION['db_error'] = False;
 
-  
-
- 
-  
-
-
   mysqli_close($conn);
+  $conn = mysqli_connect($servername, $username, $password, $dbname);
 }
+
+
+
+
+
+
+
 
 
 
@@ -120,8 +134,8 @@ if (isset($_GET['itemID']))
 <meta charset="utf-8" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-   <link rel="stylesheet" href="styleSheet.css" />
-    <title>Oray</title>
+<link rel="stylesheet" href="styleSheet.css" />
+ <title>Oray</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 </head>
@@ -139,12 +153,13 @@ if (isset($_GET['itemID']))
 <!-- -------------------------------------------- -->
 <script>
 
- 
+var jsonPostData = <?= $postData  ?> ; 
+var userID = <?= $_SESSION['userID'] ?> ; 
 
 function appendProjectInfo()
 {
 
-var jsonPostData = <?= $postData  ?> ; 
+
 var jsonTags = <?= $tag_array  ?> ; 
 
 document.getElementById("project_name").innerHTML ="Project: " + jsonPostData["project_name"];
@@ -248,9 +263,12 @@ for (i = 0 ; i < projectItemsSize ; i++)
 function appendBidInfo(itemID,bidArea)
 {
     var bids = <?= $bid_array ?> ; 
+
     var len = bids.length;
     var has_at_least_one_bid = false; 
    console.log(bids);
+
+ 
 
    var bidList = document.createElement("ul");
    bidList.classList.add("list-group")
@@ -265,7 +283,18 @@ function appendBidInfo(itemID,bidArea)
         bidLine.innerHTML ="Bid # "+bidCounter+" $"+bids[j]["price"]+" note: "+bids[j]["note"];
         bidList.appendChild(bidLine);
         bidCounter++;
-      }   
+      }
+     
+    if (userID == jsonPostData["poster_ID"] && bidCounter > 1) // if the current user posted the project give an option to accept bids
+      {
+        var accept_bid_button = document.createElement("button");
+        accept_bid_button.setAttribute("type","button");
+        accept_bid_button.setAttribute("class","btn btn-secondary btn-sm position-relative top-50 start-50");
+        accept_bid_button.setAttribute("style","width: 100px;");
+        accept_bid_button.innerHTML = "Accept bid";
+        bidList.appendChild(accept_bid_button); 
+        setAddToCartForm(accept_bid_button,bids[j]["bid_id"]);
+    }
   }
 
   if (!has_at_least_one_bid)
@@ -289,10 +318,25 @@ function setBidID(bidButton,itemID) // appends item and session data(via GET) to
     setAttribute("action","project_page.php?projectID="+<?= $_GET['projectID'] ?>+
     "&itemID="+itemID);
   };
+}
+function setAddToCartForm(button,bidID)
+{ 
+            button.onclick = function () {
+           var str = "add_this_to_cart="+bidID // use jQuery to turn the form into a big array
+           var xhttp = new XMLHttpRequest(); // using AJAX 
+           xhttp.open("POST","project_page.php",true); // call this page again with a POST variable that indicates which item to add to cart
+           xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); 
+           xhttp.send(str); // POST  
+           location.reload();
+        };
+
+
 
 
 
 }
+
+
 
 
 </script>
@@ -319,6 +363,16 @@ function setBidID(bidButton,itemID) // appends item and session data(via GET) to
 </div>
 
 <div class="container gap-2" id="project_item_info_section">
+
+
+
+
+<!-- hidden form for adding to cart -->
+<form id="add_to_cart" hidden method="POST" action="project_page.php" >
+<input type="hidden" id="add_this_to_cart" name="add_this_to_cart" >
+</form>
+
+
 
 
 

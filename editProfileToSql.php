@@ -1,6 +1,8 @@
 <?php 
 include_once 'dbconnection.php';
 include_once 'user_params.php';
+include_once 'vision_api_check.php';
+
 session_start();
 echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name']; 
 
@@ -46,6 +48,9 @@ if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg
   echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
   $uploadOk = 0;
 }
+
+if (vision_api($_FILES["filename"]["tmp_name"]) == False)
+  $uploadOk = 0;
 
 // Check if $uploadOk is set to 0 by an error
 if ($uploadOk == 0) {
