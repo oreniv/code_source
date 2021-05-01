@@ -3,7 +3,7 @@
 session_start();
 
 
-function checkCart()  // DOESN'T WORK
+function checkCart()   
 {
     
     // get the item IDs items in cart
