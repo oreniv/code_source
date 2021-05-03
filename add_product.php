@@ -1,6 +1,7 @@
 <?php 
 include_once 'dbconnection.php';
 include_once 'user_params.php';
+include_once 'vision_api_check.php';
 session_start();
 echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name']; 
 ?>
@@ -210,7 +211,8 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
                     if(confirm("you are about to upload: \n" + allName + "\n" +"Do you confirm the upload ?"))
                         {
                             myPicture = true;
-                            upload(e.dataTransfer.files, 'uploadsPicture');
+                            if (vision_api (e.dataTransfer.files[x]))
+                                upload(e.dataTransfer.files, 'uploadsPicture');
                         }
         };
 
