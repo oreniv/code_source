@@ -143,7 +143,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         function appendJsonMyProduct(data){
             for(var i = 0; i< data.length; i++){
                 createMyCard("myProducts", data[i].item_pic_link, data[i].product_description, 
-                data[i].product_price, true, data[i].product_name, 
+                data[i].product_price, null, data[i].product_name, 
                 data[i].product_id);
                     }
         }
@@ -482,12 +482,16 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             const newLikeParagraph = document.createElement("p");
             const newLikeButton = document.createElement("button");
             newLikeButton.classList.add("heart_button")
-            const newLikeIcone = document.createElement("img");
-            newLikeIcone.classList.add("icon_heart");
-            if (liked == true) {
-                newLikeIcone.src = "source/icones/groupe_22_filled.png"
-            } else {
-                newLikeIcone.src = "source/icones/groupe_22.png"
+            var newLikeIcone = null;
+            if(liked != null)
+            {
+                newLikeIcone = document.createElement("img");
+                newLikeIcone.classList.add("icon_heart");
+                if (liked == true) {
+                    newLikeIcone.src = "source/icones/groupe_22_filled.png"
+                } else {
+                    newLikeIcone.src = "source/icones/groupe_22.png"
+                }
             }
 
             newCard.appendChild(newPicture);
@@ -497,16 +501,22 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             newContainerBottomCard.appendChild(newPrice);
             newContainerBottomCard.appendChild(newLikeParagraph);
             newLikeParagraph.appendChild(newLikeButton);
-            newLikeButton.appendChild(newLikeIcone);
+            if(liked != null)
+            {
+                newLikeButton.appendChild(newLikeIcone);
+            }
 
             document.getElementById(tabName).appendChild(newCard);
 
             $(newPicture).wrap("<a href=product_page.php?productID="+id+"></a>");
-            newLikeIcone.onclick = function(){
-                if(newLikeIcone.src == "source/icones/groupe_22_filled.png"){
-                    newLikeIcone.src ="source/icones/groupe_22.png";
-                } else {
-                    newLikeIcone.src = "source/icones/groupe_22_filled.png";
+            if(liked != null)
+            {
+                newLikeIcone.onclick = function(){
+                    if(newLikeIcone.src == "source/icones/groupe_22_filled.png"){
+                        newLikeIcone.src ="source/icones/groupe_22.png";
+                    } else {
+                        newLikeIcone.src = "source/icones/groupe_22_filled.png";
+                    }
                 }
             }
         }
