@@ -87,18 +87,39 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         /**----------------------------------------------------------------------------------*/
         
 
-        function appendAllMyJson(dataProduct, dataProject, dataTopTenProject, dataTopTenProduct, dataTopTenSeller, dataSellers){
+        function appendAllMyJson(dataProduct, dataProject, dataTopTenProject, dataTopTenProduct, dataTopTenSeller, dataSellers, dataFavorite){
                     for(var i = 0; i< dataProject.length; i++){
-                        createNewCardTopTenProduct("project_link_card_happened","source/produits/project4.jpg", dataProject[i].project_description, dataProject[i].project_budget, true, dataProject[i].project_name,dataProject[i].project_id,"project");
+                        var isFavorite = false;
+                        for(var j = 0; j<dataFavorite.length; j++){
+                            if (dataFavorite[j].projectID == dataProject[i].project_id)
+                            isFavorite = true;
+                        }
+                        createNewCardTopTenProduct("project_link_card_happened","source/produits/project4.jpg", dataProject[i].project_description, dataProject[i].project_budget, isFavorite, dataProject[i].project_name,dataProject[i].project_id,"project");
                     }
                     for(var i = 0; i< dataProduct.length; i++){
-                        createNewCardTopTenProduct("product_link_card_happened",dataProduct[i].item_pic_link, dataProduct[i].product_description, dataProduct[i].product_price, true, dataProduct[i].product_name,dataProduct[i].product_id,"product");
+                        var isFavorite = false;
+                        for(var j = 0; j<dataFavorite.length; j++){
+                            if (dataFavorite[j].sales_itemID == dataProduct[i].product_id)
+                            isFavorite = true;
+                        }
+                        createNewCardTopTenProduct("product_link_card_happened",dataProduct[i].item_pic_link, dataProduct[i].product_description, dataProduct[i].product_price, isFavorite, dataProduct[i].product_name,dataProduct[i].product_id,"product");
                     }
                     for(var i = 0; i< dataTopTenProject.length; i++){
-                        createNewCardTopTenProduct("top_ten_project_card_happened","source/produits/project4.jpg", dataTopTenProject[i].project_description, dataTopTenProject[i].project_budget, true, dataTopTenProject[i].project_name,dataTopTenProject[i].project_id,"project");
+                        var isFavorite = false;
+                        for(var j = 0; j<dataFavorite.length; j++){
+                            if (dataFavorite[j].projectID == dataTopTenProject[i].project_id)
+                            isFavorite = true;
+                        }
+                        createNewCardTopTenProduct("top_ten_project_card_happened","source/produits/project4.jpg", dataTopTenProject[i].project_description, dataTopTenProject[i].project_budget, isFavorite, dataTopTenProject[i].project_name,dataTopTenProject[i].project_id,"project");
+                        
                     }
                     for(var i = 0; i< dataTopTenProduct.length; i++){
-                        createNewCardTopTenProduct("top_ten_card_happened",dataTopTenProduct[i].item_pic_link, dataTopTenProduct[i].product_description, dataTopTenProduct[i].product_price, true, dataTopTenProduct[i].product_name,dataTopTenProduct[i].product_id,"product");
+                        var isFavorite = false;
+                        for(var j = 0; j<dataFavorite.length; j++){
+                            if (dataFavorite[j].sales_itemID == dataTopTenProduct[i].product_id)
+                            isFavorite = true;
+                        }
+                        createNewCardTopTenProduct("top_ten_card_happened",dataTopTenProduct[i].item_pic_link, dataTopTenProduct[i].product_description, dataTopTenProduct[i].product_price, isFavorite, dataTopTenProduct[i].product_name,dataTopTenProduct[i].product_id,"product");
                     }
                     for(var i = 0; i< dataTopTenSeller.length; i++){
                         createNewCardTopTenProduct("top_ten_sellers_card_happened","source/produits/person3.jfif", dataTopTenSeller[i].address, dataTopTenSeller[i].seller_rating, true, dataTopTenSeller[i].name,dataTopTenSeller[i].id,"user");
@@ -134,12 +155,15 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             const newLikeParagraph = document.createElement("p");
             const newLikeButton = document.createElement("button");
             newLikeButton.classList.add("heart_button")
+            
             const newLikeIcone = document.createElement("img");
             newLikeIcone.classList.add("icon_heart");
+            newLikeIcone.id = "a" + id;
+            
             if (liked == true) {
-                newLikeIcone.src = "source/icones/groupe_22_filled.png"
+                newLikeIcone.src = "source/icones/groupe_22_filled.png";
             } else {
-                newLikeIcone.src = "source/icones/groupe_22.png"
+                newLikeIcone.src = "source/icones/groupe_22.png";
             }
 
             newCard.appendChild(newPicture);
@@ -163,6 +187,58 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             $(newPicture).wrap("<a href=extern_profile_page.php?userId="+id+"></a>");
 
             document.getElementById(tabName).appendChild(newCard);
+        }
+        
+
+        function changeFavorite(element, myHeartsLastList){
+            
+            
+            console.log(element.childNodes[0].id);
+            var myId = element.childNodes[0].id;
+            console.log(document.getElementById(myId).src);
+            var notExist = true;
+
+            if(document.getElementById(myId).src.includes("source/icones/groupe_22_filled.png")){
+                document.getElementById(myId).src = "source/icones/groupe_22.png";
+            }
+            else
+            {document.getElementById(myId).src = "source/icones/groupe_22_filled.png";}
+
+            obj = {
+                "id" : myId,
+                "src" : document.getElementById(myId).src
+            };
+
+            for(var i =0; i<myHeartsLastList.length; i++){
+                if(myHeartsLastList[i].id == myId){
+                    ajaxCall(myId, "delete");
+                    myHeartsLastList.splice(i, 1);
+                    notExist = false;
+                }
+            }
+            if(notExist){
+                myHeartsLastList.push(obj);
+                ajaxCall(myId, "insert");
+            }
+            console.log(myHeartsLastList);
+           
+
+        }
+
+        function ajaxCall(id, action) {
+            
+            $.ajax({
+            type: 'POST',
+            url: 'favoriteC_changes_to_sql.php',
+            dataType: 'json',
+            data: {
+                id: id,
+                action: action
+                },
+            success: function(response) {
+                alert(response);
+            }
+            });
         }
          
 
@@ -287,6 +363,7 @@ $(document).ready(function(){
             $sqlTopTenProject = "CALL get_top10_projects();";
             $sqlTopTenSeller ="CALL get_top10_sellers();";
             $sqlSeller ="SELECT * FROM users;";
+            $sqlFavorite = "SELECT * FROM fav_posts WHERE userID = " .$_SESSION['userID'];
             
 
             $resultProject = mysqli_query($conn, $sqlProject);
@@ -318,7 +395,11 @@ $(document).ready(function(){
             $resultCheckTopTenSeller = mysqli_num_rows($resultTopTenSeller);
             
             mysqli_close($conn);
-            
+            $conn = mysqli_connect($servername, $username, $password, $dbname);
+
+            $resultFavorite = mysqli_query($conn, $sqlFavorite);
+            $resultCheckFavorite = mysqli_num_rows($resultFavorite);
+            mysqli_close($conn);
             
             if($resultCheckProduct > 0){
                 $mainDataProduct = array();
@@ -335,6 +416,19 @@ $(document).ready(function(){
                 }
                 $jsonProduct = json_encode($mainDataProduct); 
             }
+
+            if($resultCheckFavorite > 0){
+                $mainDataFavorite = array();
+                while($row = mysqli_fetch_assoc($resultFavorite)){
+                    $dataFavorite = array(
+                        "sales_itemID" => $row['sales_itemID'],
+                        "projectID" => $row['projectID']
+                    );   
+                    array_push($mainDataFavorite, $dataFavorite);
+                    unset($dataFavorite);                
+                }
+                $jsonFavorite = json_encode($mainDataFavorite); 
+            } else $jsonFavorite =0;
 
             if($resultCheckTopTenProduct > 0){
                 $mainDataTopTenProduct  = array();
@@ -420,6 +514,20 @@ $(document).ready(function(){
 
         ?>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         <script>
             var jsonJsProduct = <?= $jsonProduct?>;
             console.log(jsonJsProduct);
@@ -437,10 +545,37 @@ $(document).ready(function(){
             console.log(jsonJsTopTenSeller);
 
             var jsonJsSeller = <?= $jsonSeller; ?>;
-            console.log(jsonJsSeller)
+            console.log(jsonJsSeller);
+
+            var jsonJsFavorite = <?= $jsonFavorite; ?>;
+            console.log(jsonJsFavorite);
 
             
-            appendAllMyJson(jsonJsProduct, jsonJsProject, jsonJsTopTenProject, jsonJsTopTenProduct,jsonJsTopTenSeller, jsonJsSeller);
+            appendAllMyJson(jsonJsProduct, jsonJsProject, jsonJsTopTenProject, jsonJsTopTenProduct,jsonJsTopTenSeller, jsonJsSeller, jsonJsFavorite);
+        
+            const myHearts = document.querySelectorAll(".heart_button");
+            var myHeartsInitList = [];
+            var myHeartsLastList = [];
+            
+            myHearts.forEach((e) => {
+                var myId = e.childNodes[0].id;
+                var mySrc = document.getElementById(myId).src;
+
+                myObj = {
+                    "id":myId,
+                    "src":mySrc
+                };
+                myHeartsInitList.push(myObj);
+
+                if(mySrc.includes("source/icones/groupe_22_filled.png"))
+                {myHeartsLastList.push(myObj);}
+
+
+                e.addEventListener('click', function() {changeFavorite(e, myHeartsLastList);});
+                
+            })
+
+            console.log(myHeartsInitList);
         </script>
 
  
