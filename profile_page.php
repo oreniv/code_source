@@ -657,7 +657,7 @@ $(document).ready(function(){
 
                     </div>
 
-                    <div id="favoriteInnerTab" class="innerBuyerTabContent">
+                    <div id="favoriteInnerTab" class="innerBuyerTabContent row">
 
                     </div>
 

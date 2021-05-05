@@ -190,12 +190,12 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         }
         
 
-        function changeFavorite(element, myHeartsLastList){
+        function changeFavorite(element, myHeartsLastList, myId, cleanId, type){
             
             
             console.log(element.childNodes[0].id);
-            var myId = element.childNodes[0].id;
             console.log(document.getElementById(myId).src);
+            
             var notExist = true;
 
             if(document.getElementById(myId).src.includes("source/icones/groupe_22_filled.png")){
@@ -206,36 +206,39 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
             obj = {
                 "id" : myId,
-                "src" : document.getElementById(myId).src
+                "src" : document.getElementById(myId).src,
+                "type" : type
             };
 
             for(var i =0; i<myHeartsLastList.length; i++){
                 if(myHeartsLastList[i].id == myId){
-                    ajaxCall(myId, true);
+                    ajaxCall(cleanId, true, type);
                     myHeartsLastList.splice(i, 1);
                     notExist = false;
                 }
             }
             if(notExist){
                 myHeartsLastList.push(obj);
-                ajaxCall(myId, false);
+                ajaxCall(cleanId, false, type);
             }
-            console.log(myHeartsLastList);
            
 
         }
 
-        function ajaxCall(id, action) {
+        function ajaxCall(id, action, type) {
+            if(type == "'projectID'")
+            type = true;
+            else if(type == "'sales_itemID'") 
+                    type = false;
 
-            cleanId = id.replace("a", "");
-            
             $.ajax({
             type: 'POST',
             url: 'favoriteC_changes_to_sql.php',
             dataType: 'json',
             data: {
-                id: cleanId,
-                action: action
+                id: id,
+                action: action,
+                type: type
                 },
             success: function(response) {
                 alert(response);
@@ -411,7 +414,8 @@ $(document).ready(function(){
                         "product_id" => $row['id'],
                         "product_price" => $row['price'],
                         "product_description" => $row['item_description'],
-                        "item_pic_link" => $row['item_pic_link']
+                        "item_pic_link" => $row['item_pic_link'],
+                        "type" => "product"
                     );   
                     array_push($mainDataProduct, $dataProduct);
                     unset($dataProduct);                
@@ -440,7 +444,8 @@ $(document).ready(function(){
                         "product_id" => $row['id'],
                         "product_price" => $row['price'],
                         "product_description" => $row['item_description'],
-                        "item_pic_link" => $row['item_pic_link']
+                        "item_pic_link" => $row['item_pic_link'],
+                        "type" => "product"
                     );   
                     array_push($mainDataTopTenProduct , $dataTopTenProduct );
                     unset($dataTopTenProduct );                
@@ -457,7 +462,8 @@ $(document).ready(function(){
                         "project_name" => $row['project_name'],
                         "project_id" => $row['id'],
                         "project_budget" => $row['budget'],
-                        "project_description" => $row['project_description']
+                        "project_description" => $row['project_description'],
+                        "type" => "project"
                     );   
                     array_push($mainDataProject, $dataProject);
                     unset($dataProject);                
@@ -473,7 +479,8 @@ $(document).ready(function(){
                         "project_name" => $row['project_name'],
                         "project_id" => $row['id'],
                         "project_budget" => $row['budget'],
-                        "project_description" => $row['project_description']
+                        "project_description" => $row['project_description'],
+                        "type" => "project"
                     );   
                     array_push($mainDataTopTenProject, $dataTopTenProject);
                     unset($dataTopTenProject);                
@@ -489,7 +496,8 @@ $(document).ready(function(){
                         "name" => $row['full_name'],
                         "id" => $row['id'],
                         "seller_rating" => $row['seller_rating'],
-                        "address" => $row['address']
+                        "address" => $row['address'],
+                        "type" => "seller"
                     );   
                     array_push($mainDataSeller, $dataSeller);
                     unset($dataSeller);                
@@ -506,7 +514,8 @@ $(document).ready(function(){
                         "name" => $row['full_name'],
                         "id" => $row['id'],
                         "seller_rating" => $row['seller_rating'],
-                        "address" => $row['address']
+                        "address" => $row['address'],
+                        "type" => "seller"
                     );   
                     array_push($mainDataTopTenSeller, $dataTopTenSeller);
                     unset($dataTopTenSeller);                
@@ -532,25 +541,18 @@ $(document).ready(function(){
 
         <script>
             var jsonJsProduct = <?= $jsonProduct?>;
-            console.log(jsonJsProduct);
             
             var jsonJsProject = <?= $jsonProject; ?>;
-            console.log(jsonJsProject);
 
             var jsonJsTopTenProject = <?= $jsonTopTenProject; ?>;
-            console.log(jsonJsTopTenProject);
 
             var jsonJsTopTenProduct = <?= $jsonTopTenProduct; ?>;
-            console.log(jsonJsTopTenProduct);
 
             var jsonJsTopTenSeller = <?= $jsonTopTenSeller; ?>;
-            console.log(jsonJsTopTenSeller);
 
             var jsonJsSeller = <?= $jsonSeller; ?>;
-            console.log(jsonJsSeller);
 
             var jsonJsFavorite = <?= $jsonFavorite; ?>;
-            console.log(jsonJsFavorite);
 
             
             appendAllMyJson(jsonJsProduct, jsonJsProject, jsonJsTopTenProject, jsonJsTopTenProduct,jsonJsTopTenSeller, jsonJsSeller, jsonJsFavorite);
@@ -563,9 +565,24 @@ $(document).ready(function(){
                 var myId = e.childNodes[0].id;
                 var mySrc = document.getElementById(myId).src;
 
+                var type = "'seller'";
+                var realId = myId.replace("a", "");
+
+                for(var i = 0; i<jsonJsProduct.length; i++){
+                    if(jsonJsProduct[i].product_id == realId){
+                        type = "'sales_itemID'";
+                    }
+                }
+                for(var i = 0; i<jsonJsProject.length; i++){
+                    if(jsonJsProject[i].project_id == realId){
+                        type = "'projectID'";
+                    }
+                }
+
                 myObj = {
                     "id":myId,
-                    "src":mySrc
+                    "src":mySrc,
+                    "type":type
                 };
                 myHeartsInitList.push(myObj);
 
@@ -573,11 +590,10 @@ $(document).ready(function(){
                 {myHeartsLastList.push(myObj);}
 
 
-                e.addEventListener('click', function() {changeFavorite(e, myHeartsLastList);});
+                e.addEventListener('click', function() {changeFavorite(e, myHeartsLastList, myId, realId, type);});
                 
             })
 
-            console.log(myHeartsInitList);
         </script>
 
  
