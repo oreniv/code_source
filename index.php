@@ -211,14 +211,14 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
             for(var i =0; i<myHeartsLastList.length; i++){
                 if(myHeartsLastList[i].id == myId){
-                    ajaxCall(myId, "delete");
+                    ajaxCall(myId, true);
                     myHeartsLastList.splice(i, 1);
                     notExist = false;
                 }
             }
             if(notExist){
                 myHeartsLastList.push(obj);
-                ajaxCall(myId, "insert");
+                ajaxCall(myId, false);
             }
             console.log(myHeartsLastList);
            
@@ -226,13 +226,15 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         }
 
         function ajaxCall(id, action) {
+
+            cleanId = id.replace("a", "");
             
             $.ajax({
             type: 'POST',
             url: 'favoriteC_changes_to_sql.php',
             dataType: 'json',
             data: {
-                id: id,
+                id: cleanId,
                 action: action
                 },
             success: function(response) {
