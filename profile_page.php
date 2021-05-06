@@ -487,6 +487,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             {
                 newLikeIcone = document.createElement("img");
                 newLikeIcone.classList.add("icon_heart");
+                newLikeIcone.id = "a" + id;
                 if (liked == true) {
                     newLikeIcone.src = "source/icones/groupe_22_filled.png"
                 } else {
