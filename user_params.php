@@ -15,7 +15,7 @@ function checkCart()
    $cartItem_array = array();
    $sale_items = array();
    $project_bids = array();
-   $_SESSION['fuck'] =  $sql_item_in_my_cart;
+ 
    
    while($temp = mysqli_fetch_assoc($uCartContentQuery))
    {
