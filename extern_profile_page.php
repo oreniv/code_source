@@ -28,9 +28,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         }
 
         function createProfile(data){
-            for(var i = 0; i < data.length; i++){
-                createProfileTable(data[i].profile_pic_link, data[i].name, data[i].mail, data[i].seller_rating);
-            }
+                createProfileTable(data["profile_pic_link"], data["name"], data["mail"], data["seller_rating"]);
         }
 
         function createProfileTable(picture, name, mail, rating){
@@ -39,9 +37,9 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             else 
             {document.getElementById("picProfileImg").setAttribute("src", picture);}
 
-            document.getElementById("myTable").rows[1].cells.item(0).innerHTML = name;
-            document.getElementById("myTable").rows[2].cells.item(0).innerHTML = mail;
-            document.getElementById("myTable").rows[3].cells.item(0).innerHTML = rating +"/5";
+            document.getElementById("fullName").innerHTML = name;
+            document.getElementById("fullMail").innerHTML = mail;
+            document.getElementById("profileRating").innerHTML = rating +"/5";
         }
 
         function createMyCard(tabName, image, description, price, liked, productName, id){
@@ -111,29 +109,10 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 <div class="containerExternalProfile">
 
     <div class="containerExternalProfileSideLeft">
-        <table id="myTable">
-            <tr>
-                <td id="picProfile">
-                    <img id="picProfileImg" src="" >
-                    fuck you
-                </td>
-            </tr>
-            <tr>
-                <td id="fullName">
-                    fuck you
-                </td>
-            </tr>
-            <tr>
-                <td id="fullMail">
-                    fuck you
-                </td>
-            </tr>
-            <tr>
-                <td id="profileRating">
-                    fuck you
-                </td>
-            </tr>
-        </table>
+    <img id="picProfileImg" src="" >
+    <p id="fullName"></p>
+    <p id="fullMail"></p>
+    <p id="profileRating"></p>
     </div>
     <div id="containerExternalProfileSideRight">
 
