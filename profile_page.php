@@ -120,15 +120,24 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             for(var i = 0; i< dataFavorite.length; i++){
                 createMyCard("favoriteInnerTab", dataFavorite[i].item_pic_link, 
                 dataFavorite[i].product_description, dataFavorite[i].product_price, true, dataFavorite[i].product_name, 
-                dataFavorite[i].product_id);
+                dataFavorite[i].product_id, "t");
             }
         }
 
-        function appendJsonTopTenProduct(dataRecommended){
+        function appendJsonTopTenProduct(dataRecommended, dataFavorite){
+            var isFavorite = null;
+
             for(var i = 0; i<dataRecommended.length; i++){
+                isFavorite = false;
+                if(typeof dataFavorite != 'undefined')
+                        {for(var j = 0; j<dataFavorite.length; j++){
+
+                            if (dataFavorite[j].product_id == dataRecommended[i].product_id)
+                            isFavorite = true;
+                        }}
                 createMyCard("recommendation", "source/produits/onepieceluffy.jpg", dataRecommended[i].product_description, 
-                dataRecommended[i].product_price, true, dataRecommended[i].product_name, 
-                dataRecommended[i].product_id);
+                dataRecommended[i].product_price, isFavorite, dataRecommended[i].product_name, 
+                dataRecommended[i].product_id, "a");
             }
         }
 
@@ -144,7 +153,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             for(var i = 0; i< data.length; i++){
                 createMyCard("myProducts", data[i].item_pic_link, data[i].product_description, 
                 data[i].product_price, null, data[i].product_name, 
-                data[i].product_id);
+                data[i].product_id, null);
                     }
         }
 
@@ -461,7 +470,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
         }
 
-        function createMyCard(tabName, image, description, price, liked, productName, id){
+        function createMyCard(tabName, image, description, price, liked, productName, id, doubleTag){
             const newCard = document.createElement("div");
             newCard.classList.add("card");
             const newPicture = document.createElement("img");
@@ -479,15 +488,21 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             const newPrice = document.createElement("p");
             newPrice.classList.add("price");
             newPrice.innerHTML = "$" + price;
-            const newLikeParagraph = document.createElement("p");
-            const newLikeButton = document.createElement("button");
-            newLikeButton.classList.add("heart_button")
+            
+            var newLikeIcone = null;
+            var newLikeParagraph;
+            var newLikeButton;
+            
             var newLikeIcone = null;
             if(liked != null)
             {
+                newLikeParagraph = document.createElement("p");
+                newLikeButton = document.createElement("button");
+                newLikeButton.classList.add("heart_button");
                 newLikeIcone = document.createElement("img");
                 newLikeIcone.classList.add("icon_heart");
-                newLikeIcone.id = "a" + id;
+                newLikeIcone.id = doubleTag + id;
+
                 if (liked == true) {
                     newLikeIcone.src = "source/icones/groupe_22_filled.png"
                 } else {
@@ -500,10 +515,11 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             newCard.appendChild(newDescription);
             newCard.appendChild(newContainerBottomCard);
             newContainerBottomCard.appendChild(newPrice);
-            newContainerBottomCard.appendChild(newLikeParagraph);
-            newLikeParagraph.appendChild(newLikeButton);
+            
             if(liked != null)
             {
+                newContainerBottomCard.appendChild(newLikeParagraph);
+                newLikeParagraph.appendChild(newLikeButton);
                 newLikeButton.appendChild(newLikeIcone);
             }
 
@@ -536,7 +552,7 @@ $(document).ready(function(){
 
 
 
-<body onLoad="scrollDiv_init()"  onunload="updateFavorite()">
+<body onLoad="scrollDiv_init()">
     <header>
         <header class="header_class">
             <!-- Header is loaded with jQuery -->
@@ -1178,7 +1194,7 @@ $(document).ready(function(){
             appendJsonMyProduct(jsonJsMyProduct);
 
             if(typeof jsonJsTopTenProduct != 'undefined')
-            appendJsonTopTenProduct(jsonJsTopTenProduct);
+            appendJsonTopTenProduct(jsonJsTopTenProduct, jsonJsMyFavorite);
 
             if(typeof jsonJsMyFavorite != 'undefined')
             appendJsonMyFavorite(jsonJsMyFavorite);
@@ -1281,13 +1297,117 @@ $(document).ready(function(){
 
             /**---------------------------------------------------- */
 
-            function updateFavorite(){
+            const myHearts = document.querySelectorAll(".heart_button");
+            var myHeartsInitList = [];
+            var myHeartsLastList = [];
+            
+            myHearts.forEach((e) => {
+                var myId = e.childNodes[0].id;
+                var mySrc = document.getElementById(myId).src;
 
+                var type = "'seller'";
+                var realId = myId.replace("a", "");
+                realId = realId.replace("t", "");
+
+                if(myId.includes("t"))
+                    var secondId = "a"+realId;
+                else
+                    var secondId = "t"+realId;
+
+                var check =false;
+
+                type = "'sales_itemID'";
+                 
+                if(type == "'sales_itemID'")
+                {
+                    if(typeof jsonJsMyFavorite != 'undefined')
+                    {
+                        for(var i =0; i<jsonJsTopTenProduct.length; i++){
+                            for(var j =0; j<jsonJsMyFavorite.length; j++){
+                                if(jsonJsTopTenProduct[i].product_id == jsonJsMyFavorite[j].product_id && jsonJsTopTenProduct[i].product_id == realId)
+                                check = true;
+                            }
+                        }
+                    }
+                }
+              
+                myObj = {
+                    "id":myId,
+                    "src":mySrc,
+                    "type":type
+                };
+                myHeartsInitList.push(myObj);
+
+                if(mySrc.includes("source/icones/groupe_22_filled.png"))
+                {myHeartsLastList.push(myObj);}
+
+
+                e.addEventListener('click', function() {changeFavorite(e, myHeartsLastList, myId, realId, type, secondId, check);});
+                
+            })
+
+
+            function changeFavorite(element, myHeartsLastList, myId, cleanId, type, secondId, checked){
+            
+            
+            console.log(element.childNodes[0].id);
+            console.log(document.getElementById(myId).src);
+            
+            var notExist = true;
+
+            if(document.getElementById(myId).src.includes("source/icones/groupe_22_filled.png")){
+                document.getElementById(myId).src = "source/icones/groupe_22.png";
+                if(checked)
+                document.getElementById(secondId).src = "source/icones/groupe_22.png";
             }
+            else
+            {
+                document.getElementById(myId).src = "source/icones/groupe_22_filled.png";
+                if(checked)
+                document.getElementById(secondId).src = "source/icones/groupe_22_filled.png";
+                }
 
+            obj = {
+                "id" : myId,
+                "src" : document.getElementById(myId).src,
+                "type" : type
+            };
 
+            for(var i =0; i<myHeartsLastList.length; i++){
+                if(myHeartsLastList[i].id == myId){
+                    ajaxCall(cleanId, true, type);
+                    myHeartsLastList.splice(i, 1);
+                    notExist = false;
+                }
+            }
+            if(notExist){
+                myHeartsLastList.push(obj);
+                ajaxCall(cleanId, false, type);
+            }
+           
 
+        }
 
+        function ajaxCall(id, action, type) {
+            if(type == "'projectID'")
+            type = true;
+            else if(type == "'sales_itemID'") 
+                    type = false;
+
+            $.ajax({
+            type: 'POST',
+            url: 'favoriteC_changes_to_sql.php',
+            dataType: 'json',
+            data: {
+                id: id,
+                action: action,
+                type: type
+                },
+            success: function(response) {
+                alert(response);
+            }
+            });
+        }
 
 
             
