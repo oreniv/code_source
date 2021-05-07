@@ -135,7 +135,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
                             if (dataFavorite[j].product_id == dataRecommended[i].product_id)
                             isFavorite = true;
                         }}
-                createMyCard("recommendation", "source/produits/onepieceluffy.jpg", dataRecommended[i].product_description, 
+                createMyCard("recommendation", dataRecommended[i].item_pic_link, dataRecommended[i].product_description, 
                 dataRecommended[i].product_price, isFavorite, dataRecommended[i].product_name, 
                 dataRecommended[i].product_id, "a");
             }
@@ -1419,4 +1419,4 @@ $(document).ready(function(){
 
 </body>
 
-</html>reload
+</html>

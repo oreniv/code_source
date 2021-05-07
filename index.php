@@ -94,7 +94,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
                             if (dataFavorite[j].projectID == dataProject[i].project_id)
                             isFavorite = true;
                         }
-                        createNewCardTopTenProduct("project_link_card_happened","source/produits/project4.jpg", dataProject[i].project_description, dataProject[i].project_budget, isFavorite, dataProject[i].project_name,dataProject[i].project_id,"project", "a");
+                        createNewCardTopTenProduct("project_link_card_happened",dataProject[i].project_pic_link, dataProject[i].project_description, dataProject[i].project_budget, isFavorite, dataProject[i].project_name,dataProject[i].project_id,"project", "a");
                     }
                     for(var i = 0; i< dataProduct.length; i++){
                         var isFavorite = false;
@@ -110,7 +110,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
                             if (dataFavorite[j].projectID == dataTopTenProject[i].project_id)
                             isFavorite = true;
                         }
-                        createNewCardTopTenProduct("top_ten_project_card_happened","source/produits/project4.jpg", dataTopTenProject[i].project_description, dataTopTenProject[i].project_budget, isFavorite, dataTopTenProject[i].project_name,dataTopTenProject[i].project_id,"project", "t");
+                        createNewCardTopTenProduct("top_ten_project_card_happened",dataTopTenProject[i].project_pic_link, dataTopTenProject[i].project_description, dataTopTenProject[i].project_budget, isFavorite, dataTopTenProject[i].project_name,dataTopTenProject[i].project_id,"project", "t");
                         
                     }
                     for(var i = 0; i< dataTopTenProduct.length; i++){
@@ -122,11 +122,11 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
                         createNewCardTopTenProduct("top_ten_card_happened",dataTopTenProduct[i].item_pic_link, dataTopTenProduct[i].product_description, dataTopTenProduct[i].product_price, isFavorite, dataTopTenProduct[i].product_name,dataTopTenProduct[i].product_id,"product", "t");
                     }
                     for(var i = 0; i< dataTopTenSeller.length; i++){
-                        createNewCardTopTenProduct("top_ten_sellers_card_happened","source/produits/person3.jfif", dataTopTenSeller[i].address, dataTopTenSeller[i].seller_rating, null, dataTopTenSeller[i].name,dataTopTenSeller[i].id,"user");
+                        createNewCardTopTenProduct("top_ten_sellers_card_happened",dataTopTenSeller[i].profile_pic_link, dataTopTenSeller[i].address, dataTopTenSeller[i].seller_rating, null, dataTopTenSeller[i].name,dataTopTenSeller[i].id,"user");
                     }
 
                     for(var i = 0; i< dataSellers.length; i++){
-                        createNewCardTopTenProduct("sellers_link_card_happened","source/produits/person3.jfif", dataSellers[i].address, dataSellers[i].seller_rating, null, dataSellers[i].name,dataSellers[i].id,"user");
+                        createNewCardTopTenProduct("sellers_link_card_happened",dataSellers[i].profile_pic_link, dataSellers[i].address, dataSellers[i].seller_rating, null, dataSellers[i].name,dataSellers[i].id,"user");
                     }
         }
 
@@ -136,8 +136,10 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             newCard.classList.add("card");
             const newPicture = document.createElement("img");
             newPicture.classList.add("img_card");
-            var firstImage = picture.split(",");
-            newPicture.src = firstImage[0];
+            if(picture != null)
+            {var firstImage = picture.split(",");
+            newPicture.src = firstImage[0];}
+            else {newPicture.src = "source/icones/noimage.png";}
             const newNameProduct = document.createElement("h3");
             newNameProduct.innerHTML = productName;
             const newDescription = document.createElement("p");
@@ -481,7 +483,8 @@ $(document).ready(function(){
                         "project_id" => $row['id'],
                         "project_budget" => $row['budget'],
                         "project_description" => $row['project_description'],
-                        "type" => "project"
+                        "type" => "project",
+                        "project_pic_link" => $row['project_pic_link']
                     );   
                     array_push($mainDataProject, $dataProject);
                     unset($dataProject);                
@@ -498,7 +501,8 @@ $(document).ready(function(){
                         "project_id" => $row['id'],
                         "project_budget" => $row['budget'],
                         "project_description" => $row['project_description'],
-                        "type" => "project"
+                        "type" => "project",
+                        "project_pic_link" => $row['project_pic_link']
                     );   
                     array_push($mainDataTopTenProject, $dataTopTenProject);
                     unset($dataTopTenProject);                
@@ -515,7 +519,8 @@ $(document).ready(function(){
                         "id" => $row['id'],
                         "seller_rating" => $row['seller_rating'],
                         "address" => $row['address'],
-                        "type" => "seller"
+                        "type" => "seller",
+                        "profile_pic_link" => $row['profile_pic_link']
                     );   
                     array_push($mainDataSeller, $dataSeller);
                     unset($dataSeller);                
@@ -533,7 +538,8 @@ $(document).ready(function(){
                         "id" => $row['id'],
                         "seller_rating" => $row['seller_rating'],
                         "address" => $row['address'],
-                        "type" => "seller"
+                        "type" => "seller",
+                        "profile_pic_link" => $row['profile_pic_link']
                     );   
                     array_push($mainDataTopTenSeller, $dataTopTenSeller);
                     unset($dataTopTenSeller);                

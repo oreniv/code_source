@@ -1080,3 +1080,7 @@ recommendationContainer:hover {
   height: 150px;
   margin: auto;
 }
+
+#picProfileImg{
+  max-width: 150px;
+}
