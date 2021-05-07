@@ -96,36 +96,6 @@ $tag_array = json_encode($tag_array); // array of tags that were given to this p
 $postData = json_encode($postData); // basic data about the whole project 
  
 
-/*  This section handles bid submission  */
-if (isset($_GET['itemID']))
-{
-
-  $conn = mysqli_connect($servername, $username, $password, $dbname);
-  $notes = "'".$_POST['notes']."'" ;
-  $sqlInsertBid = "CALL insert_project_item_bid (".$_GET['itemID'].",".$_SESSION['userID'].",".$_POST['asking_price'].",".$notes.")";  
-    
-
-  if (!mysqli_query($conn,  $sqlInsertBid)) {
-    echo("Error description: " . mysqli_error($conn));
-    $_SESSION['db_error'] = True;
-  }
-  else
-  $_SESSION['db_error'] = False;
-
-  mysqli_close($conn);
-  $conn = mysqli_connect($servername, $username, $password, $dbname);
-}
-
-
-
-
-
-
-
-
-
-
-
 ?>
 
 
@@ -220,17 +190,6 @@ for (i = 0 ; i < projectItemsSize ; i++)
   var bidCollapseArea =  document.createElement("div");
       bidCollapseArea.setAttribute("class","collapse");
       bidCollapseArea.setAttribute("id","bid_section"+[i]);
-  // bid button 
-  var bidButton = document.createElement("button");
-      bidButton.setAttribute("type","button");
-      bidButton.setAttribute("class","btn btn-secondary btn-sm col-1 w-20");
-      bidButton.setAttribute("style","width: 100px;");
-      bidButton.setAttribute("data-bs-toggle","modal");
-      bidButton.setAttribute("data-bs-target","#bid_submit");
-      bidButton.innerHTML = "Place a bid on this part";
-      
-      setBidID(bidButton,projectItems[i]["itemID"]);
-
 
      if(projectItems[i]["part_picture"] == null)
       image.setAttribute("src","source/no_picture.jpg"); // Hardcoded image 
@@ -242,7 +201,6 @@ for (i = 0 ; i < projectItemsSize ; i++)
   cardRow.appendChild(imageDiv);
   imageDiv.appendChild(image);
   cardRow.appendChild(cardTextColumn);
-  cardRow.appendChild(bidButton);
   cardTextColumn.appendChild(cardTextBody); 
   cardTextBody.appendChild(cardText);
   cardTextColumn.appendChild(bidCollapseList);
@@ -251,10 +209,8 @@ for (i = 0 ; i < projectItemsSize ; i++)
     
   appendBidInfo(projectItems[i]["itemID"],bidCollapseArea); // adds a 'onclick' event to each bid button
    
-
-
   document.getElementById("project_item_info_section").appendChild(projectItemCard);
-
+  $(image).wrap("<a href=bid_item_page.php?itemID="+ projectItems[i]["itemID"]   +"></a>");
 }
  
 }
@@ -266,8 +222,6 @@ function appendBidInfo(itemID,bidArea)
 
     var len = bids.length;
     var has_at_least_one_bid = false; 
-   console.log(bids);
-
  
 
    var bidList = document.createElement("ul");
@@ -309,19 +263,9 @@ function appendBidInfo(itemID,bidArea)
  
 }
 
-function setBidID(bidButton,itemID) // appends item and session data(via GET) to form depending on the 'bid' button clicked 
-{
-  bidButton.onclick = function () {
-    
-    document.
-    getElementById("submit_bid_form").
-    setAttribute("action","project_page.php?projectID="+<?= $_GET['projectID'] ?>+
-    "&itemID="+itemID);
-  };
-}
 function setAddToCartForm(button,bidID)
 { 
-            button.onclick = function () {
+           button.onclick = function () {
            var str = "add_this_to_cart="+bidID // use jQuery to turn the form into a big array
            var xhttp = new XMLHttpRequest(); // using AJAX 
            xhttp.open("POST","project_page.php",true); // call this page again with a POST variable that indicates which item to add to cart
@@ -330,14 +274,7 @@ function setAddToCartForm(button,bidID)
            location.reload();
         };
 
-
-
-
-
 }
-
-
-
 
 </script>
 
@@ -363,62 +300,10 @@ function setAddToCartForm(button,bidID)
 
 <div class="container gap-2" id="project_item_info_section">
 
-
-
-
 <!-- hidden form for adding to cart -->
 <form id="add_to_cart" hidden method="POST" action="project_page.php" >
 <input type="hidden" id="add_this_to_cart" name="add_this_to_cart" >
 </form>
-
-
-
-
-
-
-<!-- Modal -->
-<div class="modal fade" id="bid_submit" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="bid_submitLabel">Bid submission</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-          <form id="submit_bid_form" name="submit_bid_form"  method="POST" >
-
-            <label for="asking_price" class="form-label"> Asking price: </label>
-            <input name="asking_price" min="1" type="number" class="form-control" id="asking_price">
-            <label for="notes" class="form-label" > Notes to project owner </label>
-            <textarea name="notes" class="form-control" id="notes" rows="3" maxlength="300" ></textarea>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button submit" class="btn btn-primary">Submit</button>
-            </div>
-
-          </form>      
-      </div>
-    </div>
-  </div>
-</div>
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 </div>
 

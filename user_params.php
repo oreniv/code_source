@@ -3,7 +3,7 @@
 session_start();
 
 
-function checkCart()  // DOESN'T WORK
+function checkCart()   
 {
     
     // get the item IDs items in cart
@@ -15,7 +15,7 @@ function checkCart()  // DOESN'T WORK
    $cartItem_array = array();
    $sale_items = array();
    $project_bids = array();
-   $_SESSION['fuck'] =  $sql_item_in_my_cart;
+ 
    
    while($temp = mysqli_fetch_assoc($uCartContentQuery))
    {
