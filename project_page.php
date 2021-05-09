@@ -102,11 +102,11 @@ $postData = json_encode($postData); // basic data about the whole project
 <head>
 
 <meta charset="utf-8" />
+<link rel="stylesheet" href="styleSheet.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-<link rel="stylesheet" href="styleSheet.css" />
  <title>Oray</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 </head>
 
@@ -156,61 +156,49 @@ var projectItems = <?=  $projectItem_array   ?>;
 var projectItemsSize = projectItems.length;
 for (i = 0 ; i < projectItemsSize ; i++)
 {
-  var projectItemCard = document.createElement("div")
-    projectItemCard.classList.add("card");
-    projectItemCard.style.width = '95%';
-  var cardRow = document.createElement("div")
-    cardRow.classList.add("row");
-    cardRow.classList.add("g-0");
-  var imageDiv = document.createElement("div")
-    imageDiv.classList.add("col");
-    imageDiv.classList.add("border");
-  var image = document.createElement("img");
-    image.setAttribute("src",projectItems[i]["part_picture"]);
-    image.setAttribute("style","width: 50%; height:auto;")
-  var cardTextColumn =  document.createElement("div");
-  cardTextColumn.classList.add("col-md-8");
-  cardTextColumn.classList.add("col");
-  var cardTextBody = document.createElement("div");
-    cardTextBody.classList.add("card-body");
+  var projectItemCard = document.createElement("div");
+      projectItemCard.setAttribute("class","card text-center");
+      projectItemCard.setAttribute("style","width:19rem;height: auto;");
+  var itemImage = document.createElement("img");
+      itemImage.setAttribute("src",projectItems[i]["part_picture"]);
+      itemImage.setAttribute("class","card-img-top");
+      itemImage.setAttribute("width","200");
+      itemImage.setAttribute("height","auto");
+      itemImage.setAttribute("style","margin-top:3px;border-style: solid; border-width:1px;");
+  var cardBody = document.createElement("div");
+      cardBody.setAttribute("class","card-body");
   var cardText = document.createElement("p");
-    cardText.classList.add("card-text");
-    cardText.classList.add("border");
-    cardText.classList.add("text-center");
-    cardText.innerHTML = projectItems[i]["item_description"];
-  // bid list section and collapsable list
-  var bidCollapseList = document.createElement("button");
-      bidCollapseList.setAttribute("class","btn btn-primary");
-      bidCollapseList.setAttribute("data-bs-toggle","collapse");
-      bidCollapseList.setAttribute("type","button");
-      bidCollapseList.setAttribute("data-bs-target","#bid_section"+[i]);
-      bidCollapseList.setAttribute("aria-expanded","false");
-      bidCollapseList.setAttribute("aria-controls","bid_section"+[i]);
-      bidCollapseList.innerHTML = "View bids on this part";
-  var bidCollapseArea =  document.createElement("div");
-      bidCollapseArea.setAttribute("class","collapse");
-      bidCollapseArea.setAttribute("id","bid_section"+[i]);
+      cardText.setAttribute("class","card-text text-truncate");
+  var viewMoreButton = document.createElement("button");
+      viewMoreButton.setAttribute("class","btn btn-secondary");
+      viewMoreButton.setAttribute("type","button");
+      viewMoreButton.setAttribute("style","margin-bottom:9px;border-style: solid; border-width:3px;border-radius: 12px");
+  var bidArea = document.createElement("div");
+      bidArea.setAttribute("id","bid_section"+[i]);
 
-     if(projectItems[i]["part_picture"] == null)
-      image.setAttribute("src","source/no_picture.jpg"); // Hardcoded image 
+  viewMoreButton.innerHTML = "More details";
+  cardText.innerHTML = projectItems[i]["item_description"];
 
-
-
-
-  projectItemCard.appendChild(cardRow);
-  cardRow.appendChild(imageDiv);
-  imageDiv.appendChild(image);
-  cardRow.appendChild(cardTextColumn);
-  cardTextColumn.appendChild(cardTextBody); 
-  cardTextBody.appendChild(cardText);
-  cardTextColumn.appendChild(bidCollapseList);
-  bidCollapseList.appendChild(bidCollapseArea);
+  if(projectItems[i]["part_picture"] == null)
+    itemImage.setAttribute("src","source/no_picture.jpg"); // Hardcoded image 
   
-    
-  appendBidInfo(projectItems[i]["itemID"],bidCollapseArea); // adds a 'onclick' event to each bid button
-   
+  projectItemCard.appendChild(itemImage);
+  projectItemCard.appendChild(cardBody);
+  cardBody.appendChild(cardText);
+  projectItemCard.appendChild(bidArea);
+  projectItemCard.appendChild(viewMoreButton);
+
+  appendBidInfo(projectItems[i]["itemID"],bidArea); // adds a 'onclick' event to each bid button
+
   document.getElementById("project_item_info_section").appendChild(projectItemCard);
-  $(image).wrap("<a href=bid_item_page.php?itemID="+ projectItems[i]["itemID"]   +"></a>");
+
+
+  $(viewMoreButton).wrap("<a href=bid_item_page.php?itemID="+ projectItems[i]["itemID"]   +"></a>");
+  $(itemImage).wrap("<a href=bid_item_page.php?itemID="+ projectItems[i]["itemID"]   +"></a>");
+
+
+
+
 }
  
 }
@@ -226,6 +214,7 @@ function appendBidInfo(itemID,bidArea)
 
    var bidList = document.createElement("ul");
    bidList.classList.add("list-group")
+ 
 
   for (bidCounter = 1,j = 0 ; j < len ; j++) // go through all the bids for a particular item
   {
@@ -234,7 +223,9 @@ function appendBidInfo(itemID,bidArea)
         has_at_least_one_bid = true;
         var bidLine = document.createElement("li");
         bidLine.classList.add("list-group-item");
-        bidLine.innerHTML ="Bid # "+bidCounter+" $"+bids[j]["price"]+" note: "+bids[j]["note"];
+        bidLine.classList.add("shadow-lg");
+        bidLine.innerHTML ="Bid # "+bidCounter+": $"+bids[j]["price"]+" | Note from bidder: "+bids[j]["note"];
+        bidLine.setAttribute("style","margin:2px;border-style: solid; border-width:2px;");
         bidList.appendChild(bidLine);
         bidCounter++;
       }
@@ -243,8 +234,8 @@ function appendBidInfo(itemID,bidArea)
       {
         var accept_bid_button = document.createElement("button");
         accept_bid_button.setAttribute("type","button");
-        accept_bid_button.setAttribute("class","btn btn-secondary btn-sm position-relative top-50 start-50");
-        accept_bid_button.setAttribute("style","width: 100px;");
+        accept_bid_button.setAttribute("class","btn btn-warning btn-sm ");
+        accept_bid_button.setAttribute("style","margin-bottom:9px;border-style: solid; border-width:3px;border-radius: 12px");
         accept_bid_button.innerHTML = "Accept bid";
         bidList.appendChild(accept_bid_button); 
         setAddToCartForm(accept_bid_button,bids[j]["bid_id"]);
@@ -255,7 +246,9 @@ function appendBidInfo(itemID,bidArea)
   {
     var bidLine = document.createElement("li");
         bidLine.classList.add("list-group-item");
+        bidLine.classList.add("shadow-lg");
         bidLine.innerHTML ="No bids for this part."
+        bidLine.setAttribute("style","margin:2px;border-style: solid; border-width:2px;");
         bidList.appendChild(bidLine);
   }
   bidArea.appendChild(bidList);
@@ -293,18 +286,21 @@ function setAddToCartForm(button,bidID)
                 <div id="author" class="p-2 bg-light border fw-bold text-center">Author</div>
                 <div id="description" class="p-2 bg-light border text-center">Description</div>
                 <div id="tags" class="p-2 bg-light border text-center"> Tags </div>
+                <div >   </div>
         </div>
-        
     </div>
 </div>
 
-<div class="container gap-2" id="project_item_info_section">
+<div class="container px-4 ">
+  <div class="row gx-5 " id="project_item_info_section">
 
 <!-- hidden form for adding to cart -->
 <form id="add_to_cart" hidden method="POST" action="project_page.php" >
 <input type="hidden" id="add_this_to_cart" name="add_this_to_cart" >
 </form>
 
+
+  </div>
 </div>
 
 
@@ -322,8 +318,6 @@ appendProjectInfo();
 </footer>
 
 </body>
-
-
 
 
 </html>

@@ -345,6 +345,12 @@ function validate()
         window.alert("credit card needs to be at least 16 digits long");
         return false;
         }
+        if (sales_size == 0 && project_bid_size == 0)
+        {
+        window.alert("Your cart is empty, can't buy nothing");
+        window.location.assign("checkout.php");
+        return false;
+        }
  
         return true;
 
