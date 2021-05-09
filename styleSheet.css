@@ -1080,3 +1080,14 @@ recommendationContainer:hover {
   height: 150px;
   margin: auto;
 }
+
+@media only screen and (max-width: 600px) {
+  #site_logo {
+    display: none;
+  }
+  #header_navbar{
+    font-size: 16px;
+    color:black;
+
+  }
+}

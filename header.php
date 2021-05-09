@@ -134,7 +134,7 @@ else
 </script>
 
 
-
+<!--
     
 <div>
     <img class="logo" src="source/icones/logo.png">
@@ -148,6 +148,38 @@ else
     <a class="header_specific_link" href="underwork_page.php">Partner</a>
 
 </div>
+-->
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light header_link">
+  <div class="container-fluid">
+  <a class="navbar-brand" id="site_logo" style="font-size: x-large;font-weight: bold;">
+      <img src="source/icones/logo.png" class="logo">
+      Oray
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul id="header_navbar" class="navbar-nav"  style="margin-left: 100px;">
+        <li class="nav-item ">
+          <a class="nav-link" aria-current="page" href="index.php">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="underwork_page.php">Shop</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="underwork_page.php">Forum</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="underwork_page.php">Partner</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
 
 <div class="profile_container gap-3"></div>
 

@@ -1033,8 +1033,9 @@ $(document).ready(function(){
             if(tabName == "historyInnerTab")
             document.getElementById(tabName).style.flexDirection = "column";
 
-            elmnt.style.color = '#E68235';
-            document.getElementById(tabName).style.color = '#707070';
+        // Removed so the links don't stay 'highlighted' after switching
+       //     elmnt.style.color = '#E68235';
+       //     document.getElementById(tabName).style.color = '#707070';
 
             if(tabName=="seller_profile"){
                 document.getElementById("defaultProductOpen").click();
