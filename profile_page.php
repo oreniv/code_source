@@ -253,6 +253,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
                     document.getElementById("myProjectsParticipation").appendChild(newRow);
                     $(seeProject).wrap("<a href=project_page.php?projectID="+projectId+"></a>");
+                    $(seeItemProject).wrap("<a href=bid_item_page.php?itemID="+itemId+"></a>");
 
                 }
 
@@ -655,8 +656,11 @@ $(document).ready(function(){
             
         <div id="buyer_profile" class="tabcontent">
             <div class="containerBuyerProfile">
-                <div id="recommendation" class="recommendationContainer" onMouseOver="pauseDiv()" onMouseOut="resumeDiv()">
+                <div class="sideLeftBuyerProfile">
+                    <div id="recommendation" class="recommendationContainer" onMouseOver="pauseDiv()" onMouseOut="resumeDiv()">
 
+                    </div>
+                    <button class="withdraw_button innerBuyerTabContent" id="projectInnerButton" onclick="window.location.href='create_new_project_page.php';">Create new project</button>
                 </div>
                 <div class="historicContainer" id="historicalContainerId">
 
@@ -1056,6 +1060,10 @@ $(document).ready(function(){
             if(tabName=="seller_profile"){
                 document.getElementById("defaultProductOpen").click();
                 document.getElementById(tabName).style.color = '#707070';
+            }
+
+            if(tabName =="projectsInnerTab"){
+                document.getElementById("projectInnerButton").style.display = "block";
             }
 
             if(tabName=="buyer_profile"){
