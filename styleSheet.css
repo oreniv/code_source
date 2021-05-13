@@ -1090,4 +1090,15 @@ recommendationContainer:hover {
     color:black;
 
   }
+  #top_ten {
+    flex-direction: column;
+
+  }
+  .top_ten_container{
+    width: 100%;
+    margin:auto;
+    justify-content: center;
+  }
+
+
 }
