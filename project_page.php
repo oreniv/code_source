@@ -125,6 +125,8 @@ $postData = json_encode($postData); // basic data about the whole project
 
 var jsonPostData = <?= $postData  ?> ; 
 var userID = <?= $_SESSION['userID'] ?> ; 
+var projectId = <?= $_GET['projectID'] ?> ; 
+
 
 function appendProjectInfo()
 {
@@ -269,6 +271,15 @@ function setAddToCartForm(button,bidID)
 
 }
 
+function showEdit(){
+  for(var i =0; i<document.getElementsByClassName("itemManagement").length; i++)
+  {document.getElementsByClassName("itemManagement")[i].style.display = "block";}
+}
+function hide(){
+  for(var i =0; i<document.getElementsByClassName("itemManagement").length; i++)
+  {document.getElementsByClassName("itemManagement")[i].style.display = "none";}
+}
+
 </script>
 
 <body>
@@ -307,7 +318,7 @@ function setAddToCartForm(button,bidID)
 
 
 
-
+<button class="itemManagement" onclick="window.location.href='add_item_to_project_sql.php?projectId='+projectId;">Add item</button>
 <script>
 // appending all the data
 appendProjectInfo();
@@ -316,6 +327,12 @@ appendProjectInfo();
 <footer>
       <!-- jQuery pulls this -->
 </footer>
+
+<script>
+if(jsonPostData["poster_ID"] == userID){
+    showEdit();
+  } else hide();
+</script>
 
 </body>
 

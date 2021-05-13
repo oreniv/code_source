@@ -215,6 +215,10 @@ text-align: center;}
   display: flex;
 }
 
+.itemManagement{
+  display: none;
+}
+
 .sellers{
   width:100%;
   display: flex;
@@ -873,7 +877,7 @@ margin:10px;
 }
 
 .recommendationContainer{
-  width: 25%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   background-color: #E4F2FB;
@@ -898,10 +902,19 @@ margin:10px;
   box-shadow: inset 0 0 0 10px;
 }
 
-recommendationContainer:hover {
+.recommendationContainer:hover {
   color: rgba(0, 0, 0, 0.3);
 }
 
+.sideLeftBuyerProfile{
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+}
+
+#projectInnerButton{
+  display: none;
+}
 
 
 .containerBuyerProfile{
@@ -994,6 +1007,7 @@ recommendationContainer:hover {
   justify-content: space-between;
   height: 100px;
   width: 100%;
+  background-color:#FEFCE9;
 }
 
 .columnButtonProject{
@@ -1100,5 +1114,9 @@ recommendationContainer:hover {
     justify-content: center;
   }
 
+
+
+#picProfileImg{
+  max-width: 150px;
 
 }
