@@ -221,7 +221,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
                     const descriptionItemProject = document.createElement("p");
                     descriptionItemProject.innerHTML = descriptionItem;
-
+                    descriptionItemProject.classList.add("desc_item_fq");
                     const priceItemProject = document.createElement("p");
 
                     if(status == 'pending')
@@ -1054,15 +1054,16 @@ $(document).ready(function(){
             if(tabName == "historyInnerTab")
             document.getElementById(tabName).style.flexDirection = "column";
 
-            elmnt.style.color = '#E68235';
-            document.getElementById(tabName).style.color = '#707070';
+        // Removed so the links don't stay 'highlighted' after switching
+       //     elmnt.style.color = '#E68235';
+       //     document.getElementById(tabName).style.color = '#707070';
 
             if(tabName=="seller_profile"){
                 document.getElementById("defaultProductOpen").click();
                 document.getElementById(tabName).style.color = '#707070';
             }
 
-            if(tabName =="projectsInnerTab"){
+            if(tabName =="projectsInnerTab" && window.innerWidth >= 1000){
                 document.getElementById("projectInnerButton").style.display = "block";
             }
 

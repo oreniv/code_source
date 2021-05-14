@@ -95,7 +95,7 @@ if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg
 }
 
 if (vision_api($_FILES["filename"]["tmp_name"]) == False)
-  {$uploadOk = 0;}*/
+  {$uploadOk = 0;}
 
 // Check if $uploadOk is set to 0 by an error
 if ($uploadOk == 0) {

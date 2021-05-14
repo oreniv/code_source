@@ -185,6 +185,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
        reviewPost.style.width = '95%';
        const reviewCard = document.createElement("div");
        reviewCard.classList.add("card-body");
+       reviewCard.setAttribute("style","overflow: hidden; text-overflow: ellipsis; ");
        const reviewUser = document.createElement("h5");
        reviewUser.classList.add("card-title");
        reviewUser.classList.add("text-start");
@@ -391,7 +392,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
     <?php 
 
 
-            if(isset($_GET['productID']))
+            if(isset($_GET['productID'])  ) // FIX ME 
                  $_SESSION['productID'] = $_GET['productID'] ; // grab the product ID the user clicked on
            
              

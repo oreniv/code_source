@@ -211,7 +211,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
                     if(confirm("you are about to upload: \n" + allName + "\n" +"Do you confirm the upload ?"))
                         {
                             myPicture = true;
-                            if (vision_api (e.dataTransfer.files[x]))
+                         //   if (vision_api (e.dataTransfer.files[x]))
                                 upload(e.dataTransfer.files, 'uploadsPicture');
                         }
         };
