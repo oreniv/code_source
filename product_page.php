@@ -392,7 +392,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
     <?php 
 
 
-            if(isset($_GET['productID']))
+            if(isset($_GET['productID'])  ) // FIX ME 
                  $_SESSION['productID'] = $_GET['productID'] ; // grab the product ID the user clicked on
            
              

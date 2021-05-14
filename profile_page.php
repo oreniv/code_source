@@ -221,7 +221,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
                     const descriptionItemProject = document.createElement("p");
                     descriptionItemProject.innerHTML = descriptionItem;
-
+                    descriptionItemProject.classList.add("desc_item_fq");
                     const priceItemProject = document.createElement("p");
 
                     if(status == 'pending')
@@ -1063,7 +1063,7 @@ $(document).ready(function(){
                 document.getElementById(tabName).style.color = '#707070';
             }
 
-            if(tabName =="projectsInnerTab"){
+            if(tabName =="projectsInnerTab" && window.innerWidth >= 1000){
                 document.getElementById("projectInnerButton").style.display = "block";
             }
 

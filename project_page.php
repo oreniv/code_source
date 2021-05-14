@@ -318,7 +318,7 @@ function hide(){
 
 
 
-<button class="itemManagement" onclick="window.location.href='add_item_to_project_sql.php?projectId='+projectId;">Add item</button>
+<button class="itemManagement withdraw_button" onclick="window.location.href='add_item_to_project_sql.php?projectId='+projectId;">Add item</button>
 <script>
 // appending all the data
 appendProjectInfo();

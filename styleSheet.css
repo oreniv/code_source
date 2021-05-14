@@ -1005,11 +1005,16 @@ margin:10px;
 .itemProjectRow{
   display: flex;
   justify-content: space-between;
-  height: 100px;
+  height: 120px;
   width: 100%;
   background-color:#FEFCE9;
+  margin-top: 15px;
 }
-
+.desc_item_fq{
+  width: 35%;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
 .columnButtonProject{
   display: flex;
   flex-direction: column;
@@ -1095,7 +1100,7 @@ margin:10px;
   margin: auto;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 1000px) {
   #site_logo {
     display: none;
   }
@@ -1113,10 +1118,49 @@ margin:10px;
     margin:auto;
     justify-content: center;
   }
-
-
-
+  .profile_container{
+    flex-direction: column;
+    width: 100%;
+  }
+  .profile_table{
+    width: 100%;
+  }
+  #edit_button{
+    width:80%;
+    margin:auto;
+    justify-content: center;
+    text-align: center;
+  }
+  #profile_picture_principal{
+    width:100%;
+  }
+  #recommendation{
+    display: none;
+  }
+  .historicContainer{
+    width:100%;
+  }
+  #seller_profile{
+    flex-direction: column;
+    width: 100%;
+  }
+  .myChartDiv{
+    width: 100%;
+  }
+  .card{
+    width: 100%;
+  }
+  .my_button_add_product{
+    width: 100%;
+  }
+  .product_project_container{
+    width: 100%;
+    }
+  #projectInnerButton{
+      display:none;
+      }
 #picProfileImg{
   max-width: 150px;
+}
 
 }
