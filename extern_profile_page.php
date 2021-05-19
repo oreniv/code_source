@@ -188,9 +188,9 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         if(isset($_GET['userId']))
             $_SESSION['userId'] = $_GET['userId']; 
 
-        $sqlExternProfile = "select full_name, email, profile_pic_link, seller_rating from users where id =" .$_SESSION['userId'].";";
-        $sqlExternProduct = "select * from sales_item where sales_item_posterID = " .$_SESSION['userId'].";";
-        $sqlFavorite = "SELECT * FROM fav_posts WHERE userID = " .$_SESSION['userID'];
+        $sqlExternProfile = "SELECT full_name, email, profile_pic_link, seller_rating FROM users WHERE id =" .$_SESSION['userId'].";";
+        $sqlExternProduct = "SELECT * FROM sales_item WHERE sales_item_posterID = " .$_SESSION['userId'].";";
+        $sqlFavorite = "SELECT * FROM fav_posts WHERE userID = " .$_SESSION['userID']. ";";
         
         $conn = mysqli_connect($servername, $username, $password, $dbname);    //start
 
@@ -205,6 +205,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
         mysqli_close($conn); // close connection
 
+        $conn = mysqli_connect($servername, $username, $password, $dbname); 
         $resultFavorite = mysqli_query($conn, $sqlFavorite);
         $resultCheckFavorite = mysqli_num_rows($resultFavorite);
 
@@ -237,7 +238,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
                 unset($dataFavorite);                
             }
             $jsonFavorite = json_encode($mainDataFavorite); 
-        } else $jsonFavorite =0;
+        } else $jsonFavorite = 0;
 
         if($resultCheckExternProfile > 0)
             {
@@ -261,6 +262,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
         var jsonJsProducts = <?= $jsonMyProduct; ?>;
         var jsonJsFavorite = <?= $jsonFavorite; ?>;
+        console.log(jsonJsFavorite);
         console.log(jsonJsProducts);
         console.log(jsonJsProfile);
         appendMyJson(jsonJsProducts, jsonJsFavorite); 
