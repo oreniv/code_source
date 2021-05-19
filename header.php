@@ -62,13 +62,21 @@ else
     logoutButton.innerHTML = "Logout";
     document.getElementsByClassName("profile_container")[0].appendChild(logoutButton);
 
-    var pfp_link = document.createElement("a")
+    var pfp_link = document.createElement("div")
     pfp_link.setAttribute("id","profile_link");
-    pfp_link.setAttribute("href","profile_page.php")
+    pfp_link.setAttribute("class","dropdown");
     var mask_circle = document.createElement("div");
     mask_circle.setAttribute("class","mask_circle");
     var img_profile = document.createElement("img");
     img_profile.setAttribute("class","img_profile");
+    img_profile.setAttribute("onclick","go_to_profile_page()");
+    var dropDownContent = document.createElement("div");
+    pfp_link.appendChild(dropDownContent);
+    dropDownContent.setAttribute("class","dropdown-content");
+    dropDownContent.appendChild(logoutButton);
+  
+
+
     <?php
       if ($_SESSION['userID'] != -1 ){
       $sqlProfile = "SELECT * FROM users WHERE users.id =".$_SESSION['userID'];
@@ -96,7 +104,7 @@ else
     cart_container.setAttribute("class","cart_container");
     var cartLink = document.createElement("a");
     cartLink.setAttribute("class","cart_link");
-    cartLink.setAttribute("href","#");
+    cartLink.setAttribute("href","checkout.php");
     var number_item = document.createElement("span");
     number_item.setAttribute("class","number_item");
     number_item.innerHTML = 0 ;
@@ -109,7 +117,7 @@ else
     cart_container.appendChild(cartLink);
     cartLink.appendChild(number_item);
     cartLink.appendChild(cart_img);
-    cartLink.setAttribute("href","checkout.php");
+
     
     document.getElementsByClassName("profile_container")[0].appendChild(pfp_link);
     document.getElementsByClassName("profile_container")[0].appendChild(cartLink);
@@ -124,13 +132,18 @@ else
 }
   function logout()
     {
+      
       var xhttp = new XMLHttpRequest();  // using AJAX 
       xhttp.open("POST","user_params.php",false);
       xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       xhttp.send("kill_session="+true); 
       window.location.assign("index.php");
     }
-    
+  function go_to_profile_page()
+  {
+    window.location.assign("profile_page.php");
+  }
+
 </script>
 
 
@@ -150,8 +163,8 @@ else
 </div>
 -->
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light header_link">
-  <div class="container-fluid">
+<nav class="navbar navbar-expand-lg navbar-light  header_link" style="display:flex; justify-content:space-between;" >
+  <div class="container-fluid" style=" background-color: #F8FEFF;">
   <a class="navbar-brand" id="site_logo" style="font-size: x-large;font-weight: bold;">
       <img src="source/icones/logo.png" class="logo">
       Oray
@@ -159,8 +172,8 @@ else
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul id="header_navbar" class="navbar-nav"  style="margin-left: 100px;">
+    <div class="collapse navbar-collapse" id="navbarNav" >
+      <ul id="header_navbar" class="navbar-nav"  >
         <li class="nav-item ">
           <a class="nav-link" aria-current="page" href="index.php">Home</a>
         </li>

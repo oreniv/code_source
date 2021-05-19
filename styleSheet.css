@@ -570,6 +570,18 @@ td{
   display: flex;
   flex-direction: column;
 }
+.dropdown { position: relative;
+ display: inline-block;
+ } 
+.dropdown-content { 
+  display: none;
+  position: absolute;
+  top: 100px  ;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 16px; z-index: 1; }
+.dropdown:hover .dropdown-content { display: block; } 
 
 
 
@@ -1092,7 +1104,30 @@ margin:10px;
 .containerExternalProfile{
   display: flex;
   justify-content: space-around;
+  width: 100%;
+
 }
+#picProfileImg{
+  max-width: 150px;
+  margin:auto;
+  text-align: center;
+}
+
+.containerExternalProfileSideLeft{
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  justify-content: center;
+  margin: auto;
+  text-align: center;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); 
+}
+
+.external_profile_internal_div{
+  display: flex;
+  justify-content: space-around;
+}
+
 
 /**----------------under work--------------*/
 #iconWork{
@@ -1119,8 +1154,9 @@ margin:10px;
     justify-content: center;
   }
   .profile_container{
-    flex-direction: column;
+    display:flex;
     width: 100%;
+    justify-content: space-around;
   }
   .profile_table{
     width: 100%;
@@ -1159,8 +1195,18 @@ margin:10px;
   #projectInnerButton{
       display:none;
       }
-#picProfileImg{
-  max-width: 150px;
+
+ .cart_container{
+   display: flex;
+   flex-direction: column;
+ }
+ .number_item{
+  position: relative;
+  left: 16px;
+  bottom: 20px;
+  color: #E68235;
+  font-size: large;
 }
+ 
 
 }
