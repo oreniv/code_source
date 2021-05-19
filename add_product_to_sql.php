@@ -10,6 +10,7 @@ $title = "'".$_POST['title']."'";
 $description = "'".$_POST['description']."'";
 $tag = "'".$_POST['tags']."'";
 $price =$_POST['price'];
+$delivery =$_POST['delivery'];
 $durationDay =$_POST['dayDuration'];
 $durationHour =$_POST['timeDuration'];
 $type ="'".$_POST['type']."'";
@@ -19,7 +20,7 @@ $page_link = "'".$_POST['myFilesUploads']."'";
 
 $conn = mysqli_connect($servername, $username, $password, $dbname);
 
-$sql = "CALL insert_sales_item($userID,$title,$description,$type,$price,$pic_link,$page_link,$durationDay,$price,$filament);";
+$sql = "CALL insert_sales_item($userID,$title,$description,$type,$price,$pic_link,$page_link,$durationDay,$delivery,$filament);";
 
 if (mysqli_query($conn, $sql)) {
     echo "New record created successfully";

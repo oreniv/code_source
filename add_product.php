@@ -60,6 +60,9 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             <label for="price">price:</label><br>
             <input type="number" id="price" name="price" min="0" required><br>
 
+            <label for="delivery">price:</label><br>
+            <input type="number" id="delivery" name="delivery" min="0" required><br>
+
             <label for="duration">Print duration (days/hours/minutes):</label><br>
             <input type="range" id="dayDuration" name="dayDuration" min="0" value="0" max="99">
             <span id="demo">0 days</span>
@@ -88,7 +91,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
             <label for="filament">Choose a filament:</label><br> 
             <select id="filament" name="filament">
-                <option value="">...</option>
+                <option value="NULL">...</option>
                 <option value="PLA">PLA</option>
                 <option value="ABS">ABS</option>
                 <option value="PETG">PETG</option>
