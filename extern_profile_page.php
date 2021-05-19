@@ -20,10 +20,15 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
 
     <script>
-        function appendMyJson(data){
+        function appendMyJson(data, dataFavorite){
             for(var i = 0; i< data.length; i++){
+                var isFavorite = false;
+                        for(var j = 0; j<dataFavorite.length; j++){
+                            if (dataFavorite[j].sales_itemID == data[i].product_id)
+                            {isFavorite = true;}
+                        }
                 createMyCard("containerExternalProfileSideRight", data[i].item_pic_link, data[i].product_description, 
-                    data[i].product_price, true, data[i].product_name, data[i].product_id);
+                    data[i].product_price, isFavorite, data[i].product_name, data[i].product_id, "a");
                             }
         }
 
@@ -42,7 +47,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             document.getElementById("profileRating").innerHTML = rating +"/5";
         }
 
-        function createMyCard(tabName, image, description, price, liked, productName, id){
+        function createMyCard(tabName, image, description, price, liked, productName, id, doubleTag){
             const newCard = document.createElement("div");
             newCard.classList.add("card");
             const newPicture = document.createElement("img");
@@ -65,9 +70,10 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             newLikeButton.classList.add("heart_button")
             const newLikeIcone = document.createElement("img");
             newLikeIcone.classList.add("icon_heart");
+            newLikeIcone.id = doubleTag + id;
             if (liked == true) {
                 newLikeIcone.src = "source/icones/groupe_22_filled.png";
-            } else {
+            } else if (liked == false){
                 newLikeIcone.src = "source/icones/groupe_22.png";
             }
 
@@ -83,6 +89,62 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             document.getElementById(tabName).appendChild(newCard);
 
             $(newPicture).wrap("<a href=product_page.php?productID="+id+"></a>");
+        }
+
+
+        function changeFavorite(element, myHeartsLastList, myId, cleanId, type){
+            
+            
+            console.log(element.childNodes[0].id);
+            console.log(document.getElementById(myId).src);
+            
+            var notExist = true;
+
+            if(document.getElementById(myId).src.includes("source/icones/groupe_22_filled.png")){
+                document.getElementById(myId).src = "source/icones/groupe_22.png";  
+            }
+            else
+            {
+                document.getElementById(myId).src = "source/icones/groupe_22_filled.png";
+            }
+
+            obj = {
+                "id" : myId,
+                "src" : document.getElementById(myId).src,
+                "type" : type
+            };
+
+            for(var i =0; i<myHeartsLastList.length; i++){
+                if(myHeartsLastList[i].id == myId){
+                    ajaxCall(cleanId, true, type);
+                    myHeartsLastList.splice(i, 1);
+                    notExist = false;
+                }
+            }
+            if(notExist){
+                myHeartsLastList.push(obj);
+                ajaxCall(cleanId, false, type);
+            }
+           
+
+        }
+
+        function ajaxCall(id, action, type) {
+            type = false;
+
+            $.ajax({
+            type: 'POST',
+            url: 'favoriteC_changes_to_sql.php',
+            dataType: 'json',
+            data: {
+                id: id,
+                action: action,
+                type: type
+                },
+            success: function(response) {
+                alert(response);
+            }
+            });
         }
     </script>
 
@@ -128,6 +190,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
         $sqlExternProfile = "select full_name, email, profile_pic_link, seller_rating from users where id =" .$_SESSION['userId'].";";
         $sqlExternProduct = "select * from sales_item where sales_item_posterID = " .$_SESSION['userId'].";";
+        $sqlFavorite = "SELECT * FROM fav_posts WHERE userID = " .$_SESSION['userID'];
         
         $conn = mysqli_connect($servername, $username, $password, $dbname);    //start
 
@@ -141,6 +204,12 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         $resultCheckExternProduct = mysqli_num_rows($resultExternProduct);
 
         mysqli_close($conn); // close connection
+
+        $resultFavorite = mysqli_query($conn, $sqlFavorite);
+        $resultCheckFavorite = mysqli_num_rows($resultFavorite);
+
+        mysqli_close($conn); // close connection
+
 
         if($resultCheckExternProduct > 0){
             $mainDataMyProduct  = array();
@@ -157,6 +226,18 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             }
             $jsonMyProduct  = json_encode($mainDataMyProduct); 
         }
+
+        if($resultCheckFavorite > 0){
+            $mainDataFavorite = array();
+            while($row = mysqli_fetch_assoc($resultFavorite)){
+                $dataFavorite = array(
+                    "sales_itemID" => $row['sales_itemID']
+                );   
+                array_push($mainDataFavorite, $dataFavorite);
+                unset($dataFavorite);                
+            }
+            $jsonFavorite = json_encode($mainDataFavorite); 
+        } else $jsonFavorite =0;
 
         if($resultCheckExternProfile > 0)
             {
@@ -179,10 +260,40 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
                     };  
 
         var jsonJsProducts = <?= $jsonMyProduct; ?>;
+        var jsonJsFavorite = <?= $jsonFavorite; ?>;
         console.log(jsonJsProducts);
         console.log(jsonJsProfile);
-        appendMyJson(jsonJsProducts); 
+        appendMyJson(jsonJsProducts, jsonJsFavorite); 
         createProfile(jsonJsProfile);
+
+        const myHearts = document.querySelectorAll(".heart_button");
+            var myHeartsInitList = [];
+            var myHeartsLastList = [];
+            
+            myHearts.forEach((e) => {
+                var myId = e.childNodes[0].id;
+                var mySrc = document.getElementById(myId).src;
+
+                var type = "'sales_itemID'";
+                var realId = myId.replace("a", "");
+
+
+                var check =false;
+
+                myObj = {
+                    "id":myId,
+                    "src":mySrc,
+                    "type":type
+                };
+                myHeartsInitList.push(myObj);
+
+                if(mySrc.includes("source/icones/groupe_22_filled.png"))
+                {myHeartsLastList.push(myObj);}
+
+
+                e.addEventListener('click', function() {changeFavorite(e, myHeartsLastList, myId, realId, type, check);});
+                
+            })
 
     </script>
     <footer>
