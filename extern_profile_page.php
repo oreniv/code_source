@@ -107,12 +107,14 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 </header>
 
 <div class="containerExternalProfile">
-
+    
     <div class="containerExternalProfileSideLeft">
     <img id="picProfileImg" src="" >
     <p id="fullName"></p>
-    <p id="fullMail"></p>
-    <p id="profileRating"></p>
+        <div class="external_profile_internal_div">
+        <p id="fullMail"></p>
+        <p id="profileRating"></p>
+        </div>        
     </div>
     <div id="containerExternalProfileSideRight">
 
@@ -156,6 +158,8 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
                 unset($dataMyProduct );                
             }
             $jsonMyProduct  = json_encode($mainDataMyProduct); 
+        } else {
+            $jsonMyProduct = 0;
         }
 
         if($resultCheckExternProfile > 0)
@@ -181,7 +185,8 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         var jsonJsProducts = <?= $jsonMyProduct; ?>;
         console.log(jsonJsProducts);
         console.log(jsonJsProfile);
-        appendMyJson(jsonJsProducts); 
+        if (jsonJsProducts != 0)
+            appendMyJson(jsonJsProducts); 
         createProfile(jsonJsProfile);
 
     </script>
