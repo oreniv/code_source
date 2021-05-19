@@ -11,6 +11,22 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
 <script>
 
+
+  function preFillForm()
+  {
+
+  var full_name = <?=  json_encode($_SESSION['full_name'])  ?> ; 
+  var email = <?= json_encode($_SESSION['email'])  ?> ; 
+  var address = <?= json_encode($_SESSION['address']) ?> ; 
+
+  document.getElementById("full_name").setAttribute("value",full_name);
+  document.getElementById("buyer_email").setAttribute("value",email);
+  document.getElementById("shipping_address").innerHTML = address ;
+  document.getElementById("full_name").setAttribute("readonly",true);
+  document.getElementById("buyer_email").setAttribute("readonly",true);
+  document.getElementById("shipping_address").setAttribute("readonly",true);
+  }
+
     function addToCart()
     {
         <?php 
@@ -210,7 +226,8 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         // checking if the data was written to db 
      if (   <?php  echo json_encode($_SESSION['db_error'] ) ;  ?> == true )
             window.alert("There was an error making the purchase,please try again"); 
-
+          <?php $_SESSION['db_error'] = false ; ?>
+          
 </script>
 
 
@@ -302,6 +319,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
       </div>
       <div class="modal-body">
      <form id="buy_now_form" >   
+     <input type="hidden" id="buy_now" name="buy_now" >
         <div class="mb-3">
             <label for="full_name" class="form-label">Full name:</label>
             <input type="text" class="form-control" name="full_name"  id="full_name" required>
@@ -501,7 +519,8 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
       }
       document.getElementById("product_image").src = sourcesArray[slideIndex];
     }
-
+    if (<?php echo $_SESSION['userID'] ?> != -1)
+        preFillForm();
 
 
 </script>

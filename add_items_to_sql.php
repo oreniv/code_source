@@ -1,5 +1,6 @@
 <?php 
 include_once 'dbconnection.php';
+include_once 'vision_api_check.php' ;
 
 session_start();
 echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name']; 

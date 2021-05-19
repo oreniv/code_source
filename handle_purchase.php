@@ -25,6 +25,26 @@ mysqli_close($conn);
 die();
 }
 // Handle purchase for a registered user 
+elseif (isset($_POST['buy_now']))
+{
+    $productID = (int)$_SESSION['productID'];
+    $quantity = (int)$_POST['quantity'] ; 
+    $sqlPurchaseData = "CALL insert_transaction_history(".$_SESSION['userID'].",".$productID.",$quantity,'sales_item')" ; 
+    
+    
+    
+    
+    mysqli_query($conn,$sqlPurchaseData); 
+    mysqli_close($conn);
+    $conn = mysqli_connect($servername, $username, $password, $dbname);
+
+
+
+die();
+}
+
+
+
 
 
 $sqlCheckCart = "SELECT sales_itemID,project_item_bidID FROM item_in_cart WHERE cartID =".$_SESSION['cartID'];
