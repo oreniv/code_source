@@ -169,12 +169,14 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 </header>
 
 <div class="containerExternalProfile">
-
+    
     <div class="containerExternalProfileSideLeft">
     <img id="picProfileImg" src="" >
     <p id="fullName"></p>
-    <p id="fullMail"></p>
-    <p id="profileRating"></p>
+        <div class="external_profile_internal_div">
+        <p id="fullMail"></p>
+        <p id="profileRating"></p>
+        </div>        
     </div>
     <div id="containerExternalProfileSideRight">
 
@@ -226,6 +228,8 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
                 unset($dataMyProduct );                
             }
             $jsonMyProduct  = json_encode($mainDataMyProduct); 
+        } else {
+            $jsonMyProduct = 0;
         }
 
         if($resultCheckFavorite > 0){
@@ -265,7 +269,10 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         console.log(jsonJsFavorite);
         console.log(jsonJsProducts);
         console.log(jsonJsProfile);
+
+        if (jsonJsProducts != 0)   
         appendMyJson(jsonJsProducts, jsonJsFavorite); 
+
         createProfile(jsonJsProfile);
 
         const myHearts = document.querySelectorAll(".heart_button");
