@@ -153,7 +153,6 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
                     else
                         linkFiles = linkFiles + "," + "uploads/" + data[x].name;
                 }
-                console.log(linkFiles);
                 document.getElementById('myPicUploads').value = linkFiles;
 
                 if(dropZoneName == 'dropZonePicture')
@@ -184,9 +183,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             xhr.open('post', 'upload.php');
             xhr.send(formData);
 
-            console.log(myPicture);
-            console.log(myFiles);
-
+           
             if(myPicture == true && myFiles == true){
                 document.getElementById('firstStepAddProduct').style.display = "none";
                 document.getElementById('secondStepAddProduct').style.display = "flex";
@@ -201,7 +198,6 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             
                 e.preventDefault();
                 this.className = 'dropZone';
-                console.log(e.dataTransfer.files);
                 var allName = null;
 
                 for(var x=0; x<e.dataTransfer.files.length; x++){
@@ -234,7 +230,6 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             if(buttonDrop == true)
             {
                 this.className = 'dropZone';
-                console.log(e.dataTransfer.files);
                 var allName = null;
 
                 for(var x=0; x<e.dataTransfer.files.length; x++){

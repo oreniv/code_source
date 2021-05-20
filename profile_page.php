@@ -49,7 +49,6 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         /**------------------------------------------------------------------------------------ */
 
         function createMyCharts(myTitle, dataImported, specificContainer){
-            console.log(dataImported);
             Highcharts.chart(specificContainer, {
                 chart: {
                 backgroundColor: '#E4F2FB',
@@ -1092,7 +1091,6 @@ $(document).ready(function(){
                         "address" :  <?php echo json_encode($dataProfile["address"], JSON_HEX_TAG); ?>,
                         "profile_pic_link" :  <?php echo json_encode($dataProfile["profile_pic_link"], JSON_HEX_TAG); ?>
                     };   
-            console.log(jsonJsProfile);
             appendData(jsonJsProfile);
 
             var jsonJsMyFavorite;
@@ -1106,7 +1104,6 @@ $(document).ready(function(){
 
             if(<?php echo json_encode($jsonMyFavorite); ?> != 0)
             {jsonJsMyFavorite = <?= $jsonMyFavorite; ?>;
-            console.log(jsonJsMyFavorite);}
 
 
 
@@ -1115,7 +1112,6 @@ $(document).ready(function(){
 
             if(<?php echo json_encode($jsonMyProduct); ?> != 0)
             {jsonJsMyProduct = <?= $jsonMyProduct; ?>;
-            console.log(jsonJsMyProduct);}
 
 
 
@@ -1125,7 +1121,6 @@ $(document).ready(function(){
 
             if(<?php echo json_encode($jsonMyProjects); ?> != 0)
             {jsonJsMyProjects = <?= $jsonMyProjects; ?>;
-            console.log(jsonJsMyProjects);
             appendProjects(jsonJsMyProjects);}
 
 
@@ -1137,7 +1132,6 @@ $(document).ready(function(){
 
             if(<?php echo json_encode($jsonEarningData); ?> != 0)
             {jsonEarningDataJs = <?= $jsonEarningData; ?>;
-            console.log(jsonEarningDataJs);}
 
 
 
@@ -1152,7 +1146,6 @@ $(document).ready(function(){
 
             if(<?php echo json_encode($jsonEarning); ?> != 0)
             {jsonTentative = <?= $jsonEarning; ?>;
-            console.log(jsonTentative);}
 
 
 
@@ -1167,7 +1160,6 @@ $(document).ready(function(){
             if(<?php echo json_encode($jsonProjectsParticipation); ?> != 0)
             {
                 jsonJSProjectsParticipation = <?= $jsonProjectsParticipation; ?>;
-                console.log(jsonJSProjectsParticipation);
             }
 
             if(<?php echo json_encode($jsonEarning); ?> != 0)
@@ -1197,7 +1189,6 @@ $(document).ready(function(){
                 }
             
             var jsonJsTopTenProduct = <?= $jsonTopTenProduct; ?>;
-            console.log(jsonJsTopTenProduct);
 
             if(typeof jsonJsMyProduct != 'undefined')
             appendJsonMyProduct(jsonJsMyProduct);
@@ -1213,7 +1204,6 @@ $(document).ready(function(){
 
             if(<?php echo json_encode($jsonHistory); ?> != 0)
             {jsonJsHistory = <?= $jsonHistory; ?>;
-            console.log(jsonJsHistory);
             appenedHistoryCard(jsonJsHistory);}
 
 
@@ -1359,8 +1349,6 @@ $(document).ready(function(){
             function changeFavorite(element, myHeartsLastList, myId, cleanId, type, secondId, checked){
             
             
-            console.log(element.childNodes[0].id);
-            console.log(document.getElementById(myId).src);
             
             var notExist = true;
 

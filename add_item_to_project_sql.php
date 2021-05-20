@@ -64,9 +64,7 @@ echo $myProjectId;}
 var br = document.createElement("br"); 
 var number =-1;
 var projectId = <?php echo json_encode($myProjectId, JSON_HEX_TAG); ?>; 
-console.log(projectId);
 var tenId = projectId.toString();
-console.log(tenId);
 
 function createForm(){
     number++;

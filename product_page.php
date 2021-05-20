@@ -492,9 +492,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         };   
 
     var jsonReviews = <?= $jsonReviews; ?>;
-    console.log(jsonReviews);
-    console.log(jsonJsProduct);
-
+   
    appendData(jsonJsProduct);
    appendReview(jsonReviews);
 

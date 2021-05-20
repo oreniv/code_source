@@ -225,9 +225,6 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         function changeFavorite(element, myHeartsLastList, myId, cleanId, type, secondId, checked){
             
             
-            console.log(element.childNodes[0].id);
-            console.log(document.getElementById(myId).src);
-            
             var notExist = true;
 
             if(document.getElementById(myId).src.includes("source/icones/groupe_22_filled.png")){

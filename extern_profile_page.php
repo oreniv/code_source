@@ -95,9 +95,6 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         function changeFavorite(element, myHeartsLastList, myId, cleanId, type){
             
             
-            console.log(element.childNodes[0].id);
-            console.log(document.getElementById(myId).src);
-            
             var notExist = true;
 
             if(document.getElementById(myId).src.includes("source/icones/groupe_22_filled.png")){
@@ -266,10 +263,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
 
         var jsonJsProducts = <?= $jsonMyProduct; ?>;
         var jsonJsFavorite = <?= $jsonFavorite; ?>;
-        console.log(jsonJsFavorite);
-        console.log(jsonJsProducts);
-        console.log(jsonJsProfile);
-
+        
         if (jsonJsProducts != 0)   
         appendMyJson(jsonJsProducts, jsonJsFavorite); 
 
