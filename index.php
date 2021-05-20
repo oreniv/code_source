@@ -95,23 +95,28 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
         
 
         function appendAllMyJson(dataProduct, dataProject, dataTopTenProject, dataTopTenProduct, dataTopTenSeller, dataSellers, dataFavorite){
-                    for(var i = 0; i< dataProject.length; i++){
+                    if(dataProject!=0)
+                    {for(var i = 0; i< dataProject.length; i++){
                         var isFavorite = false;
                         for(var j = 0; j<dataFavorite.length; j++){
                             if (dataFavorite[j].projectID == dataProject[i].project_id)
                             isFavorite = true;
                         }
                         createNewCardTopTenProduct("project_link_card_happened",dataProject[i].project_pic_link, dataProject[i].project_description, dataProject[i].project_budget, isFavorite, dataProject[i].project_name,dataProject[i].project_id,"project", "a");
-                    }
-                    for(var i = 0; i< dataProduct.length; i++){
+                    }}
+
+                    if(dataProduct!=0)
+                    {for(var i = 0; i< dataProduct.length; i++){
                         var isFavorite = false;
                         for(var j = 0; j<dataFavorite.length; j++){
                             if (dataFavorite[j].sales_itemID == dataProduct[i].product_id)
                             isFavorite = true;
                         }
                         createNewCardTopTenProduct("product_link_card_happened",dataProduct[i].item_pic_link, dataProduct[i].product_description, dataProduct[i].product_price, isFavorite, dataProduct[i].product_name,dataProduct[i].product_id,"product", "a");
-                    }
-                    for(var i = 0; i< dataTopTenProject.length; i++){
+                    }}
+
+                    if(dataTopTenProject!=0)
+                    {for(var i = 0; i< dataTopTenProject.length; i++){
                         var isFavorite = false;
                         for(var j = 0; j<dataFavorite.length; j++){
                             if (dataFavorite[j].projectID == dataTopTenProject[i].project_id)
@@ -119,22 +124,28 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
                         }
                         createNewCardTopTenProduct("top_ten_project_card_happened",dataTopTenProject[i].project_pic_link, dataTopTenProject[i].project_description, dataTopTenProject[i].project_budget, isFavorite, dataTopTenProject[i].project_name,dataTopTenProject[i].project_id,"project", "t");
                         
-                    }
-                    for(var i = 0; i< dataTopTenProduct.length; i++){
+                    }}
+
+                    if(dataTopTenProduct!=0)
+                    {for(var i = 0; i< dataTopTenProduct.length; i++){
                         var isFavorite = false;
                         for(var j = 0; j<dataFavorite.length; j++){
                             if (dataFavorite[j].sales_itemID == dataTopTenProduct[i].product_id)
                             isFavorite = true;
                         }
                         createNewCardTopTenProduct("top_ten_card_happened",dataTopTenProduct[i].item_pic_link, dataTopTenProduct[i].product_description, dataTopTenProduct[i].product_price, isFavorite, dataTopTenProduct[i].product_name,dataTopTenProduct[i].product_id,"product", "t");
-                    }
-                    for(var i = 0; i< dataTopTenSeller.length; i++){
-                        createNewCardTopTenProduct("top_ten_sellers_card_happened",dataTopTenSeller[i].profile_pic_link, dataTopTenSeller[i].address, dataTopTenSeller[i].seller_rating, null, dataTopTenSeller[i].name,dataTopTenSeller[i].id,"user");
-                    }
+                    }}
 
-                    for(var i = 0; i< dataSellers.length; i++){
+
+                    if(dataTopTenSeller!=0)
+                    {for(var i = 0; i< dataTopTenSeller.length; i++){
+                        createNewCardTopTenProduct("top_ten_sellers_card_happened",dataTopTenSeller[i].profile_pic_link, dataTopTenSeller[i].address, dataTopTenSeller[i].seller_rating, null, dataTopTenSeller[i].name,dataTopTenSeller[i].id,"user");
+                    }}
+
+                    if(dataSellers!=0)
+                    {for(var i = 0; i< dataSellers.length; i++){
                         createNewCardTopTenProduct("sellers_link_card_happened",dataSellers[i].profile_pic_link, dataSellers[i].address, dataSellers[i].seller_rating, null, dataSellers[i].name,dataSellers[i].id,"user");
-                    }
+                    }}
         }
 
         function createNewCardTopTenProduct(tabName, picture, description, price, liked, productName,id,postType, doubleTag) {
@@ -448,7 +459,7 @@ $(document).ready(function(){
                     unset($dataProduct);                
                 }
                 $jsonProduct = json_encode($mainDataProduct); 
-            }
+            } else $jsonProduct = 0;
 
             if($resultCheckFavorite > 0){
                 $mainDataFavorite = array();
@@ -461,7 +472,7 @@ $(document).ready(function(){
                     unset($dataFavorite);                
                 }
                 $jsonFavorite = json_encode($mainDataFavorite); 
-            } else $jsonFavorite =0;
+            } else $jsonFavorite = 0;
 
             if($resultCheckTopTenProduct > 0){
                 $mainDataTopTenProduct  = array();
@@ -478,7 +489,7 @@ $(document).ready(function(){
                     unset($dataTopTenProduct );                
                 }
                 $jsonTopTenProduct  = json_encode($mainDataTopTenProduct ); 
-            }
+            } else $jsonTopTenProduct = 0;
 
 
             if($resultCheckProject > 0)
@@ -497,7 +508,7 @@ $(document).ready(function(){
                     unset($dataProject);                
                 }
                 $jsonProject = json_encode($mainDataProject);                
-            }
+            } else $jsonProject = 0;
 
             if($resultCheckTopTenProject > 0)
             {
@@ -515,7 +526,7 @@ $(document).ready(function(){
                     unset($dataTopTenProject);                
                 }
                 $jsonTopTenProject = json_encode($mainDataTopTenProject);                
-            }
+            } else $jsonTopTenProject = 0;
 
             if($resultCheckSeller > 0)
             {
@@ -533,7 +544,7 @@ $(document).ready(function(){
                     unset($dataSeller);                
                 }
                 $jsonSeller = json_encode($mainDataSeller);                
-            }
+            } else $jsonSeller= 0;
 
 
             if($resultCheckTopTenSeller > 0)
@@ -552,7 +563,7 @@ $(document).ready(function(){
                     unset($dataTopTenSeller);                
                 }
                 $jsonTopTenSeller = json_encode($mainDataTopTenSeller);                
-            }
+            } else $jsonTopTenSeller = 0;
 
         ?>
 
