@@ -55,7 +55,7 @@ echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name'];
             <label for="budget">Budget:</label><br>
             <input type="number" id="budget" name="budget" min="0" required><br>
 
-            <input type="submit" value="Create project" name="submit">
+            <input class="withdraw_button" type="submit" value="Create project" name="submit">
             
 </form>
 

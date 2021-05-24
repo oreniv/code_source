@@ -95,6 +95,24 @@ $projectItem_array = json_encode($projectItem_array); // array of all items that
 $tag_array = json_encode($tag_array); // array of tags that were given to this project
 $postData = json_encode($postData); // basic data about the whole project 
  
+if ($_SESSION['userID'] != -1)
+{
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+$sqlGetBidsHistory = "SELECT project_bid_itemID FROM transaction_history WHERE buyerID =".$_SESSION['userID'] ; 
+$sqlResult = mysqli_query($conn, $sqlGetBidsHistory);
+$counter = mysqli_num_rows($sqlResult);
+$i = 0;
+$bidsAccepted = array();
+
+  while($i < $counter)
+        {
+          $row = mysqli_fetch_assoc($sqlResult);
+          array_push($bidsAccepted,$row);
+          $i = $i + 1;
+        }
+        
+$bidsAccepted = json_encode($bidsAccepted);
+}
 
 ?>
 
@@ -126,6 +144,9 @@ $postData = json_encode($postData); // basic data about the whole project
 var jsonPostData = <?= $postData  ?> ; 
 var userID = <?= $_SESSION['userID'] ?> ; 
 var projectId = <?= $_GET['projectID'] ?> ; 
+var arr_cart =  <?=  json_encode($_SESSION['items_in_cart'][1]) ?> ;
+var bidsAccepted = <?= $bidsAccepted ?>;
+
 
 
 function appendProjectInfo()
@@ -209,19 +230,42 @@ for (i = 0 ; i < projectItemsSize ; i++)
 function appendBidInfo(itemID,bidArea)
 {
     var bids = <?= $bid_array ?> ; 
-
     var len = bids.length;
     var has_at_least_one_bid = false; 
- 
+    var len_my_bids = bidsAccepted.length
 
    var bidList = document.createElement("ul");
    bidList.classList.add("list-group")
- 
+   var inactive_flag = false;
+
+   for (bidCounter = 1,j = 0 ; j < len ; j++) // first loop to see if a project bid for this item is in my cart
+   {
+    
+    if(bids[j]["project_itemID"] == itemID )
+    { 
+      try{
+      if (arr_cart.indexOf(Number(bids[j]['bid_id'])) != -1)
+        inactive_flag = true;
+      for(k=0;k<len_my_bids;k++)
+      {
+        if (bids[j]["bid_id"] == Number(bidsAccepted[k]["project_bid_itemID"]))
+        inactive_flag = true;
+      }
+
+
+      }
+      catch(err){}
+    }
+
+   }
+
 
   for (bidCounter = 1,j = 0 ; j < len ; j++) // go through all the bids for a particular item
   {
+
     if (bids[j]["project_itemID"] == itemID ) // if the current itemID has a bid, post it.
-      {    
+      { 
+         
         has_at_least_one_bid = true;
         var bidLine = document.createElement("li");
         bidLine.classList.add("list-group-item");
@@ -230,10 +274,24 @@ function appendBidInfo(itemID,bidArea)
         bidLine.setAttribute("style","margin:2px;border-style: solid; border-width:2px;");
         bidList.appendChild(bidLine);
         bidCounter++;
+       
       }
      
     if (userID == jsonPostData["poster_ID"] && bidCounter > 1) // if the current user posted the project give an option to accept bids
-      {
+    {
+       if (inactive_flag == true)
+       { 
+        var accept_bid_button = document.createElement("button");
+        accept_bid_button.setAttribute("type","button");
+        accept_bid_button.setAttribute("class","btn btn-warning btn-sm ");
+        accept_bid_button.setAttribute("style","margin-bottom:9px;border-style: solid; border-width:3px;border-radius: 12px");
+        accept_bid_button.innerHTML = "You already accepted a bid for this item";
+        accept_bid_button.disabled = true;
+        bidList.appendChild(accept_bid_button); 
+        setAddToCartForm(accept_bid_button,bids[j]["bid_id"]);
+       }
+       else
+       {
         var accept_bid_button = document.createElement("button");
         accept_bid_button.setAttribute("type","button");
         accept_bid_button.setAttribute("class","btn btn-warning btn-sm ");
@@ -241,6 +299,7 @@ function appendBidInfo(itemID,bidArea)
         accept_bid_button.innerHTML = "Accept bid";
         bidList.appendChild(accept_bid_button); 
         setAddToCartForm(accept_bid_button,bids[j]["bid_id"]);
+      }
     }
   }
 
@@ -260,16 +319,23 @@ function appendBidInfo(itemID,bidArea)
 
 function setAddToCartForm(button,bidID)
 { 
+     
+     if (arr_cart.indexOf(Number(bidID)) != -1 )
+      {
+        button.innerHTML = "You already accepted this bid";
+        button.disabled = true;
+      }
            button.onclick = function () {
-           var str = "add_this_to_cart="+bidID // use jQuery to turn the form into a big array
+           var str = "add_this_to_cart="+bidID  
            var xhttp = new XMLHttpRequest(); // using AJAX 
            xhttp.open("POST","project_page.php",true); // call this page again with a POST variable that indicates which item to add to cart
            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded"); 
-           xhttp.send(str); // POST  
-           location.reload();
-        };
+           xhttp.send(str); // POST    
+           setTimeout(function(){ location.reload(); }, 500);
+        }
+};
+       
 
-}
 
 function showEdit(){
   for(var i =0; i<document.getElementsByClassName("itemManagement").length; i++)
@@ -279,6 +345,7 @@ function hide(){
   for(var i =0; i<document.getElementsByClassName("itemManagement").length; i++)
   {document.getElementsByClassName("itemManagement")[i].style.display = "none";}
 }
+
 
 </script>
 

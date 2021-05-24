@@ -1135,6 +1135,57 @@ margin:10px;
   margin: auto;
 }
 
+/*  Add project page */
+.content{
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+  text-align: center;
+  width: 50%;
+}
+#filename{
+  margin: auto;
+  text-align: center;
+  justify-content: center;
+
+}
+#budget{
+  width: 50%;
+  margin: auto;
+  text-align: center;
+  justify-content: center;
+}
+
+.add_item_button{
+  width: 40%;
+  display: flex;
+  justify-content: space-around;
+
+}
+.add_item_button:focus{
+  width: 40%;
+
+}
+.container_forms{
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  text-align: center;
+  justify-content: center;
+  width:50%;
+}
+.my_item_form{
+  padding-top: 5px;
+  padding-bottom: 5px;
+  width: 30%;
+}
+.file_form{
+  margin: auto;
+  text-align: center;
+  justify-content: center;
+
+}
 @media only screen and (max-width: 1000px) {
   #site_logo {
     display: none;
