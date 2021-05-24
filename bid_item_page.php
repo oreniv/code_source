@@ -10,11 +10,17 @@ session_start();
 if(!isset($_GET['itemID']))
   $_GET['itemID'] = $_POST['itemID'];
 
-$sqlGetbidInfo = "SELECT * FROM OrayData.project_item WHERE id=".$_GET['itemID'] ; 
+$sqlGetbidInfo = "SELECT * FROM project_item WHERE id=".$_GET['itemID'] ; 
 $query = mysqli_query($conn, $sqlGetbidInfo);  
 $query = mysqli_fetch_assoc($query); 
-
 $info = json_encode($query);
+// get the user who this project belongs to
+$sqlGetPosterID = "SELECT posterID FROM project INNER JOIN
+project_item ON project.id = project_item.projectID 
+Where project_item.id =".$_GET['itemID'] ; 
+$query = mysqli_query($conn, $sqlGetPosterID);  
+$query = mysqli_fetch_assoc($query); 
+$posterID = json_encode($query);
 
 /*  This section handles bid submission  */
 if (isset($_POST['itemID']))
@@ -36,6 +42,7 @@ if (isset($_POST['itemID']))
   $conn = mysqli_connect($servername, $username, $password, $dbname);
   header("Location:project_page.php?projectID=".$query["projectID"]);
 }
+
 
 ?>
 
@@ -70,11 +77,18 @@ if (isset($_POST['itemID']))
 function appendInfo()
 {
   page_info = <?=  $info ?> ;
-
+  posterID = <?= $posterID  ?> ; 
+ 
   document.getElementById("item_description").innerHTML = page_info["item_description"] ; 
   document.getElementById("item_type").innerHTML = page_info["item_type"] ; 
   document.getElementById("item_pic").setAttribute("src",page_info["part_pic"]);
   document.getElementById("itemID").value = page_info["id"];
+
+    if (<?= json_encode($_SESSION['userID']) ?>  == posterID['posterID'])
+    {  
+      document.getElementById("bid_submit_button").innerHTML = "You can't submit a bid on your own project";
+      document.getElementById("bid_submit_button").disabled = true;
+    }
 
 } 
 
@@ -95,7 +109,7 @@ function appendInfo()
        <li class="list-group-item" id="item_type" >Item type</li>
     </ul>
       <div class="row">
-         <button type="button" data-bs-toggle="modal" data-bs-target="#bid_submit" class="btn btn-secondary col-8 mx-auto shadow-lg" style="margin-top:50px;border-radius: 12px;">Submit bid</button>
+         <button id="bid_submit_button" type="button" data-bs-toggle="modal" data-bs-target="#bid_submit" class="btn btn-secondary col-8 mx-auto shadow-lg" style="margin-top:50px;border-radius: 12px;">Submit bid</button>
       </div>
     </div>
   </div>

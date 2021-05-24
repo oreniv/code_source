@@ -46,7 +46,7 @@ echo $myProjectId;}
 
 <div class="container_forms" id="mContainer_forms">
 </div>
-<button onclick="createForm()">Add an item</button>
+<button class="withdraw_button add_item_button" onclick="createForm()">Add an item</button>
 
 
 
@@ -81,27 +81,29 @@ function createForm(){
     title.setAttribute("name", "title");
     title.setAttribute("placeholder", "Title");
     title.classList.add(mClassName);
-
+    title.setAttribute("style","margin-bottom:5px;");
     var project = document.createElement("input");
     project.setAttribute("type", "hidden");
     project.setAttribute("name", "projectId");
     project.setAttribute("value", projectId);
     project.classList.add(mClassName);
-
+    project.setAttribute("style","margin-bottom:5px;");
     var description = document.createElement("textarea");
     description.setAttribute("rows", "10");
     description.setAttribute("cols", "30");
     description.setAttribute("name", "description");
     description.setAttribute("placeholder", "Description");
     description.classList.add(mClassName);
-
+    description.setAttribute("style","margin-bottom:5px;");
+   
     var picture = document.createElement("input");
     picture.setAttribute("type", "file");
     picture.setAttribute("name", "filename");
     picture.setAttribute("placeholder", "pictures");
     picture.classList.add(mClassName);
+    picture.classList.add("file_form");
     picture.id = "filename";
-
+    picture.setAttribute("style","margin-bottom:5px;");
  
     var select = document.createElement("select");
     select.setAttribute("name", "mSelect");
@@ -118,11 +120,14 @@ function createForm(){
     var option3 = document.createElement("option");
     option3.innerHTML = "Physical-item";
     option3.setAttribute("value", 3);
-     
+   
     var s = document.createElement("button");
     s.setAttribute("type", "submit");
-    s.setAttribute("value", "Submit");
+    s.innerHTML = "Submit"
     s.classList.add("button_submit");
+    s.classList.add("withdraw_button");
+    s.classList.add("my_item_form");
+    s.setAttribute("style","margin-bottom:5px;");
     s.id = (mClassName);
 
     form.appendChild(title); 

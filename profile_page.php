@@ -1103,7 +1103,7 @@ $(document).ready(function(){
 
 
             if(<?php echo json_encode($jsonMyFavorite); ?> != 0)
-            {jsonJsMyFavorite = <?= $jsonMyFavorite; ?>;
+                jsonJsMyFavorite = <?= $jsonMyFavorite; ?>;
 
 
 
@@ -1111,7 +1111,7 @@ $(document).ready(function(){
 
 
             if(<?php echo json_encode($jsonMyProduct); ?> != 0)
-            {jsonJsMyProduct = <?= $jsonMyProduct; ?>;
+                jsonJsMyProduct = <?= $jsonMyProduct; ?>;
 
 
 
@@ -1131,7 +1131,7 @@ $(document).ready(function(){
 
 
             if(<?php echo json_encode($jsonEarningData); ?> != 0)
-            {jsonEarningDataJs = <?= $jsonEarningData; ?>;
+                jsonEarningDataJs = <?= $jsonEarningData; ?>;
 
 
 
@@ -1145,7 +1145,7 @@ $(document).ready(function(){
 
 
             if(<?php echo json_encode($jsonEarning); ?> != 0)
-            {jsonTentative = <?= $jsonEarning; ?>;
+                jsonTentative = <?= $jsonEarning; ?>;
 
 
 
