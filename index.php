@@ -2,7 +2,7 @@
 include_once 'dbconnection.php';
  
 session_start();
-echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name']; 
+
 
 ?>
 

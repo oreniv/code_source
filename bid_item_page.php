@@ -89,6 +89,11 @@ function appendInfo()
       document.getElementById("bid_submit_button").innerHTML = "You can't submit a bid on your own project";
       document.getElementById("bid_submit_button").disabled = true;
     }
+    else if (<?= json_encode($_SESSION['userID']) ?>  == -1)
+    {  
+      document.getElementById("bid_submit_button").innerHTML = "Must be logged in to submit a bid";
+      document.getElementById("bid_submit_button").disabled = true;
+    }
 
 } 
 

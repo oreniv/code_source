@@ -3,7 +3,7 @@ include_once 'dbconnection.php';
 include_once 'user_params.php';
 
 session_start();
-echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name']; 
+
  
  
 ?>
@@ -112,6 +112,10 @@ $bidsAccepted = array();
         }
         
 $bidsAccepted = json_encode($bidsAccepted);
+}
+elseif($_SESSION['userID'] == -1)
+{
+  $bidsAccepted = -1;
 }
 
 ?>

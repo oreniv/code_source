@@ -4,7 +4,7 @@ include_once 'user_params.php';
 include_once 'vision_api_check.php';
 
 session_start();
-echo "Current userID: ",$_SESSION['userID']," ||","  " , $_SESSION['full_name']; 
+
 
 $userID = "'".$_SESSION['userID']."'";
 $name =  "'".$_POST['nameEdit']."'";
