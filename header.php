@@ -169,25 +169,6 @@ else
       <img src="source/icones/logo.png" class="logo">
       Oray
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav" >
-      <ul id="header_navbar" class="navbar-nav"  >
-        <li class="nav-item ">
-          <a class="nav-link" aria-current="page" href="index.php">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="underwork_page.php">Shop</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="underwork_page.php">Forum</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="underwork_page.php">Partner</a>
-        </li>
-      </ul>
-    </div>
   </div>
 </nav>
 
@@ -242,13 +223,13 @@ else
       <div class="modal-body">        
     <div class="mb-3">
         <label for="name_input" class="form-label">Full name:</label>
-        <input name="full_name" type="text" class="form-control" id="full_name" >
+        <input name="full_name" type="text" class="form-control" required id="full_name" >
         <label for="email_input" class="form-label">Email:</label>
-        <input name="email" type="email" class="form-control" id="email_input" >
+        <input name="email" type="email" class="form-control" required id="email_input" >
         <label for="birthday_input" class="form-label">Birthday:</label>
-        <input name="birthday" type="date" class="form-control" id="birthday_input" >
+        <input name="birthday" type="date" class="form-control" required id="birthday_input" >
         <label for="password_input" class="form-label">Password:</label>
-        <input name="password" type="password" class="form-control" id="password_input" >        
+        <input name="password" type="password" class="form-control" required id="password_input" >        
         <label for="profile_pic" class="form-label">Profile picture: (Optional)</label>
         <input name="profile_pic" type="file" class="form-control" id="profile_pic" >  
         <label for="payment_details" class="form-label">Credit card num:(Optional)</label>
